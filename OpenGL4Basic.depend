@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1418140224 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
+	<SDL2/SDL.h>
+	<SDL2/SDL_opengl.h>
+	<iostream>
+	"Shader.h"
+
+1418029516 source:/home/brock/code/cpp/Opengl4/basic/Shader.cpp
+	"Shader.h"
+	<fstream>
+	<iostream>
+	<string.h>
+
+1418029404 /home/brock/code/cpp/Opengl4/basic/Shader.h
+	<string>
+	<SDL2/SDL_opengl.h>
+	<vector>
+
