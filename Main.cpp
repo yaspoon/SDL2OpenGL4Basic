@@ -44,18 +44,28 @@ void init()
 
         rotStepLocation = glGetUniformLocation(program, "rotStep");
 
+        GLfloat pointSize = 0.0f;
+        glGetFloatv(GL_POINT_SIZE, &pointSize);
+        std::cout << "Point Size:" << pointSize << std::endl;
+
+        GLfloat pointRange[2];
+        glGetFloatv(GL_POINT_SIZE_RANGE, pointRange);
+        std::cout << "Point Range from " << pointRange[0] << " to " << pointRange[1] << std::endl;
+
+        glPointSize(20.0f);
+
 }
 
 void draw(int rotStep)
 {
         glUniform1i(rotStepLocation, rotStep);
 
-        std::cout << rotStep << std::endl;
+        //std::cout << rotStep << std::endl;
         glClear(GL_COLOR_BUFFER_BIT);
 
         glBindVertexArray(vertArrays[TRIANGLES]);
 
-        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
+        glDrawArrays(GL_POINTS, 0, NUM_VERTICES);
 }
 
 int main(int argc, char *argv[])

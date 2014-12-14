@@ -14,6 +14,7 @@ class Shader
 private:
         static std::string readText(std::string filepath);
         static void validateShader(GLuint shader, const char* file=0);
+        static bool validateProgram(GLuint program);
 public:
         Shader();
         Shader(std::string filepath);

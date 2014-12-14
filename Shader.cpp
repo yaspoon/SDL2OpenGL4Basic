@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <string.h>
+#include <stdlib.h>
 
 Shader::Shader()
 {
@@ -59,21 +60,55 @@ GLuint Shader::LoadShaders(std::vector<struct ShaderList> shaders)
         }
 
         glLinkProgram(program);
+        validateProgram(program);
 
         return program;
 }
 
 void Shader::validateShader(GLuint shader, const char* file)
 {
-    const unsigned int BUFFER_SIZE = 512;
-    char buffer[BUFFER_SIZE];
-        memset(buffer, 0, BUFFER_SIZE);
-    GLsizei length = 0;
+        GLint status;
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+        if(status == GL_TRUE)
+        {
+                std::cout << "Loaded \"" << file << "\" successfully" << std::endl;
+        }
+        else
+        {
+                GLsizei logSize;
+                glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logSize);
+                GLchar *buffer = new GLchar[logSize];
+                GLsizei length = 0;
 
-    glGetShaderInfoLog(shader, BUFFER_SIZE, &length, buffer);
+                glGetShaderInfoLog(shader, logSize, &length, buffer);
 
-    if(length > 0)
-    {
-        std::cerr << "Shader" << shader << (file? file : "") << " compile error: " << buffer << std::endl;
-    }
+                if(length > 0)
+                {
+                        std::cerr << "Shader:" << shader << (file? file : "") << " compile error: " << buffer << std::endl;
+                }
+        }
+}
+
+bool Shader::validateProgram(GLuint program)
+{
+        bool retval = true;
+        GLint status;
+        glGetProgramiv(program, GL_LINK_STATUS, &status);
+
+        if(status == GL_TRUE)
+        {
+                retval =- true;
+                std::cout << "Successfully linked shaders into program" << std::endl;
+        }
+        else
+        {
+                GLsizei logLength;
+                glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+                GLsizei length = 0;
+                GLchar *buffer = new GLchar[logLength];
+                glGetProgramInfoLog(program, logLength, &length, buffer);
+                std::cout << "Program failed to link: " << buffer << std::endl;
+        }
+
+        return retval;
 }
