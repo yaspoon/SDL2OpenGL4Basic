@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "Shader.h"
+#include "MD2Model.h"
 
 enum vaoIds {TRIANGLES, NUM_VAOS};
 enum bufferIds {ARRAY_BUFFER, NUM_BUFFERS};
@@ -54,6 +55,9 @@ void init()
 
         glPointSize(20.0f);
 
+        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
+
 }
 
 void draw(int rotStep)
@@ -65,11 +69,13 @@ void draw(int rotStep)
 
         glBindVertexArray(vertArrays[TRIANGLES]);
 
-        glDrawArrays(GL_POINTS, 0, NUM_VERTICES);
+        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
 }
 
 int main(int argc, char *argv[])
 {
+        MD2Model skel;
+        skel.loadModel("./hueteotl/tris.md2");
         SDL_Window *window = NULL;
         SDL_GLContext context = NULL;
         bool quit = false;
