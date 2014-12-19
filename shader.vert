@@ -4,6 +4,9 @@ layout(location=0) in vec4 vPosition;
 uniform int rotStep;
 const float PI = 3.14;
 
+mat4 projection_mat = mat4(1.0f);
+vec4 proj1 = vec4(
+
 void main()
 {
 	float radians = (float(rotStep) * PI) / 180.0f;
