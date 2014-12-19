@@ -11,6 +11,8 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option host_application="primusrun" />
+				<Option run_host_application_in_terminal="1" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="`sdl2-config --cflags`" />
@@ -36,6 +38,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="MD2Model.cpp" />
+		<Unit filename="MD2Model.h" />
 		<Unit filename="Main.cpp" />
 		<Unit filename="Shader.cpp" />
 		<Unit filename="Shader.h" />
