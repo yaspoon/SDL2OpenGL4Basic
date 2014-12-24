@@ -38,11 +38,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Box.cpp" />
+		<Unit filename="Box.h" />
+		<Unit filename="Camera.cpp" />
+		<Unit filename="Camera.h" />
 		<Unit filename="MD2Model.cpp" />
 		<Unit filename="MD2Model.h" />
 		<Unit filename="Main.cpp" />
+		<Unit filename="Mat4.h" />
 		<Unit filename="Shader.cpp" />
 		<Unit filename="Shader.h" />
+		<Unit filename="Vec4.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
