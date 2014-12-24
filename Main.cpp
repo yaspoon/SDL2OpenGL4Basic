@@ -30,8 +30,10 @@ const GLfloat mf_near = 1;
 const GLfloat mf_far = 500;
 GLint projMatLocation;
 GLint modelMatLocation;
+GLint cameraMatLocation;
 
 Mat4<float> modelMatrix;
+Mat4<float> cameraMatrix;
 
 float toRadians(float deg)
 {
@@ -128,6 +130,12 @@ void init()
                 std::cout << "Couldn't find modelMatrix in shader" << std::endl;
         }
 
+        cameraMatLocation = glGetUniformLocation(program, "cameraMatrix");
+        if(cameraMatLocation == -1)
+        {
+                std::cout << "Couldn't find modelMatrix in shader" << std::endl;
+        }
+
         glUniformMatrix4fv(projMatLocation, 1, false, &projectionMatrix);
 
         glCullFace(GL_BACK);
@@ -138,6 +146,7 @@ void init()
 void draw()
 {
         glUniformMatrix4fv(modelMatLocation, 1, false, &modelMatrix);
+        glUniformMatrix4fv(cameraMatLocation, 1, false, &cameraMatrix);
 
         //std::cout << rotStep << std::endl;
         glClear(GL_COLOR_BUFFER_BIT);
@@ -154,7 +163,23 @@ int main(int argc, char *argv[])
         modelMatrix = Mat4<float>(1.0f);
 
         Mat4<float> transMatrix(1.0f);
-        transMatrix[2][3] = -2.5f;
+        transMatrix[2][3] = 2.5f;
+
+        float camAngle = 90 * (PI / 180);
+        Mat4<float> camRot(1.0f);
+        camRot[0][0] = cos(-camAngle);
+        camRot[0][2] = sin(-camAngle);
+
+        camRot[2][0] = -sin(-camAngle);
+        camRot[2][2] = cos(-camAngle);
+
+
+        cameraMatrix = Mat4<float>(1.0f);
+        cameraMatrix[0][3] = 1.0f;
+        cameraMatrix[2][2] = -1.0f;
+        cameraMatrix[2][3] = -2.5;
+
+        cameraMatrix = camRot * cameraMatrix;
 
         MD2Model skel;
         skel.loadModel("./hueteotl/tris.md2");
