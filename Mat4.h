@@ -3,6 +3,7 @@
 
 #include "Vec4.h"
 #include <iostream>
+#include "string.h"
 
 template<typename T>
 class Mat4
