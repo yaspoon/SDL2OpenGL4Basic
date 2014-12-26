@@ -1,6 +1,13 @@
 #ifndef VEC4_H
 #define VEC4_H
 
+enum v
+{
+        x = 0,
+        y = 1,
+        z = 2
+};
+
 template<typename T>
 class Vec4
 {
