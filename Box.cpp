@@ -1,13 +1,6 @@
 #include "Box.h"
 #include <string.h>
 
-enum
-{
-        x = 0,
-        y = 1,
-        z = 2
-};
-
 Box::Box()
 {
         short indexs[] = {0, 1, 2, //Front face
