@@ -8,6 +8,8 @@
 #include "MD2Model.h"
 #include "Vec4.h"
 #include "Mat4.h"
+#include "Camera.h"
+#include "Timer.h"
 
 #include "Box.h"
 
@@ -160,6 +162,8 @@ void draw()
 
 int main(int argc, char *argv[])
 {
+        Timer frameTimer;
+        Camera cam;
         modelMatrix = Mat4<float>(1.0f);
 
         Mat4<float> transMatrix(1.0f);
@@ -175,11 +179,11 @@ int main(int argc, char *argv[])
 
 
         cameraMatrix = Mat4<float>(1.0f);
-        cameraMatrix[0][3] = 1.0f;
+        cameraMatrix[0][3] = 2.5f;
         cameraMatrix[2][2] = -1.0f;
-        cameraMatrix[2][3] = -2.5;
+        cameraMatrix[2][3] = -1.0;
 
-        cameraMatrix = camRot * cameraMatrix;
+        cameraMatrix = cam.cameraMatrix(); //camRot * cameraMatrix;
 
         MD2Model skel;
         skel.loadModel("./hueteotl/tris.md2");
@@ -192,8 +196,8 @@ int main(int argc, char *argv[])
                 window = SDL_CreateWindow("OpenGL 4.3 Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_OPENGL);
                 if(window != NULL)
                 {
-                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
                         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
                         context = SDL_GL_CreateContext(window);
@@ -217,6 +221,10 @@ int main(int argc, char *argv[])
 
                                 int rotStep = 0;
 
+                                frameTimer.start();
+                                float previousTime = frameTimer.getTicks();
+                                float currentTime = previousTime;
+
                                 while(!quit)
                                 {
                                         while(SDL_PollEvent(&event))
@@ -227,12 +235,40 @@ int main(int argc, char *argv[])
                                                 }
                                                 else if(event.type == SDL_KEYDOWN)
                                                 {
-                                                        if(event.key.keysym.scancode == SDL_SCANCODE_Q)
+                                                        switch(event.key.keysym.scancode)
                                                         {
+                                                        case SDL_SCANCODE_Q:
                                                                 quit = true;
+                                                                break;
+                                                        case SDL_SCANCODE_W:
+                                                                cam.dirz(1.0f);
+                                                                break;
+                                                        case SDL_SCANCODE_S:
+                                                                cam.dirz(-1.0f);
+                                                                break;
+                                                        }
+                                                }
+                                                else if(event.type == SDL_KEYUP)
+                                                {
+                                                        switch(event.key.keysym.scancode)
+                                                        {
+                                                        case SDL_SCANCODE_Q:
+                                                                quit = true;
+                                                                break;
+                                                        case SDL_SCANCODE_W:
+                                                                cam.dirz(0.0f);
+                                                                break;
                                                         }
                                                 }
                                         }
+
+                                        currentTime = frameTimer.getTicks();
+                                        float dt = (float)(currentTime - previousTime) / 1000.0f;
+                                        cam.update(dt);
+                                        previousTime = currentTime;
+
+
+                                        cameraMatrix = cam.cameraMatrix();
 
                                         //modelMatrix = Mat4<float>(1.0f); //Reset model matrix to the identity matrix
                                         Mat4<float> rotMatrix(1.0f);
