@@ -13,5 +13,5 @@ void main()
 {
 	colour = vColour;
 
-	gl_Position = ((vPosition * modelMatrix) * cameraMatrix) * vprojectionMat;
+	gl_Position = vprojectionMat * (cameraMatrix * (modelMatrix * vPosition));
 }
