@@ -90,12 +90,6 @@ void init()
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 
-        GLfloat vertices[] = {-1.0, -1.0, 0.0,
-                                           1.0, -1.0, 0.0,
-                                           1.0, 1.0, 0.0,
-                                           -1.0, 1.0, 0.0
-                                         };
-
         GLfloat colours[NUM_VERTICES][3] = {{1.0, 0.0, 0.0},
                                                                           {0.0, 1.0, 0.0},
                                                                           {0.0, 0.0, 1.0},
