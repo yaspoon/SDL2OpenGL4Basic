@@ -111,8 +111,8 @@ void init()
                                      7, 6, 5,
                                      1, 5, 6, //Right side
                                      6, 2, 1,
-                                     4, 0, 3, //left side
-                                     3, 7, 4,
+                                     0, 3, 7, //left side
+                                     7, 4, 0,
                                      3,2, 6, //Top
                                      6, 7 ,3,
                                      4, 5, 1,//Bottom
@@ -120,16 +120,16 @@ void init()
 
         glGenBuffers(NUM_INDEXS, ibo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 6, indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 12 * 3, indices, GL_STATIC_DRAW);
 
         glGenVertexArrays(NUM_VAOS, vertArrays);
         glBindVertexArray(vertArrays[TRIANGLES]);
 
         glGenBuffers(NUM_BUFFERS, buffers);
         glBindBuffer(GL_ARRAY_BUFFER, buffers[ARRAY_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) + sizeof(colours), NULL, GL_STATIC_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-        glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertices), sizeof(colours), colours);
+        glBufferData(GL_ARRAY_BUFFER, b.vsize() + sizeof(colours), NULL, GL_STATIC_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, b.vsize(), b.Vertices());
+        glBufferSubData(GL_ARRAY_BUFFER, b.vsize(), sizeof(colours), colours);
 
         std::vector<struct ShaderList> list;
         list.push_back((struct ShaderList){GL_VERTEX_SHADER, "./shader.vert"});
@@ -176,9 +176,8 @@ void init()
 
         glUniformMatrix4fv(projMatLocation, 1, false, (float*)&projectionMatrix);
 
-        /*glCullFace(GL_BACK);
-        glEnable(GL_CULL_FACE);*/
-
+        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
 }
 
 void draw()
@@ -208,8 +207,6 @@ int main(int argc, char *argv[])
         transMatrix[3][2] = 0.0f;
 
         cameraMatrix = cam.cameraMatrix();
-        //cameraMatrix[2][2] = -1.0f;
-        //cameraMatrix[3][2] = -1.0f;
 
         MD2Model skel;
         skel.loadModel("./hueteotl/tris.md2");
