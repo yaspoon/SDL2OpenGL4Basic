@@ -10,6 +10,9 @@
 #include "Mat4.h"
 #include "Camera.h"
 #include "Timer.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Box.h"
 
@@ -26,20 +29,55 @@ GLuint buffers[NUM_BUFFERS];
 GLuint ibo[NUM_INDEXS];
 const GLuint NUM_VERTICES = 8;
 
-const GLfloat mf_aspectRatio = 1.0f / 1.0f;
+const GLfloat width = 640.0f;
+const GLfloat height = 640.0f;
+const GLfloat mf_aspectRatio = width / height;
 const GLfloat mf_fov = 90.0f;
-const GLfloat mf_near = 1;
-const GLfloat mf_far = 500;
+const GLfloat mf_near = 1.0f;
+const GLfloat mf_far = 500.0f;
 GLint projMatLocation;
 GLint modelMatLocation;
 GLint cameraMatLocation;
 
 Mat4<float> modelMatrix;
 Mat4<float> cameraMatrix;
+Mat4<float> projectionMatrix;
 
 float toRadians(float deg)
 {
         return deg * (PI / 180.0f);
+}
+
+Mat4<float> frustumProjection(float left, float right, float top, float bottom, float near, float far)
+{
+        Mat4<float> m(1.0f);
+
+        float A = (right + left) / (right - left);
+        float B = (top + bottom) / (top - bottom);
+        float C = -((far + near) / (far - near));
+        float D = -((2 * far * near) / (far - near));
+
+        m[0][0] = (2 * near) / (right - left);
+        m[1][1] = (2 * near) / (top - bottom);
+        m[2][0] = A;
+        m[2][1] = B;
+        m[2][2] = C;
+        m[2][3] = -1.0f;
+        m[3][2] = D;
+
+        m[3][3] = 0.0f;
+
+        return m;
+}
+
+Mat4<float> perspectiveProjection(float FOV, float aspectRatio, float near, float far)
+{
+        float right = near * tan(toRadians(FOV / 2));
+        float left = -right;
+        float top = right / aspectRatio;
+        float bottom = left / aspectRatio;
+
+        return frustumProjection(left, right, top, bottom, near, far);
 }
 
 void init()
@@ -48,17 +86,15 @@ void init()
         Vec4<float> max(0.5, 0.5, 0.5, 1.0f);
         Box b(min, max);
 
-        b.print();
-
         glEnable(GL_MULTISAMPLE);
-        GLfloat tanHalfAngleRad = tan(toRadians(mf_fov / 2));
-        GLfloat nf = (mf_near + mf_far) / (mf_near - mf_far);
-        Vec4<GLfloat> col1(1.0f / tanHalfAngleRad, 0.0f, 0.0f, 0.0f);
-        Vec4<GLfloat> col2(0.0f, mf_aspectRatio / tanHalfAngleRad, 0.0f, 0.0f);
-        Vec4<GLfloat> col3(0.0f, 0.0f, nf, -1.0f);
-        Vec4<GLfloat> col4(0.0f, 0.0f, nf, 0.0f);
 
-        Mat4<GLfloat> projectionMatrix(col1, col2, col3, col4);
+        projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
+
+        GLfloat vertices[] = {-1.0, -1.0, 0.0,
+                                           1.0, -1.0, 0.0,
+                                           1.0, 1.0, 0.0,
+                                           -1.0, 1.0, 0.0
+                                         };
 
         GLfloat colours[NUM_VERTICES][3] = {{1.0, 0.0, 0.0},
                                                                           {0.0, 1.0, 0.0},
@@ -84,16 +120,16 @@ void init()
 
         glGenBuffers(NUM_INDEXS, ibo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 6, indices, GL_STATIC_DRAW);
 
         glGenVertexArrays(NUM_VAOS, vertArrays);
         glBindVertexArray(vertArrays[TRIANGLES]);
 
         glGenBuffers(NUM_BUFFERS, buffers);
         glBindBuffer(GL_ARRAY_BUFFER, buffers[ARRAY_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER, b.vsize() + sizeof(colours), NULL, GL_STATIC_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, b.vsize(), b.Vertices());
-        glBufferSubData(GL_ARRAY_BUFFER, b.vsize(), sizeof(colours), colours);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) + sizeof(colours), NULL, GL_STATIC_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+        glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertices), sizeof(colours), colours);
 
         std::vector<struct ShaderList> list;
         list.push_back((struct ShaderList){GL_VERTEX_SHADER, "./shader.vert"});
@@ -138,16 +174,17 @@ void init()
                 std::cout << "Couldn't find modelMatrix in shader" << std::endl;
         }
 
-        glUniformMatrix4fv(projMatLocation, 1, false, &projectionMatrix);
+        glUniformMatrix4fv(projMatLocation, 1, false, (float*)&projectionMatrix);
 
-        glCullFace(GL_BACK);
-        glEnable(GL_CULL_FACE);
+        /*glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);*/
 
 }
 
 void draw()
 {
         glUniformMatrix4fv(modelMatLocation, 1, false, &modelMatrix);
+
         glUniformMatrix4fv(cameraMatLocation, 1, false, &cameraMatrix);
 
         //std::cout << rotStep << std::endl;
@@ -162,28 +199,17 @@ void draw()
 
 int main(int argc, char *argv[])
 {
+        SDL_bool relativeMouse = SDL_FALSE;
         Timer frameTimer;
         Camera cam;
         modelMatrix = Mat4<float>(1.0f);
 
         Mat4<float> transMatrix(1.0f);
-        transMatrix[2][3] = 2.5f;
+        transMatrix[3][2] = 0.0f;
 
-        float camAngle = 90 * (PI / 180);
-        Mat4<float> camRot(1.0f);
-        camRot[0][0] = cos(-camAngle);
-        camRot[0][2] = sin(-camAngle);
-
-        camRot[2][0] = -sin(-camAngle);
-        camRot[2][2] = cos(-camAngle);
-
-
-        cameraMatrix = Mat4<float>(1.0f);
-        cameraMatrix[0][3] = 2.5f;
-        cameraMatrix[2][2] = -1.0f;
-        cameraMatrix[2][3] = -1.0;
-
-        cameraMatrix = cam.cameraMatrix(); //camRot * cameraMatrix;
+        cameraMatrix = cam.cameraMatrix();
+        //cameraMatrix[2][2] = -1.0f;
+        //cameraMatrix[3][2] = -1.0f;
 
         MD2Model skel;
         skel.loadModel("./hueteotl/tris.md2");
@@ -193,7 +219,7 @@ int main(int argc, char *argv[])
 
         if(SDL_Init(SDL_INIT_EVERYTHING) == 0)
         {
-                window = SDL_CreateWindow("OpenGL 4.3 Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_OPENGL);
+                window = SDL_CreateWindow("OpenGL 4.3 Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL);
                 if(window != NULL)
                 {
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -213,7 +239,7 @@ int main(int argc, char *argv[])
                                 SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &samples);
                                 printf("Multisamples %d\n", samples);
 
-                                glViewport(0, 0, 640, 480);
+                                glViewport(0, 0, width, height);
 
                                 SDL_Event event;
 
@@ -224,6 +250,20 @@ int main(int argc, char *argv[])
                                 frameTimer.start();
                                 float previousTime = frameTimer.getTicks();
                                 float currentTime = previousTime;
+
+                                Vec4<float> b1(1.0, 1.0, 0.0, 1.0f);
+
+                                projectionMatrix.print();
+
+                                std::cout << "Camera:" << std::endl;
+                                cameraMatrix.print();
+
+                                Vec4<float> test = (transMatrix * b1);
+                                Vec4<float> test2 = cameraMatrix * test;
+                                Vec4<float> test3 = projectionMatrix * test2;
+                                test.print();
+                                test2.print();
+                                test3.print();
 
                                 while(!quit)
                                 {
@@ -246,19 +286,40 @@ int main(int argc, char *argv[])
                                                         case SDL_SCANCODE_S:
                                                                 cam.dirz(-1.0f);
                                                                 break;
+                                                        case SDL_SCANCODE_A:
+                                                                cam.dirx(-1.0f);
+                                                                break;
+                                                        case SDL_SCANCODE_D:
+                                                                cam.dirx(1.0f);
+                                                                break;
+                                                        case SDL_SCANCODE_F:
+                                                                relativeMouse = (SDL_bool)!relativeMouse;
+                                                                SDL_SetRelativeMouseMode(relativeMouse);
+                                                                break;
                                                         }
                                                 }
                                                 else if(event.type == SDL_KEYUP)
                                                 {
                                                         switch(event.key.keysym.scancode)
                                                         {
-                                                        case SDL_SCANCODE_Q:
-                                                                quit = true;
-                                                                break;
                                                         case SDL_SCANCODE_W:
                                                                 cam.dirz(0.0f);
                                                                 break;
+                                                        case SDL_SCANCODE_S:
+                                                                cam.dirz(0.0f);
+                                                                break;
+                                                        case SDL_SCANCODE_A:
+                                                                cam.dirx(0.0f);
+                                                                break;
+                                                        case SDL_SCANCODE_D:
+                                                                cam.dirx(0.0f);
+                                                                break;
                                                         }
+                                                }
+                                                else if(event.type == SDL_MOUSEMOTION)
+                                                {
+                                                        cam.updatePitch((float)event.motion.yrel);
+                                                        cam.updateYaw((float)event.motion.xrel);
                                                 }
                                         }
 
@@ -270,13 +331,12 @@ int main(int argc, char *argv[])
 
                                         cameraMatrix = cam.cameraMatrix();
 
-                                        //modelMatrix = Mat4<float>(1.0f); //Reset model matrix to the identity matrix
                                         Mat4<float> rotMatrix(1.0f);
-                                        float radians = (float)rotStep * (PI / 180.0f);
+                                        /*float radians = (float)rotStep * (PI / 180.0f);
                                         rotMatrix[1][1] = cos(radians);
                                         rotMatrix[1][2] = -sin(radians);
                                         rotMatrix[2][1] = sin(radians);
-                                        rotMatrix[2][2] = cos(radians);
+                                        rotMatrix[2][2] = cos(radians);*/
 
                                         modelMatrix = rotMatrix * transMatrix;
 
