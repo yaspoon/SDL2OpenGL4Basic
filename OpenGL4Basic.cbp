@@ -44,6 +44,8 @@
 		<Unit filename="MD2Model.h" />
 		<Unit filename="Main.cpp" />
 		<Unit filename="Mat4.h" />
+		<Unit filename="Math.cpp" />
+		<Unit filename="Math.h" />
 		<Unit filename="Shader.cpp" />
 		<Unit filename="Shader.h" />
 		<Unit filename="Timer.cpp" />
