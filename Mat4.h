@@ -1,9 +1,14 @@
 #ifndef MAT4_H
 #define MAT4_H
 
-#include "Vec4.h"
 #include <iostream>
 #include "string.h"
+#include "Vec4.h"
+
+// [fx ux rx tx]        [fx fy fz fw]
+// [fy uy ry ty]        [ux uy uz uw]
+// [fz uz rz tz]         [rx ry rz rw]
+// [fw uw rw tw]    [tx ty tz tw]
 
 template<typename T>
 class Mat4
@@ -38,23 +43,24 @@ public:
         }
 
         Mat4<T>(Vec4<T> a, Vec4<T> b, Vec4<T> c, Vec4<T> d)
-                //mat[0](a), mat[1](b), mat[2](c), mat[3](d)
         {
                 for(int i = 0; i < rows; i++)
                 {
-                        mat[0 * cols + i] = a[i];
-                        mat[1 * cols + i] = b[i];
-                        mat[2 * cols + i] = c[i];
-                        mat[3 * cols + i] = d[i];
+                        mat[0 * rows + i] = a[i];
+                        mat[1 * rows + i] = b[i];
+                        mat[2 * rows + i] = c[i];
+                        mat[3 * rows + i] = d[i];
                 }
         }
 
-        Mat4<T>(T a, T b, T c, T d, //Col1
-                        T e, T f, T g, T h, //Col2
-                        T i, T j, T k, T l, //Col3
-                        T x, T y, T z, T w //Col4
+        Mat4<T>(T a, T b, T c, T d, //Row1
+                        T e, T f, T g, T h, //Row2
+                        T i, T j, T k, T l, //Row3
+                        T x, T y, T z, T w //Row4
                         )
         {
+                /*These are actually the rows.. But I didn't know wtf I was  doing and though this was the columns being set
+                    hurrdurr*/
                 int col1 = 0 * cols;
                 int col2 = 1 * cols;
                 int col3 = 2 * cols;
@@ -89,7 +95,7 @@ public:
 
         T *operator[](int index)
         {
-                int offset = index * cols;
+                int offset = index * rows;
                 return &(mat[offset]);
         }
 
@@ -98,11 +104,28 @@ public:
                 return mat;
         }
 
+        Vec4<T> operator*(Vec4<T> v)
+        {
+                Vec4<T> retval;
+
+                int row0 = 0 * rows;
+                int row1 = 1 * rows;
+                int row2 = 2 * rows;
+                int row3 = 3 * rows;
+
+                retval[x] = v[x] * mat[row0 + 0] + v[y] * mat[row1 + 0] + v[z] * mat[row2 + 0] + v[w] * mat[row3 + 0];
+                retval[y] = v[x] * mat[row0 + 1] + v[y] * mat[row1 + 1] + v[z] * mat[row2 + 1] + v[w] * mat[row3 + 1];
+                retval[z] = v[x] * mat[row0 + 2] + v[y] * mat[row1 + 2] + v[z] * mat[row2 + 2] + v[w] * mat[row3 + 2];
+                retval[w] = v[x] * mat[row0 + 3] + v[y] * mat[row1 + 3] + v[z] * mat[row2 + 3] + v[w] * mat[row3 + 3];
+
+                return retval;
+        }
+
         /*
         Wow this is fucked and took so long
         to write because I to retarded for this shit
         */
-        Mat4 operator*(Mat4<T> other)
+        Mat4<T> operator*(Mat4<T> other)
         {
                 Mat4<T> retval;
 
@@ -111,15 +134,59 @@ public:
                         for(int col = 0; col < cols; col++)
                         {
                                 T accum = (T)0.0f;
-                                /*i is to get the 4 elements from each row and
-                                   col we currently have selected*/
+                                //i is to get the 4 elements from each row and
+                                   //col we currently have selected
                                 for(int i = 0; i < cols; i++)
                                 {
-                                        accum += (*this)[i][row] * other[col][i];
+                                        accum += (*this)[row][i] * other[i][col];
                                 }
-                                retval[col][row] = accum;
+                                retval[row][col] = accum;
                         }
                 }
+
+                return retval;
+        }
+
+        Mat4<T> setForward(Vec4<T> f)
+        {
+                Mat4<T> retval(*this);
+
+                retval[0][x] = f[x];
+                retval[0][y] = f[y];
+                retval[0][z] = f[z];
+
+                return retval;
+        }
+
+        Mat4<T> setUp(Vec4<T> up)
+        {
+                Mat4<T> retval(*this);
+
+                retval[1][x] = up[x];
+                retval[1][y] = up[y];
+                retval[1][z] = up[z];
+
+                return retval;
+        }
+
+        Mat4<T> setRight(Vec4<T> right)
+        {
+                Mat4<T> retval(*this);
+
+                retval[2][x] = right[x];
+                retval[2][y] = right[y];
+                retval[2][z] = right[z];
+
+                return retval;
+        }
+
+        Mat4<T> setTranslation(Vec4<T> trans)
+        {
+                Mat4<T> retval(*this);
+
+                retval[3][x] = trans[x];
+                retval[3][y] = trans[y];
+                retval[3][z] = trans[z];
 
                 return retval;
         }
@@ -130,7 +197,7 @@ public:
                 {
                         for(int j = 0; j < cols; j++)
                         {
-                                std::cout << (*this)[j][i] << " ";
+                                std::cout << (*this)[i][j] << " ";
                         }
                         std::cout << std::endl;
                 }
