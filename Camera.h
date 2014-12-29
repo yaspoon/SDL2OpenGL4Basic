@@ -7,7 +7,7 @@
 class Camera
 {
 private:
-        static const int speed = 5;
+        static const int speed = 20;
         Vec4<float> position;
         Vec4<float> direction;
         Vec4<float> up;
