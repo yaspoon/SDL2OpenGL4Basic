@@ -28,13 +28,18 @@ Camera::Camera()
 
 void Camera::update(float dt)
 {
-        position[x] += (movedir[x] * speed) * dt; //Direction is 0 when we're not moving that that direction
-        position[y] += (movedir[y] * speed) * dt; //Direction is 0 when we're not moving that that direction
-        position[z] += (movedir[z] * speed) * dt; //Direction is 0 when we're not moving that that direction
-
         direction[x] = sin(Math::toRadians(yaw));
         direction[y] = sin(Math::toRadians(pitch));
         direction[z] = cos(Math::toRadians(yaw));
+
+        float length = direction.length();
+
+        Vec4<float> right = up.crossProduct(direction);
+        right = right.normalise();
+
+        Vec4<float> velocity = (direction * movedir[z]) + (right * movedir[x]);
+
+        position = position + velocity * dt;
 }
 
 Mat4<float> Camera::cameraMatrix()
@@ -42,7 +47,9 @@ Mat4<float> Camera::cameraMatrix()
         Mat4<float> camMatrix(1.0f);
 
         Vec4<float> camSide = up.crossProduct(direction);
+        camSide = camSide.normalise();
         Vec4<float> camUp = direction.crossProduct(camSide);
+        camUp = camUp.normalise();
 
         camMatrix = camMatrix.setForward(Vec4<float>(camSide[x], camUp[x], -direction[x], 1.0f));
         camMatrix = camMatrix.setUp(Vec4<float>(camSide[y], camUp[y], -direction[y], 1.0f));
@@ -59,7 +66,7 @@ Mat4<float> Camera::cameraMatrix()
 
 void Camera::dirx(float dir)
 {
-        movedir[x] = dir;
+        movedir[x] = dir * speed;
 }
 
 void Camera::diry(float dir)
@@ -69,8 +76,7 @@ void Camera::diry(float dir)
 
 void Camera::dirz(float dir)
 {
-        movedir[z] = dir;
-        std::cout << "camera dirz:" << movedir[z] << std::endl;
+        movedir[z] = dir * speed;
 }
 
 void Camera::updatePitch(float newMouse)
@@ -85,8 +91,6 @@ void Camera::updatePitch(float newMouse)
         {
                 pitch = -89.0f;
         }
-
-        //std::cout << "Pitch:" << pitch << std::endl;
 }
 
 void Camera::updateYaw(float newMouse)
@@ -100,6 +104,4 @@ void Camera::updateYaw(float newMouse)
         {
                 yaw += 360.0f;
         }
-
-        //std::cout << "Yaw:" << yaw << std::endl;
 }
