@@ -2,6 +2,7 @@
 #define VEC4_H
 
 #include <iostream>
+#include "math.h"
 
 enum v
 {
@@ -50,6 +51,16 @@ public:
         T* operator&()
         {
                 return xyzw;
+        }
+
+        Vec4<T> operator*(T scalar)
+        {
+                return Vec4<T>(scalar * xyzw[x], scalar * xyzw[y], scalar * xyzw[z], scalar * xyzw[w]);
+        }
+
+        Vec4<T> operator+(Vec4<T> other)
+        {
+                return Vec4<T>(xyzw[x] + other[x], xyzw[y] + other[y], xyzw[z] + other[z], xyzw[w] + other[w]);
         }
 
         T &operator[](int index)
