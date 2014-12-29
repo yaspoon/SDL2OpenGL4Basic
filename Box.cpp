@@ -1,21 +1,21 @@
 #include "Box.h"
 #include <string.h>
 
+static const unsigned short indexs[] = {0, 1, 2, //Front face
+                             2, 3, 0,
+                             5, 4, 7, //Back Face
+                             7, 6, 5,
+                             1, 5, 6, //Right side
+                             6, 2, 1,
+                             0, 3, 7, //left side
+                             7, 4, 0,
+                             3,2, 6, //Top
+                             6, 7 ,3,
+                             4, 5, 1,//Bottom
+                             1, 0, 4};
 Box::Box()
 {
-        short indexs[] = {0, 1, 2, //Front face
-                                     2, 3, 0,
-                                     5, 4, 7, //Back Face
-                                     7, 6, 5,
-                                     1, 5, 6, //Right side
-                                     6, 2, 1,
-                                     4, 0, 3, //left side
-                                     3, 7, 4,
-                                     3,2, 6, //Top
-                                     6, 7 ,3,
-                                     4, 5, 1,//Bottom
-                                     1, 0, 4};
-        memcpy(indices, indexs, sizeof(short) * (sizeof(indexs) * sizeof(*indexs)));
+        memcpy(this->indices, indexs, sizeof(unsigned short) * 12 * 3);
 
         float vertexs[] = {-0.5, -0.5, -0.5, //Front Vertcices
                                             0.5, -0.5, -0.5,
@@ -32,6 +32,8 @@ Box::Box()
 
 Box::Box(Vec4<float> min, Vec4<float> max)
 {
+        memcpy(this->indices, indexs, sizeof(unsigned short) * 12 * 3);
+
         vertices[0] = min[x]; //Front Vertex 0
         vertices[1] = min[y];
         vertices[2] = min[z];
@@ -80,7 +82,12 @@ int Box::vcount()
         return vertexCount;
 }
 
-short *Box::getIndices()
+size_t Box::isize()
+{
+        return sizeof(indices);
+}
+
+unsigned short *Box::getIndices()
 {
         return indices;
 }
