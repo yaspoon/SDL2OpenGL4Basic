@@ -82,8 +82,8 @@ Mat4<float> perspectiveProjection(float FOV, float aspectRatio, float near, floa
 
 void init()
 {
-        Vec4<float> min(-0.5, -0.5, -0.5, 1.0f);
-        Vec4<float> max(0.5, 0.5, 0.5, 1.0f);
+        Vec4<float> min(-10.0, -10.0, -10.0, 1.0f);
+        Vec4<float> max(10.0, 10.0, 10.0, 1.0f);
         Box b(min, max);
 
         glEnable(GL_MULTISAMPLE);
@@ -99,22 +99,12 @@ void init()
                                                                           {0.0, 0.0, 1.0},
                                                                           {1.0, 1.0, 1.0}};
 
-        GLushort indices[] = {0, 1, 2, //Front face
-                                     2, 3, 0,
-                                     5, 4, 7, //Back Face
-                                     7, 6, 5,
-                                     1, 5, 6, //Right side
-                                     6, 2, 1,
-                                     0, 3, 7, //left side
-                                     7, 4, 0,
-                                     3,2, 6, //Top
-                                     6, 7 ,3,
-                                     4, 5, 1,//Bottom
-                                     1, 0, 4};
-
         glGenBuffers(NUM_INDEXS, ibo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 12 * 3, indices, GL_STATIC_DRAW);
+
+        unsigned short *test = b.getIndices();
+        size_t stuff = b.isize();
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, b.isize(), b.getIndices(), GL_STATIC_DRAW);
 
         glGenVertexArrays(NUM_VAOS, vertArrays);
         glBindVertexArray(vertArrays[TRIANGLES]);
@@ -198,7 +188,7 @@ int main(int argc, char *argv[])
         modelMatrix = Mat4<float>(1.0f);
 
         Mat4<float> transMatrix(1.0f);
-        transMatrix[3][2] = 0.0f;
+        transMatrix[3][2] = 10.0f;
 
         cameraMatrix = cam.cameraMatrix();
 
