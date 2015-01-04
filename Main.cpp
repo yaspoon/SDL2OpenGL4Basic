@@ -29,9 +29,9 @@ GLuint buffers[NUM_BUFFERS];
 GLuint ibo[NUM_INDEXS];
 const GLuint NUM_VERTICES = 8;
 
-const GLfloat width = 640.0f;
-const GLfloat height = 640.0f;
-const GLfloat mf_aspectRatio = width / height;
+GLfloat width = 640.0f;
+GLfloat height = 640.0f;
+GLfloat mf_aspectRatio = width / height;
 const GLfloat mf_fov = 90.0f;
 const GLfloat mf_near = 1.0f;
 const GLfloat mf_far = 500.0f;
@@ -102,8 +102,6 @@ void init()
         glGenBuffers(NUM_INDEXS, ibo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
 
-        unsigned short *test = b.getIndices();
-        size_t stuff = b.isize();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, b.isize(), b.getIndices(), GL_STATIC_DRAW);
 
         glGenVertexArrays(NUM_VAOS, vertArrays);
@@ -295,6 +293,22 @@ int main(int argc, char *argv[])
                                                         case SDL_SCANCODE_D:
                                                                 cam.dirx(0.0f);
                                                                 break;
+                                                        case SDL_SCANCODE_F1:
+                                                        {
+                                                                SDL_DisplayMode dm;
+                                                                SDL_GetDesktopDisplayMode(0, &dm);
+
+                                                                width = dm.w;
+                                                                height = dm.h;
+                                                                mf_aspectRatio = width / height;
+
+                                                                SDL_SetWindowDisplayMode(window, &dm);
+                                                                glViewport(0, 0, width, height);
+                                                                SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+
+                                                                projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
+                                                                glUniformMatrix4fv(projMatLocation, 1, false, (float*)&projectionMatrix);
+                                                        }
                                                         }
                                                 }
                                                 else if(event.type == SDL_MOUSEMOTION)
@@ -313,12 +327,6 @@ int main(int argc, char *argv[])
                                         cameraMatrix = cam.cameraMatrix();
 
                                         Mat4<float> rotMatrix(1.0f);
-                                        /*float radians = (float)rotStep * (PI / 180.0f);
-                                        rotMatrix[1][1] = cos(radians);
-                                        rotMatrix[1][2] = -sin(radians);
-                                        rotMatrix[2][1] = sin(radians);
-                                        rotMatrix[2][2] = cos(radians);*/
-
                                         modelMatrix = rotMatrix * transMatrix;
 
                                         draw();
