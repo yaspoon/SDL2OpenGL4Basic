@@ -11,33 +11,22 @@ Camera::Camera()
         position[z] = 0.0f;
         position[w] = 1.0f;
 
-        direction[x] = 0.0f;
-        direction[y] = 0.0f;
-        direction[z] = 1.0f;
-        direction[w] = 0.0f;
-
         up[x] = 0.0f;
         up[y] = 1.0f;
         up[z] = 0.0f;
         up[w] = 0.0f;
 
-        pitch = 0.0f;
-        yaw = 0.0f;
-        roll = 0.0f;
 }
 
 void Camera::update(float dt)
 {
-        direction[x] = sin(Math::toRadians(yaw));
-        direction[y] = sin(Math::toRadians(pitch));
-        direction[z] = cos(Math::toRadians(yaw));
+        direction.normalise();
+        Vec4<float> tmpDir = direction.toVector().normalise();
 
-        float length = direction.length();
-
-        Vec4<float> right = up.crossProduct(direction);
+        Vec4<float> right = up.crossProduct(tmpDir);
         right = right.normalise();
 
-        Vec4<float> velocity = (direction * movedir[z]) + (right * movedir[x]);
+        Vec4<float> velocity = (tmpDir * movedir[z]) + (right * movedir[x]);
 
         position = position + velocity * dt;
 }
@@ -45,15 +34,17 @@ void Camera::update(float dt)
 Mat4<float> Camera::cameraMatrix()
 {
         Mat4<float> camMatrix(1.0f);
+        direction.normalise();
+        Vec4<float> tmpDir = direction.toVector().normalise();
 
-        Vec4<float> camSide = up.crossProduct(direction);
+        Vec4<float> camSide = up.crossProduct(tmpDir);
         camSide = camSide.normalise();
-        Vec4<float> camUp = direction.crossProduct(camSide);
+        Vec4<float> camUp = tmpDir.crossProduct(camSide);
         camUp = camUp.normalise();
 
-        camMatrix = camMatrix.setForward(Vec4<float>(camSide[x], camUp[x], -direction[x], 1.0f));
-        camMatrix = camMatrix.setUp(Vec4<float>(camSide[y], camUp[y], -direction[y], 1.0f));
-        camMatrix = camMatrix.setRight(Vec4<float>(camSide[z], camUp[z], -direction[z], 1.0f));
+        camMatrix = camMatrix.setForward(Vec4<float>(camSide[x], camUp[x], -tmpDir[x], 1.0f));
+        camMatrix = camMatrix.setUp(Vec4<float>(camSide[y], camUp[y], -tmpDir[y], 1.0f));
+        camMatrix = camMatrix.setRight(Vec4<float>(camSide[z], camUp[z], -tmpDir[z], 1.0f));
 
         Mat4<float> trans(1.0f);
         trans = trans.setTranslation(-position);
@@ -81,27 +72,11 @@ void Camera::dirz(float dir)
 
 void Camera::updatePitch(float newMouse)
 {
-        pitch -= (newMouse * mouseSensitivity);
+        direction.add2Pitch(-newMouse * mouseSensitivity);
 
-        if(pitch > 89.0f)
-        {
-                pitch = 89.0f;
-        }
-        else if(pitch < -89.0f)
-        {
-                pitch = -89.0f;
-        }
 }
 
 void Camera::updateYaw(float newMouse)
 {
-        yaw += (newMouse * mouseSensitivity);
-        if(yaw > 180.0f)
-        {
-                yaw -= 360.0f;
-        }
-        else if(yaw < -180.0f)
-        {
-                yaw += 360.0f;
-        }
+        direction.add2Yaw(newMouse * mouseSensitivity);
 }

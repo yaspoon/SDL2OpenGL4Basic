@@ -3,18 +3,22 @@
 
 #include "Vec4.h"
 #include "Mat4.h"
+#include "EAngle.h"
 
 class Camera
 {
 private:
         static const int speed = 20;
         Vec4<float> position;
-        Vec4<float> direction;
+        //Vec4<float> direction;
         Vec4<float> up;
         Vec4<float> movedir;
-        float pitch;
-        float yaw;
-        float roll;
+        //float pitch;
+        //float yaw;
+        //float roll;
+        EAngle direction;
+
+
 public:
         Camera();
         void update(float dt);
