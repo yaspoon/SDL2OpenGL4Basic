@@ -1,3 +1,6 @@
+#ifndef SHADER_H
+#define SHADER_H
+
 #include <string>
 #define GL_GLEXT_PROTOTYPES 1
 #include <SDL2/SDL_opengl.h>
@@ -20,3 +23,4 @@ public:
         Shader(std::string filepath);
         static GLuint LoadShaders(std::vector<struct ShaderList> shaders);
 };
+#endif // SHADER_H
