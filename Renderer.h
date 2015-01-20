@@ -44,6 +44,8 @@ private:
         Mat4<float> frustumProjection(float left, float right, float top, float bottom, float near, float far);
         Mat4<float> perspectiveProjection(float FOV, float aspectRatio, float near, float far);
 
+        std::string title;
+
         SDL_Window *window = NULL;
         SDL_GLContext context = NULL;
 public:
@@ -54,6 +56,8 @@ public:
         bool initSDL();
         void initGL(std::vector<struct ShaderList> list);
         void cleanup();
+
+        void setWindowTitle(std::string title);
 
         GLint loadProgram(std::vector<struct ShaderList> list);
         void useProgram(GLint program);
