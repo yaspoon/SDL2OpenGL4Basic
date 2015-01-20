@@ -19,7 +19,6 @@ EAngle::EAngle(float pitch, float yaw, float roll)
 void EAngle::add2Pitch(float y)
 {
         pitch += y;
-        std::cout << "pitch:" << pitch << std::endl;
 }
 
 void EAngle::add2Yaw(float x)
@@ -45,11 +44,11 @@ void EAngle::normalise()
 
         if(yaw > 180.0f)
         {
-                yaw = 180.0f;
+                yaw = yaw - 360.0f;
         }
         else if(yaw < -180.0f)
         {
-                yaw = -180.0f;
+                yaw = yaw + 360.0f;
         }
 
         if(roll > 180.0f)
