@@ -5,6 +5,8 @@
 Renderer::Renderer():
 modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
 {
+        title = "OpenGL 4.3 Test";
+
         mf_width = 640.0f;
         mf_height = 480.0f;
         mf_aspectRatio = mf_width / mf_height;
@@ -22,6 +24,8 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
 Renderer::Renderer(float width, float height):
 modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
 {
+        title = "OpenGL 4.3 Test";
+
         mf_width = width;
         mf_height = height;
         mf_aspectRatio = mf_width / mf_height;
@@ -39,6 +43,8 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
 Renderer::Renderer(float width, float height, float near, float far, float fov):
 modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
 {
+        title = "OpenGL 4.3 Test";
+
         mf_width = width;
         mf_height = height;
         mf_aspectRatio = mf_width / mf_height;
@@ -89,13 +95,12 @@ bool Renderer::initSDL()
 {
         if(SDL_Init(SDL_INIT_EVERYTHING) == 0)
         {
-                window = SDL_CreateWindow("OpenGL 4.3 Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mf_width, mf_height, SDL_WINDOW_OPENGL);
+                window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mf_width, mf_height, SDL_WINDOW_OPENGL);
                 if(window != NULL)
                 {
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-                        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
                         context = SDL_GL_CreateContext(window);
                         if(context != NULL)
                         {
@@ -119,11 +124,10 @@ bool Renderer::initSDL()
 
 void Renderer::initGL(std::vector<struct ShaderList> list)
 {
-        //glEnable(GL_MULTISAMPLE);
         glViewport(0, 0, mf_width, mf_height);
 
-        /*glCullFace(GL_BACK);
-        glEnable(GL_CULL_FACE);*/
+        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
 
         program = loadProgram(list);
         glUseProgram(program);
@@ -148,6 +152,12 @@ void Renderer::cleanup()
         }
 
         SDL_Quit();
+}
+
+void Renderer::setWindowTitle(std::string title)
+{
+        std::string newTitle = this->title + " FPS:" + title;
+        SDL_SetWindowTitle(window, newTitle.c_str());
 }
 
 GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
@@ -207,6 +217,8 @@ void Renderer::draw()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
 
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, NULL);
+
+        SDL_GL_SwapWindow(window);
 }
 
 void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize)
@@ -237,6 +249,6 @@ void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *
                 std::cout << "Couldn't find Colour  n in shader" << std::endl;
         }
 
-        glVertexAttribPointer(vColour, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)(vsize/sizeof(float)));
+        glVertexAttribPointer(vColour, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)(vsize));
         glEnableVertexAttribArray(vColour);
 }
