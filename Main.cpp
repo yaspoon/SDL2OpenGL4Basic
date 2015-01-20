@@ -3,6 +3,7 @@
 #define GL_GLEXT_PROTOTYPES 1
 #include <SDL2/SDL_opengl.h>
 #include <iostream>
+#include <sstream>
 
 #include "Shader.h"
 #include "MD2Model.h"
@@ -11,6 +12,7 @@
 #include "Camera.h"
 #include "Timer.h"
 
+
 #include "Box.h"
 #include "Renderer.h"
 
@@ -18,6 +20,8 @@ const GLfloat PI = 3.14;
 enum vaoIds {TRIANGLES, NUM_VAOS};
 enum bufferIds {ARRAY_BUFFER, NUM_BUFFERS};
 enum indexIds{INDEXS, NUM_INDEXS};
+
+static const float MAX_FPS = 60.0f;
 
 GLint vPosition;
 GLint vColour;
@@ -59,6 +63,7 @@ int main(int argc, char *argv[])
 {
         SDL_bool relativeMouse = SDL_FALSE;
         Timer frameTimer;
+        Timer fps;
         Camera cam;
 
         Mat4<float> transMatrix(1.0f);
@@ -66,8 +71,6 @@ int main(int argc, char *argv[])
 
         MD2Model skel;
         skel.loadModel("./hueteotl/tris.md2");
-        SDL_Window *window = NULL;
-        SDL_GLContext context = NULL;
         bool quit = false;
 
         SDL_Event event;
@@ -79,6 +82,11 @@ int main(int argc, char *argv[])
         frameTimer.start();
         float previousTime = frameTimer.getTicks();
         float currentTime = previousTime;
+
+        const float FRAME_TIME = 1000.0f / MAX_FPS; //Amount of time each frame should take
+        int frame = 0;
+
+        fps.start();
 
         while(!quit)
         {
@@ -131,26 +139,14 @@ int main(int argc, char *argv[])
                                         break;
                                 case SDL_SCANCODE_F1:
                                 {
-                                        /*SDL_DisplayMode dm;
-                                        SDL_GetDesktopDisplayMode(0, &dm);
-
-                                        width = dm.w;
-                                        height = dm.h;
-                                        mf_aspectRatio = width / height;
-
-                                        SDL_SetWindowDisplayMode(window, &dm);
-                                        glViewport(0, 0, width, height);
-                                        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-
-                                        projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
-                                        glUniformMatrix4fv(projMatLocation, 1, false, (float*)&projectionMatrix);*/
+                                        /*Implement fullscreen switching*/
                                 }
                                 }
                         }
                         else if(event.type == SDL_MOUSEMOTION)
                         {
-                                //cam.updatePitch((float)event.motion.yrel);
-                                //cam.updateYaw((float)event.motion.xrel);
+                                cam.updatePitch((float)event.motion.yrel);
+                                cam.updateYaw((float)event.motion.xrel);
                         }
                 }
 
@@ -158,6 +154,12 @@ int main(int argc, char *argv[])
                 float dt = (float)(currentTime - previousTime) / 1000.0f;
                 cam.update(dt);
                 previousTime = currentTime;
+
+                /*Frame limiting*/
+                if(dt < FRAME_TIME)
+                {
+                        SDL_Delay(FRAME_TIME - dt);
+                }
 
 
                 renderer.updateCameraMatrix(cam.cameraMatrix());
@@ -170,7 +172,49 @@ int main(int argc, char *argv[])
                 rotStep += 1;
                 rotStep %= 360;
 
-                SDL_GL_SwapWindow(window);
+                GLenum error = glGetError();
+
+                switch(error)
+                {
+                case GL_INVALID_ENUM:
+                        std::cout << "ERROR: GL Invalid Enum" << std::endl;
+                case GL_INVALID_VALUE:
+                        std::cout << "ERROR: GL Invalid Value" << std::endl;
+                        break;
+                case GL_INVALID_OPERATION:
+                        std::cout << "ERROR: GL Invalid Operation" << std::endl;
+                        break;
+                case GL_INVALID_FRAMEBUFFER_OPERATION:
+                        std::cout << "ERROR: GL Invalid Framebuffer Operation" << std::endl;
+                        break;
+                case GL_OUT_OF_MEMORY:
+                        std::cout << "ERROR: GL Out of Memory" << std::endl;
+                        break;
+                case GL_STACK_UNDERFLOW:
+                        std::cout << "ERROR:GL Stack Underflow" << std::endl;
+                        break;
+                case GL_STACK_OVERFLOW:
+                        std::cout << "ERROR:GL Stack Overflow" << std::endl;
+                        break;
+                case GL_NO_ERROR:
+                        break;
+                default:
+                        break;
+                }
+
+                frame += 1;
+                float frameTime = fps.getTicks();
+                if(frameTime > 1000.0f)
+                {
+                        std::stringstream convert;
+                        convert << frame;
+                        renderer.setWindowTitle(convert.str());
+
+                        frame = 0;
+                        fps.stop();
+                        fps.start();
+                }
+
         }
 
         renderer.cleanup();
