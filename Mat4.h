@@ -123,7 +123,7 @@ public:
 
         /*
         Wow this is fucked and took so long
-        to write because I to retarded for this shit
+        to write because I'm to retarded for this shit
         */
         Mat4<T> operator*(Mat4<T> other)
         {
@@ -154,6 +154,7 @@ public:
                 retval[0][x] = f[x];
                 retval[0][y] = f[y];
                 retval[0][z] = f[z];
+                retval[0][w] = f[w];
 
                 return retval;
         }
@@ -165,6 +166,7 @@ public:
                 retval[1][x] = up[x];
                 retval[1][y] = up[y];
                 retval[1][z] = up[z];
+                retval[1][w] = up[w];
 
                 return retval;
         }
@@ -176,6 +178,7 @@ public:
                 retval[2][x] = right[x];
                 retval[2][y] = right[y];
                 retval[2][z] = right[z];
+                retval[2][w] = right[w];
 
                 return retval;
         }

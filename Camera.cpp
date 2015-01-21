@@ -42,9 +42,9 @@ Mat4<float> Camera::cameraMatrix()
         Vec4<float> camUp = tmpDir.crossProduct(camSide);
         camUp = camUp.normalise();
 
-        camMatrix = camMatrix.setForward(Vec4<float>(camSide[x], camUp[x], -tmpDir[x], 1.0f));
-        camMatrix = camMatrix.setUp(Vec4<float>(camSide[y], camUp[y], -tmpDir[y], 1.0f));
-        camMatrix = camMatrix.setRight(Vec4<float>(camSide[z], camUp[z], -tmpDir[z], 1.0f));
+        camMatrix = camMatrix.setForward(Vec4<float>(camSide[x], camUp[x], -tmpDir[x], 0.0f));
+        camMatrix = camMatrix.setUp(Vec4<float>(camSide[y], camUp[y], -tmpDir[y], 0.0f));
+        camMatrix = camMatrix.setRight(Vec4<float>(camSide[z], camUp[z], -tmpDir[z], 0.0f));
 
         Mat4<float> trans(1.0f);
         trans = trans.setTranslation(-position);
