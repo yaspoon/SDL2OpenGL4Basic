@@ -62,8 +62,8 @@ void init()
 int main(int argc, char *argv[])
 {
         SDL_bool relativeMouse = SDL_FALSE;
-        Timer frameTimer;
-        Timer fps;
+        Timer GameTimer; //Keep track of time between game frames
+        Timer FrameTimer; //Keep track of time between actual drawn frames
         Camera cam;
 
         Mat4<float> transMatrix(1.0f);
@@ -79,14 +79,18 @@ int main(int argc, char *argv[])
 
         int rotStep = 0;
 
-        frameTimer.start();
-        float previousTime = frameTimer.getTicks();
+        GameTimer.start();
+        float previousTime = GameTimer.getTicks();
         float currentTime = previousTime;
 
         const float FRAME_TIME = 1000.0f / MAX_FPS; //Amount of time each frame should take
         int frame = 0;
+        int ticks = 0;
+        float timeSinceLastFrame = 0;
 
-        fps.start();
+        bool uncappedFps = false;
+
+        FrameTimer.start();
 
         while(!quit)
         {
@@ -119,6 +123,9 @@ int main(int argc, char *argv[])
                                         relativeMouse = (SDL_bool)!relativeMouse;
                                         SDL_SetRelativeMouseMode(relativeMouse);
                                         break;
+                                case SDL_SCANCODE_F2:
+                                        uncappedFps = !uncappedFps;
+                                        break;
                                 }
                         }
                         else if(event.type == SDL_KEYUP)
@@ -150,60 +157,62 @@ int main(int argc, char *argv[])
                         }
                 }
 
-                currentTime = frameTimer.getTicks();
+                currentTime = GameTimer.getTicks();
                 float dt = (float)(currentTime - previousTime) / 1000.0f;
+                timeSinceLastFrame += currentTime - previousTime;
                 cam.update(dt);
                 previousTime = currentTime;
 
                 /*Frame limiting*/
-                if(dt < FRAME_TIME)
+                if(timeSinceLastFrame > FRAME_TIME || uncappedFps)
                 {
-                        SDL_Delay(FRAME_TIME - dt);
+                        timeSinceLastFrame = 0;
+                        //SDL_Delay(FRAME_TIME - dt);
+
+                        renderer.updateCameraMatrix(cam.cameraMatrix());
+
+                        Mat4<float> rotMatrix(1.0f);
+                        renderer.updateModelMatrix(rotMatrix * transMatrix);
+
+                        renderer.draw();
+
+                        rotStep += 1;
+                        rotStep %= 360;
+
+                        GLenum error = glGetError();
+
+                        switch(error)
+                        {
+                        case GL_INVALID_ENUM:
+                                std::cout << "ERROR: GL Invalid Enum" << std::endl;
+                        case GL_INVALID_VALUE:
+                                std::cout << "ERROR: GL Invalid Value" << std::endl;
+                                break;
+                        case GL_INVALID_OPERATION:
+                                std::cout << "ERROR: GL Invalid Operation" << std::endl;
+                                break;
+                        case GL_INVALID_FRAMEBUFFER_OPERATION:
+                                std::cout << "ERROR: GL Invalid Framebuffer Operation" << std::endl;
+                                break;
+                        case GL_OUT_OF_MEMORY:
+                                std::cout << "ERROR: GL Out of Memory" << std::endl;
+                                break;
+                        case GL_STACK_UNDERFLOW:
+                                std::cout << "ERROR:GL Stack Underflow" << std::endl;
+                                break;
+                        case GL_STACK_OVERFLOW:
+                                std::cout << "ERROR:GL Stack Overflow" << std::endl;
+                                break;
+                        case GL_NO_ERROR:
+                                break;
+                        default:
+                                break;
+                        }
+
+                        frame += 1;
                 }
 
-
-                renderer.updateCameraMatrix(cam.cameraMatrix());
-
-                Mat4<float> rotMatrix(1.0f);
-                renderer.updateModelMatrix(rotMatrix * transMatrix);
-
-                renderer.draw();
-
-                rotStep += 1;
-                rotStep %= 360;
-
-                GLenum error = glGetError();
-
-                switch(error)
-                {
-                case GL_INVALID_ENUM:
-                        std::cout << "ERROR: GL Invalid Enum" << std::endl;
-                case GL_INVALID_VALUE:
-                        std::cout << "ERROR: GL Invalid Value" << std::endl;
-                        break;
-                case GL_INVALID_OPERATION:
-                        std::cout << "ERROR: GL Invalid Operation" << std::endl;
-                        break;
-                case GL_INVALID_FRAMEBUFFER_OPERATION:
-                        std::cout << "ERROR: GL Invalid Framebuffer Operation" << std::endl;
-                        break;
-                case GL_OUT_OF_MEMORY:
-                        std::cout << "ERROR: GL Out of Memory" << std::endl;
-                        break;
-                case GL_STACK_UNDERFLOW:
-                        std::cout << "ERROR:GL Stack Underflow" << std::endl;
-                        break;
-                case GL_STACK_OVERFLOW:
-                        std::cout << "ERROR:GL Stack Overflow" << std::endl;
-                        break;
-                case GL_NO_ERROR:
-                        break;
-                default:
-                        break;
-                }
-
-                frame += 1;
-                float frameTime = fps.getTicks();
+                float frameTime = FrameTimer.getTicks();
                 if(frameTime > 1000.0f)
                 {
                         std::stringstream convert;
@@ -211,8 +220,8 @@ int main(int argc, char *argv[])
                         renderer.setWindowTitle(convert.str());
 
                         frame = 0;
-                        fps.stop();
-                        fps.start();
+                        FrameTimer.stop();
+                        FrameTimer.start();
                 }
 
         }
