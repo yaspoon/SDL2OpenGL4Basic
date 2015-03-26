@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include "Common.h"
 #include "Math.h"
+#include <SOIL/SOIL.h>
+#include <SDL2/SDL_image.h>
 
 Renderer::Renderer():
 modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
@@ -126,6 +128,8 @@ void Renderer::initGL(std::vector<struct ShaderList> list)
 {
         glViewport(0, 0, mf_width, mf_height);
 
+        glDepthRange(mf_near, mf_far); /*Tell opengl where the near and far planes sit*/
+
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
 
@@ -182,6 +186,12 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Couldn't find modelMatrix in shader" << std::endl;
         }
 
+        lightPosLocation = glGetUniformLocation(program, "lightPos");
+        if(lightPosLocation == -1)
+        {
+            std::cout << "Couldn't find lighPos in shader" << std::endl;
+        }
+
         return program;
 }
 
@@ -211,44 +221,148 @@ void Renderer::draw()
 
         glUniformMatrix4fv(cameraMatLocation, 1, false, &cameraMatrix);
 
+        glUniform3f(lightPosLocation, 0.0f, 0.0f, -15.0f);
+
         glClear(GL_COLOR_BUFFER_BIT);
 
         glBindVertexArray(vertArrays[TRIANGLES]);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
+        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
 
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, NULL);
+        //glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_SHORT, NULL);
+
+        glDrawArrays(GL_TRIANGLES, 0, triangleCount);
 
         SDL_GL_SwapWindow(window);
 }
 
-void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize)
+void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize, size_t tsize, float *texCoords, float *normals, size_t nsize)
 {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, icount, indices, GL_STATIC_DRAW);
+        triangleCount = vsize / sizeof(*vertices);
+        glBindVertexArray(vertArrays[TRIANGLES]);
 
+        size_t bufSize = vsize + csize + tsize + nsize;
+
+        if(indices)
+        {
+                indexSize = icount;
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, icount, indices, GL_STATIC_DRAW);
+        }
+
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[ARRAY_BUFFER]);
+        glBufferData(GL_ARRAY_BUFFER,  bufSize, NULL, GL_STATIC_DRAW);
+
+        size_t total = 0;
+
+        if(vertices)
+        {
+                glBufferSubData(GL_ARRAY_BUFFER, 0, vsize, vertices);
+
+                vPosition = glGetAttribLocation(program, "vPosition");
+                if(vPosition == -1)
+                {
+                        std::cout << "Couldn't find vPosition in shader" << std::endl;
+                }
+                glVertexAttribPointer(vPosition, 3, GL_FLOAT,  GL_FALSE, 0, (GLvoid*)total);
+                glEnableVertexAttribArray(vPosition);
+                total += vsize;
+        }
+
+        if(colours)
+        {
+                glBufferSubData(GL_ARRAY_BUFFER, total, csize, colours);
+                vColour = glGetAttribLocation(program, "vColour");
+                if(vColour == -1)
+                {
+                        std::cout << "Couldn't find Colour in shader" << std::endl;
+                }
+                glVertexAttribPointer(vColour, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)total);
+                glEnableVertexAttribArray(vColour);
+                total += csize;
+        }
+
+        if(tsize)
+        {
+                glBufferSubData(GL_ARRAY_BUFFER, total, tsize, texCoords);
+
+                GLint texAttrib = glGetAttribLocation(program, "tCoord");
+                if(texAttrib == -1)
+                {
+                        std::cout << "Couldn't find tCoord in shader" << std::endl;
+                }
+                glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)total);
+                glEnableVertexAttribArray(texAttrib);
+                total += tsize;
+        }
+
+        if(normals)
+        {
+                glBufferSubData(GL_ARRAY_BUFFER, total, nsize, normals);
+
+                GLint normAttrib = glGetAttribLocation(program, "normal");
+                if(normAttrib == -1)
+                {
+                        std::cout << "Couldn't find normal in shader" << std::endl;
+                }
+                glVertexAttribPointer(normAttrib, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)total);
+                glEnableVertexAttribArray(normAttrib);
+                total += nsize;
+        }
+}
+
+void Renderer::loadTexture(char *name)
+{
+        SDL_Surface *crate = IMG_Load(name);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textures[TEXTURE]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, crate->w, crate->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, crate->pixels);
+        glUniform1i(glGetUniformLocation(program, "tex"), 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void Renderer::loadTest()
+{
+        unsigned short indexs[] = {0, 1, 2, //Front face
+                             2, 3, 0};
+
+        float coords[] = {0, 0, 1, 0, 1, 1, 0, 1};
+
+        float vertices[] = {-5.0f, -5.0f, 0.0f,
+                                        5.0f, -5.0f, 0.0f,
+                                        5.0f, 5.0f, 0.0f,
+                                        -5.0f, 5.0f, 0.0f};
 
         glBindVertexArray(vertArrays[TRIANGLES]);
 
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexs), indexs, GL_STATIC_DRAW);
+
         glBindBuffer(GL_ARRAY_BUFFER, buffers[ARRAY_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER,  vsize + csize, NULL, GL_STATIC_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vsize, vertices);
-        glBufferSubData(GL_ARRAY_BUFFER, vsize, csize, colours);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) + sizeof(coords), NULL, GL_STATIC_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+        glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertices), sizeof(coords), coords);
 
-        vPosition = glGetAttribLocation(program, "vPosition");
-        if(vPosition == -1)
-        {
-                std::cout << "Couldn't find vPosition in shader" << std::endl;
-        }
+        GLint vPos = glGetAttribLocation(program, "vPosition");
+        glVertexAttribPointer(vPos, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)0);
+        glEnableVertexAttribArray(vPos);
 
-        glVertexAttribPointer(vPosition, 3, GL_FLOAT,  GL_FALSE, 0, (GLvoid*)0);
-        glEnableVertexAttribArray(vPosition);
+        GLint tCoord = glGetAttribLocation(program, "tCoord");
+        glVertexAttribPointer(tCoord, 2, GL_FLOAT, GL_FALSE, 0, (const GLvoid *)sizeof(vertices));
+        glEnableVertexAttribArray(tCoord);
 
-        vColour = glGetAttribLocation(program, "vColour");
-        if(vColour == -1)
-        {
-                std::cout << "Couldn't find Colour  n in shader" << std::endl;
-        }
-
-        glVertexAttribPointer(vColour, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)(vsize));
-        glEnableVertexAttribArray(vColour);
+        GLuint texture;
+        glGenTextures(1, &texture);
+        SDL_Surface *crate = IMG_Load("basic2.png");
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, crate->w, crate->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, crate->pixels);
+        glUniform1i(glGetUniformLocation(program, "tex"), 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
+

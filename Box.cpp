@@ -13,6 +13,40 @@ static const unsigned short indexs[] = {0, 1, 2, //Front face
                              6, 7 ,3,
                              4, 5, 1,//Bottom
                              1, 0, 4};
+
+static const float coords[] = {0, 0.5, 0.33, 0.5, 0.33, 0, 0, 0, //0, 1, 0.33, 1, 0.33, 0.5, 0, 0.5, //Front
+                                                  1, 0.5, 0.66, 0.5, 0.66, 0, 1, 0,//Back
+                                                  0.33, 0.5, 0.66, 0.5, 0.66, 0, 0.33, 0,//Right
+                                                  0.33, 1, 0.33, 0.5, 0, 0.5, 0, 1,//Left
+                                                  0, 1, 1, 1, 1, 0, 0, 0,//Top
+                                                  0, 1, 1, 1, 1, 0, 0, 0, //Bottom
+                                                  };
+
+static const float normals[] = {0.0f, 0.0f, -1.0f,
+                                                    0.0f, 0.0f, -1.0f,
+                                                    0.0f, 0.0f, -1.0f,
+                                                    0.0f, 0.0f, -1.0f, //Front
+                                                    0.0f, 0.0f, 1.0f,
+                                                    0.0f, 0.0f, 1.0f,
+                                                    0.0f, 0.0f, 1.0f,
+                                                    0.0f, 0.0f, 1.0f,
+                                                    1.0f, 0.0f, 0.0f,
+                                                    1.0f, 0.0f, 0.0f,
+                                                    1.0f, 0.0f, 0.0f,
+                                                    1.0f, 0.0f, 0.0f,
+                                                    -1.0f, 0.0f, 0.0f,
+                                                    -1.0f, 0.0f, 0.0f,
+                                                    -1.0f, 0.0f, 0.0f,
+                                                    -1.0f, 0.0f, 0.0f,
+                                                    0.0f, 1.0f, 0.0f,
+                                                    0.0f, 1.0f, 0.0f,
+                                                    0.0f, 1.0f, 0.0f,
+                                                    0.0f, 1.0f, 0.0f,
+                                                    0.0f, -1.0f, 0.0f,
+                                                    0.0f, -1.0f, 0.0f,
+                                                    0.0f, -1.0f, 0.0f,
+                                                    0.0f, -1.0f, 0.0f};
+
 Box::Box()
 {
         memcpy(this->indices, indexs, sizeof(unsigned short) * 12 * 3);
@@ -28,6 +62,8 @@ Box::Box()
                                            -0.5, 0.5, 0.5};
 
         memcpy(vertices, vertexs, sizeof(float) * (sizeof(vertexs) / sizeof(*vertexs)));
+        memcpy(texCoords, coords, sizeof(float) * (sizeof(coords) / sizeof(*coords)));
+        memcpy(this->normals, normals, sizeof(normals));
 }
 
 Box::Box(Vec4<float> min, Vec4<float> max)
@@ -65,6 +101,9 @@ Box::Box(Vec4<float> min, Vec4<float> max)
         vertices[21] = min[x];
         vertices[22] = max[y];
         vertices[23] = max[z];
+
+        memcpy(texCoords, coords, sizeof(coords));
+        memcpy(this->normals, normals, sizeof(normals));
 }
 
 float *Box::Vertices()
@@ -102,4 +141,24 @@ void Box::print()
                 }
                 std::cout << std::endl;
         }
+}
+
+size_t Box::tsize()
+{
+        return sizeof(texCoords);
+}
+
+float *Box::getTextureCoords()
+{
+        return texCoords;
+}
+
+float *Box::getNormals()
+{
+    return normals;
+}
+
+size_t Box::nsize()
+{
+    return sizeof(normals);
 }

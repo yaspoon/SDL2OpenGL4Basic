@@ -2,6 +2,7 @@
 /*We need this weirdo define for the core profile gl3 stuff to work*/
 #define GL_GLEXT_PROTOTYPES 1
 #include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <sstream>
 
@@ -11,6 +12,7 @@
 #include "Mat4.h"
 #include "Camera.h"
 #include "Timer.h"
+#include "ObjLoader.h"
 
 
 #include "Box.h"
@@ -56,11 +58,17 @@ void init()
         list.push_back((struct ShaderList){GL_FRAGMENT_SHADER, "./shader.frag"});
 
         renderer.initGL(list);
-        renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), colours, sizeof(colours));
+        //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), colours, sizeof(colours), b.tsize(), b.getTextureCoords(), b.getNormals(), b.nsize());
+        ObjLoader loader("resources/sphere.obj");
+        renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, NULL, 0, 0, NULL, loader.getNormals(), loader.nsize());
+        renderer.loadTexture("Test2.png");
+
+        //renderer.loadTest();
 }
 
 int main(int argc, char *argv[])
 {
+        renderer = Renderer(1024, 768);
         SDL_bool relativeMouse = SDL_FALSE;
         Timer GameTimer; //Keep track of time between game frames
         Timer FrameTimer; //Keep track of time between actual drawn frames
@@ -179,6 +187,30 @@ int main(int argc, char *argv[])
                         rotStep += 1;
                         rotStep %= 360;
 
+                        frame += 1;
+                }
+
+                float frameTime = FrameTimer.getTicks();
+                if(frameTime > 1000.0f)
+                {
+                        std::stringstream convert;
+                        convert << frame;
+                        renderer.setWindowTitle(convert.str());
+
+                        frame = 0;
+                        FrameTimer.stop();
+                        FrameTimer.start();
+                }
+
+        }
+
+        renderer.cleanup();
+
+        return 0;
+}
+
+void checkGL()
+{
                         GLenum error = glGetError();
 
                         switch(error)
@@ -208,25 +240,4 @@ int main(int argc, char *argv[])
                         default:
                                 break;
                         }
-
-                        frame += 1;
-                }
-
-                float frameTime = FrameTimer.getTicks();
-                if(frameTime > 1000.0f)
-                {
-                        std::stringstream convert;
-                        convert << frame;
-                        renderer.setWindowTitle(convert.str());
-
-                        frame = 0;
-                        FrameTimer.stop();
-                        FrameTimer.start();
-                }
-
-        }
-
-        renderer.cleanup();
-
-        return 0;
 }

@@ -15,7 +15,8 @@ class Renderer
 private:
         enum vaoIds {TRIANGLES, NUM_VAOS};
         enum bufferIds {ARRAY_BUFFER, NUM_BUFFERS};
-        enum indexIds{INDEXS, NUM_INDEXS};
+        enum indexIds {INDEXS, NUM_INDEXS};
+        enum texIds {TEXTURE, NUM_TEXTURES};
 
         GLint vPosition;
         GLint vColour;
@@ -23,6 +24,7 @@ private:
         GLuint vertArrays[NUM_VAOS];
         GLuint buffers[NUM_BUFFERS];
         GLuint ibo[NUM_INDEXS];
+        GLuint textures[NUM_TEXTURES];
 
         float mf_width;
         float mf_height;
@@ -34,8 +36,13 @@ private:
         GLint projMatLocation;
         GLint modelMatLocation;
         GLint cameraMatLocation;
+        GLint lightPosLocation;
+
+        size_t indexSize;
 
         GLint program;
+
+        int triangleCount;
 
         Mat4<float> modelMatrix;
         Mat4<float> projectionMatrix;
@@ -68,6 +75,9 @@ public:
 
         void draw();
 
-        void loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount);
+        void loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount, size_t tsize, float *texCoords, float *normals, size_t nsize);
+        void loadTexture(char *name);
+
+        void loadTest();
 };
 #endif
