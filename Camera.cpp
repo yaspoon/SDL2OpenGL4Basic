@@ -55,6 +55,16 @@ Mat4<float> Camera::cameraMatrix()
         return camMatrix;
 }
 
+Vec4<float> Camera::getDirection()
+{
+        return direction.toVector();
+}
+
+Vec4<float> Camera::getPosition()
+{
+        return position;
+}
+
 void Camera::dirx(float dir)
 {
         movedir[x] = dir * speed;

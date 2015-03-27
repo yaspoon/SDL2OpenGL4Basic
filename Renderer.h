@@ -19,6 +19,7 @@ private:
 
         GLint vPosition;
         GLint vColour;
+        GLint vNormal;
 
         GLuint vertArrays[NUM_VAOS];
         GLuint buffers[NUM_BUFFERS];
@@ -34,12 +35,17 @@ private:
         GLint projMatLocation;
         GLint modelMatLocation;
         GLint cameraMatLocation;
+        GLint angleLocation;
+        GLint camPositionLocation;
+        GLfloat angle;
 
         GLint program;
 
         Mat4<float> modelMatrix;
         Mat4<float> projectionMatrix;
         Mat4<float> cameraMatrix;
+
+        Vec4<float> camPosition;
 
         Mat4<float> frustumProjection(float left, float right, float top, float bottom, float near, float far);
         Mat4<float> perspectiveProjection(float FOV, float aspectRatio, float near, float far);
@@ -65,9 +71,10 @@ public:
 
         void updateCameraMatrix(Mat4<float> camMat);
         void updateModelMatrix(Mat4<float> modMat);
+        void updateCameraPosition(Vec4<float> camDir);
 
         void draw();
 
-        void loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount);
+        void loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount, float *normals, size_t nsize);
 };
 #endif

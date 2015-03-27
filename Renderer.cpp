@@ -17,6 +17,7 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         projMatLocation = -1;
         cameraMatLocation = -1;
         modelMatLocation = -1;
+        angle = 0.0f;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
@@ -36,6 +37,7 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         projMatLocation = -1;
         cameraMatLocation = -1;
         modelMatLocation = -1;
+        angle = 0.0f;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
@@ -55,6 +57,7 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         projMatLocation = -1;
         cameraMatLocation = -1;
         modelMatLocation = -1;
+        angle = 0.0f;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
@@ -98,7 +101,7 @@ bool Renderer::initSDL()
                 window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mf_width, mf_height, SDL_WINDOW_OPENGL);
                 if(window != NULL)
                 {
-                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
                         context = SDL_GL_CreateContext(window);
@@ -182,6 +185,18 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Couldn't find modelMatrix in shader" << std::endl;
         }
 
+        camPositionLocation = glGetUniformLocation(program, "camPosition");
+        if(camPositionLocation == -1)
+        {
+                std::cout << "Couldn't find modelMatrix in shader" << std::endl;
+        }
+
+        angleLocation = glGetUniformLocation(program, "angle");
+        if(angle == -1)
+        {
+                std::cout << "Failed to find angle in shader" << std::endl;
+        }
+
         return program;
 }
 
@@ -205,23 +220,34 @@ void Renderer::updateModelMatrix(Mat4<float> modMat)
         modelMatrix = modMat;
 }
 
+void Renderer::updateCameraPosition(Vec4<float> camDir)
+{
+        camPosition = camDir;
+}
+
 void Renderer::draw()
 {
         glUniformMatrix4fv(modelMatLocation, 1, false, &modelMatrix);
 
         glUniformMatrix4fv(cameraMatLocation, 1, false, &cameraMatrix);
 
+        glUniform1f(angleLocation, angle);
+
+        glUniform3f(camPositionLocation, camPosition[x], camPosition[y], camPosition[z]);
+
+        angle = (angle += 1) <= 360 ? angle : 0.0f;
+
         glClear(GL_COLOR_BUFFER_BIT);
 
         glBindVertexArray(vertArrays[TRIANGLES]);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
 
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, NULL);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         SDL_GL_SwapWindow(window);
 }
 
-void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize)
+void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize, float *normals, size_t nsize)
 {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, icount, indices, GL_STATIC_DRAW);
@@ -230,9 +256,10 @@ void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *
         glBindVertexArray(vertArrays[TRIANGLES]);
 
         glBindBuffer(GL_ARRAY_BUFFER, buffers[ARRAY_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER,  vsize + csize, NULL, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER,  vsize + csize + nsize, NULL, GL_STATIC_DRAW);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vsize, vertices);
         glBufferSubData(GL_ARRAY_BUFFER, vsize, csize, colours);
+        glBufferSubData(GL_ARRAY_BUFFER, vsize + csize, nsize, normals);
 
         vPosition = glGetAttribLocation(program, "vPosition");
         if(vPosition == -1)
@@ -251,4 +278,13 @@ void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *
 
         glVertexAttribPointer(vColour, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)(vsize));
         glEnableVertexAttribArray(vColour);
+
+        vNormal = glGetAttribLocation(program, "vNormal");
+        if(vNormal == -1)
+        {
+                std::cout << "Failed to find vNormal in shader" << std::endl;
+        }
+
+        glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)(vsize + csize));
+        glEnableVertexAttribArray(vNormal);
 }

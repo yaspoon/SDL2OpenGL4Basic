@@ -41,22 +41,13 @@ void init()
         Vec4<float> max(10.0, 10.0, 10.0, 1.0f);
         Box b(min, max);
 
-        GLfloat colours[NUM_VERTICES*3] = {1.0, 0.0, 0.0,
-                                                                          0.0, 1.0, 0.0,
-                                                                          0.0, 0.0, 1.0,
-                                                                          1.0, 1.0, 1.0,
-                                                                          1.0, 0.0, 0.0,
-                                                                          0.0, 1.0, 0.0,
-                                                                          0.0, 0.0, 1.0,
-                                                                          1.0, 1.0, 1.0};
-
 
         std::vector<struct ShaderList> list;
         list.push_back((struct ShaderList){GL_VERTEX_SHADER, "./shader.vert"});
         list.push_back((struct ShaderList){GL_FRAGMENT_SHADER, "./shader.frag"});
 
         renderer.initGL(list);
-        renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), colours, sizeof(colours));
+        renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), b.Colours(), b.csize(), b.Normals(), b.nsize());
 }
 
 int main(int argc, char *argv[])
@@ -170,6 +161,7 @@ int main(int argc, char *argv[])
                         //SDL_Delay(FRAME_TIME - dt);
 
                         renderer.updateCameraMatrix(cam.cameraMatrix());
+                        renderer.updateCameraPosition(cam.getPosition());
 
                         Mat4<float> rotMatrix(1.0f);
                         renderer.updateModelMatrix(rotMatrix * transMatrix);

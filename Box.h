@@ -8,8 +8,12 @@
 class Box
 {
 private:
-        static const int vertexCount = 8;
-        float vertices[3 * vertexCount];
+        static const int vertexCount = 4;
+        static const int NUM_FACES = 6;
+        static const int NUM_TRIANGLES = NUM_FACES * 2;
+        float vertices[NUM_TRIANGLES][3][3];
+        float colours[NUM_TRIANGLES][3][3];
+        float normals[NUM_TRIANGLES][3][3];
         unsigned short indices[36];
 public:
         Box();
@@ -20,6 +24,12 @@ public:
         int vcount();
         unsigned short *getIndices();
         size_t isize();
+
+        float *Colours();
+        size_t csize();
+
+        float *Normals();
+        size_t nsize();
 
         void print(); //Print out box coordinates
 };

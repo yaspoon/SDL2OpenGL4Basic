@@ -12,6 +12,22 @@ enum v
         w = 3
 };
 
+enum c
+{
+        r = 0,
+        g,
+        b,
+        q
+};
+
+//Vertex 1, Vertex 2, Vertex 3 of a triangle
+enum triangle
+{
+        v1 = 0,
+        v2,
+        v3
+};
+
 template<typename T>
 class Vec4
 {

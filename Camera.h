@@ -24,6 +24,9 @@ public:
         void update(float dt);
         Mat4<float> cameraMatrix();
 
+        Vec4<float> getDirection();
+        Vec4<float> getPosition();
+
         void dirx(float dir);
         void diry(float dir);
         void dirz(float dir);
