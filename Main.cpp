@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
         Camera cam;
 
         Mat4<float> transMatrix(1.0f);
-        transMatrix[3][2] = 10.0f;
+        transMatrix[3][2] = 0.0f;
 
         MD2Model skel;
         skel.loadModel("./hueteotl/tris.md2");

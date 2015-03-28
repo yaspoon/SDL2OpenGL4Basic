@@ -14,9 +14,11 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add option="`sdl2-config --cflags`" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="`sdl2-config --libs`" />
+					<Add option="`pkg-config --libs SDL2_image`" />
 					<Add library="GL" />
 				</Linker>
 			</Target>
@@ -27,6 +29,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -42,12 +45,16 @@
 		<Unit filename="Camera.h" />
 		<Unit filename="EAngle.cpp" />
 		<Unit filename="EAngle.h" />
+		<Unit filename="Face.cpp" />
+		<Unit filename="Face.h" />
 		<Unit filename="MD2Model.cpp" />
 		<Unit filename="MD2Model.h" />
 		<Unit filename="Main.cpp" />
 		<Unit filename="Mat4.h" />
 		<Unit filename="Math.cpp" />
 		<Unit filename="Math.h" />
+		<Unit filename="ObjLoader.cpp" />
+		<Unit filename="ObjLoader.h" />
 		<Unit filename="Renderer.cpp" />
 		<Unit filename="Renderer.h" />
 		<Unit filename="Shader.cpp" />
@@ -55,6 +62,9 @@
 		<Unit filename="Timer.cpp" />
 		<Unit filename="Timer.h" />
 		<Unit filename="Vec4.h" />
+		<Unit filename="include/Renderable.h" />
+		<Unit filename="src/Renderable.cpp" />
+		<Unit filename="triplet.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
