@@ -106,7 +106,7 @@ std::vector<std::pair<int, bool> > ObjLoader::loadFace(std::string&ss)
                 std::istringstream convert(num);
                 int vertex;
                 convert >> vertex;
-                face.insert(face.begin(), std::pair<int, bool>(vertex, true));
+                face.insert(face.begin(), std::pair<int, bool>((vertex - 1), true));
         }
 
         start = end + 1;
@@ -136,7 +136,7 @@ std::vector<std::pair<int, bool> > ObjLoader::loadFace(std::string&ss)
                 std::istringstream convert(normalNum);
                 int normal;
                 convert >> normal;
-                face.insert(face.begin() + 2, std::pair<int, bool>(normal, true));
+                face.insert(face.begin() + 2, std::pair<int, bool>((normal - 1), true));
         }
 
         return face;
@@ -144,13 +144,14 @@ std::vector<std::pair<int, bool> > ObjLoader::loadFace(std::string&ss)
 
 float *ObjLoader::getVertices()
 {
+        int count = faces.size() * 3 * 3;
         float *vertices = new float[faces.size() * 3 * 3];
         int i = 0;
 
         for(std::vector<Face>::iterator it = faces.begin(); it != faces.end(); ++it, i += 9)
         {
                 Face face = *it;
-                triplet<float, float, float> vertex1= this->vertices[face.getVertex(0)];
+                triplet<float, float, float> vertex1= this->vertices[face.getVertex(2)];
                 vertices[i + 0] = vertex1.first;
                 vertices[i + 1] = vertex1.second;
                 vertices[i + 2] = vertex1.third;
@@ -160,7 +161,7 @@ float *ObjLoader::getVertices()
                 vertices[i + 4] = vertex2.second;
                 vertices[i + 5] = vertex2.third;
 
-                triplet<float, float, float> vertex3 = this->vertices[face.getVertex(2)];
+                triplet<float, float, float> vertex3 = this->vertices[face.getVertex(0)];
                 vertices[i + 6] = vertex3.first;
                 vertices[i + 7] = vertex3.second;
                 vertices[i + 8] = vertex3.third;
@@ -199,4 +200,23 @@ float *ObjLoader::getNormals()
         }
 
         return normals;
+}
+
+float *ObjLoader::getColours()
+{
+        float *colours = new float[faces.size() * 3 * 3];
+
+        for(int i = 0; i < faces.size() * 3 * 3; i += 3)
+        {
+                colours[i + 0] = 1.0f;
+                colours[i + 1] = 0.0f;
+                colours[i + 2] = 0.0f;
+        }
+
+        return colours;
+}
+
+size_t ObjLoader::csize()
+{
+        return sizeof(float) * faces.size() * 3 * 3;
 }

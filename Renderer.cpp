@@ -20,6 +20,9 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         cameraMatLocation = -1;
         modelMatLocation = -1;
 
+        diffuse = false;
+        specular = false;
+
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
 
@@ -39,6 +42,9 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         cameraMatLocation = -1;
         modelMatLocation = -1;
 
+        diffuse = false;
+        specular = false;
+
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
 
@@ -57,6 +63,9 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         projMatLocation = -1;
         cameraMatLocation = -1;
         modelMatLocation = -1;
+
+        diffuse = false;
+        specular = false;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
@@ -100,7 +109,7 @@ bool Renderer::initSDL()
                 window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mf_width, mf_height, SDL_WINDOW_OPENGL);
                 if(window != NULL)
                 {
-                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
                         context = SDL_GL_CreateContext(window);
@@ -132,6 +141,9 @@ void Renderer::initGL(std::vector<struct ShaderList> list)
 
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
+
+        //glEnable(GL_DEPTH_TEST);
+        //glDepthFunc(GL_LESS);
 
         program = loadProgram(list);
         glUseProgram(program);
@@ -186,12 +198,29 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Couldn't find modelMatrix in shader" << std::endl;
         }
 
+        camPositionLocation = glGetUniformLocation(program, "camPosition");
+        if(camPositionLocation == -1)
+        {
+                std::cout << "Couldn't find modelMatrix in shader" << std::endl;
+        }
+
         lightPosLocation = glGetUniformLocation(program, "lightPos");
         if(lightPosLocation == -1)
         {
-            std::cout << "Couldn't find lighPos in shader" << std::endl;
+                std::cout << "Failed to find lightPos in shader" << std::endl;
         }
 
+        enableDiffuseLocation = glGetUniformLocation(program, "enableDiffuse");
+        if(enableDiffuseLocation== -1)
+        {
+                std::cout << "Failed to enableDiffuse in shader" << std::endl;
+        }
+
+        enableSpecularLocation = glGetUniformLocation(program, "enableSpecular");
+        if(enableSpecularLocation == -1)
+        {
+                std::cout << "Failed to find enableSpecular in shader" << std::endl;
+        }
         return program;
 }
 
@@ -215,20 +244,28 @@ void Renderer::updateModelMatrix(Mat4<float> modMat)
         modelMatrix = modMat;
 }
 
+void Renderer::updateCameraPosition(Vec4<float> camDir)
+{
+        camPosition = camDir;
+}
+
 void Renderer::draw()
 {
         glUniformMatrix4fv(modelMatLocation, 1, false, &modelMatrix);
 
         glUniformMatrix4fv(cameraMatLocation, 1, false, &cameraMatrix);
 
-        glUniform3f(lightPosLocation, 0.0f, 0.0f, -15.0f);
+        glUniform3f(lightPosLocation, 0.0f, 0.0f, -5.0f);
 
-        glClear(GL_COLOR_BUFFER_BIT);
+        glUniform1i(enableDiffuseLocation, diffuse);
+        glUniform1i(enableSpecularLocation, specular);
+
+        glUniform3f(camPositionLocation, camPosition[x], camPosition[y], camPosition[z]);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glBindVertexArray(vertArrays[TRIANGLES]);
         //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
-
-        //glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_SHORT, NULL);
 
         glDrawArrays(GL_TRIANGLES, 0, triangleCount);
 
@@ -244,7 +281,6 @@ void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *
 
         if(indices)
         {
-                indexSize = icount;
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
                 glBufferData(GL_ELEMENT_ARRAY_BUFFER, icount, indices, GL_STATIC_DRAW);
         }
@@ -252,11 +288,11 @@ void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *
         glBindBuffer(GL_ARRAY_BUFFER, buffers[ARRAY_BUFFER]);
         glBufferData(GL_ARRAY_BUFFER,  bufSize, NULL, GL_STATIC_DRAW);
 
-        size_t total = 0;
+        size_t total = 0.0f;
 
         if(vertices)
         {
-                glBufferSubData(GL_ARRAY_BUFFER, 0, vsize, vertices);
+                glBufferSubData(GL_ARRAY_BUFFER, total, vsize, vertices);
 
                 vPosition = glGetAttribLocation(program, "vPosition");
                 if(vPosition == -1)
@@ -298,14 +334,14 @@ void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *
         if(normals)
         {
                 glBufferSubData(GL_ARRAY_BUFFER, total, nsize, normals);
-
-                GLint normAttrib = glGetAttribLocation(program, "normal");
-                if(normAttrib == -1)
+                vNormal = glGetAttribLocation(program, "vNormal");
+                if(vNormal == -1)
                 {
-                        std::cout << "Couldn't find normal in shader" << std::endl;
+                        std::cout << "Failed to find vNormal in shader" << std::endl;
                 }
-                glVertexAttribPointer(normAttrib, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)total);
-                glEnableVertexAttribArray(normAttrib);
+
+                glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)(total));
+                glEnableVertexAttribArray(vNormal);
                 total += nsize;
         }
 }
@@ -364,5 +400,10 @@ void Renderer::loadTest()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void Renderer::setTriangleCount(float triangles)
+{
+        triangleCount = triangles;
 }
 

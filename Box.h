@@ -8,11 +8,14 @@
 class Box
 {
 private:
-        static const int vertexCount = 8;
-        float vertices[3 * vertexCount];
+        static const int vertexCount = 4;
+        static const int NUM_FACES = 6;
+        static const int NUM_TRIANGLES = NUM_FACES * 2;
+        float vertices[NUM_TRIANGLES][3][3];
+        float colours[NUM_TRIANGLES][3][3];
+        float normals[NUM_TRIANGLES][3][3];
         unsigned short indices[36];
         float texCoords[2 * 4 * 6]; //2 floats per tex coord, 4 tex coords per face and 6 faces
-        float normals[6];
 public:
         Box();
         Box(Vec4<float> minPoint, Vec4<float> maxPoint);
@@ -26,6 +29,11 @@ public:
         size_t isize();
         size_t tsize();
         size_t nsize();
+
+        float *Colours();
+        size_t csize();
+
+        float *Normals();
 
         void print(); //Print out box coordinates
 };

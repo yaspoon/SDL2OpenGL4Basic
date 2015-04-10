@@ -43,27 +43,19 @@ void init()
         Vec4<float> max(10.0, 10.0, 10.0, 1.0f);
         Box b(min, max);
 
-        GLfloat colours[NUM_VERTICES*3] = {1.0, 0.0, 0.0,
-                                                                          0.0, 1.0, 0.0,
-                                                                          0.0, 0.0, 1.0,
-                                                                          1.0, 1.0, 1.0,
-                                                                          1.0, 0.0, 0.0,
-                                                                          0.0, 1.0, 0.0,
-                                                                          0.0, 0.0, 1.0,
-                                                                          1.0, 1.0, 1.0};
-
 
         std::vector<struct ShaderList> list;
-        list.push_back((struct ShaderList){GL_VERTEX_SHADER, "./shader.vert"});
-        list.push_back((struct ShaderList){GL_FRAGMENT_SHADER, "./shader.frag"});
+        list.push_back((struct ShaderList){GL_VERTEX_SHADER, "./shader_diffuse.vert"});
+        list.push_back((struct ShaderList){GL_FRAGMENT_SHADER, "./shader_diffuse.frag"});
 
         renderer.initGL(list);
+
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), colours, sizeof(colours), b.tsize(), b.getTextureCoords(), b.getNormals(), b.nsize());
         ObjLoader loader("resources/sphere.obj");
-        renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, NULL, 0, 0, NULL, loader.getNormals(), loader.nsize());
+        renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), 0, NULL, loader.getNormals(), loader.nsize());
         renderer.loadTexture("Test2.png");
 
-        //renderer.loadTest();
+        //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), b.Colours(), b.csize(), b.Normals(), b.nsize());
 }
 
 int main(int argc, char *argv[])
@@ -75,7 +67,7 @@ int main(int argc, char *argv[])
         Camera cam;
 
         Mat4<float> transMatrix(1.0f);
-        transMatrix[3][2] = 0.0f;
+        transMatrix[3][2] = 5.0f;
 
         MD2Model skel;
         skel.loadModel("./hueteotl/tris.md2");
@@ -131,6 +123,9 @@ int main(int argc, char *argv[])
                                         relativeMouse = (SDL_bool)!relativeMouse;
                                         SDL_SetRelativeMouseMode(relativeMouse);
                                         break;
+                                case SDL_SCANCODE_O:
+                                        renderer.diffuse = !renderer.diffuse;
+                                        break;
                                 case SDL_SCANCODE_F2:
                                         uncappedFps = !uncappedFps;
                                         break;
@@ -178,6 +173,7 @@ int main(int argc, char *argv[])
                         //SDL_Delay(FRAME_TIME - dt);
 
                         renderer.updateCameraMatrix(cam.cameraMatrix());
+                        renderer.updateCameraPosition(cam.getPosition());
 
                         Mat4<float> rotMatrix(1.0f);
                         renderer.updateModelMatrix(rotMatrix * transMatrix);

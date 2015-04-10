@@ -20,6 +20,7 @@ private:
 
         GLint vPosition;
         GLint vColour;
+        GLint vNormal;
 
         GLuint vertArrays[NUM_VAOS];
         GLuint buffers[NUM_BUFFERS];
@@ -36,10 +37,10 @@ private:
         GLint projMatLocation;
         GLint modelMatLocation;
         GLint cameraMatLocation;
+        GLint camPositionLocation;
         GLint lightPosLocation;
-
-        size_t indexSize;
-
+        GLint enableDiffuseLocation;
+        GLint enableSpecularLocation;
         GLint program;
 
         int triangleCount;
@@ -47,6 +48,8 @@ private:
         Mat4<float> modelMatrix;
         Mat4<float> projectionMatrix;
         Mat4<float> cameraMatrix;
+
+        Vec4<float> camPosition;
 
         Mat4<float> frustumProjection(float left, float right, float top, float bottom, float near, float far);
         Mat4<float> perspectiveProjection(float FOV, float aspectRatio, float near, float far);
@@ -70,8 +73,11 @@ public:
         void useProgram(GLint program);
         void setProjectionMatrix(Mat4<float> projMat);
 
+        void setTriangleCount(float triangles);
+
         void updateCameraMatrix(Mat4<float> camMat);
         void updateModelMatrix(Mat4<float> modMat);
+        void updateCameraPosition(Vec4<float> camDir);
 
         void draw();
 
@@ -79,5 +85,8 @@ public:
         void loadTexture(char *name);
 
         void loadTest();
+
+        bool diffuse;
+        bool specular;
 };
 #endif

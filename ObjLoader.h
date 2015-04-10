@@ -17,6 +17,9 @@ class ObjLoader
                 float *getNormals();
                 size_t nsize();
 
+                float *getColours();
+                size_t csize();
+
                 virtual ~ObjLoader();
         protected:
         private:
