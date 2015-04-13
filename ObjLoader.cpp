@@ -185,13 +185,14 @@ float *ObjLoader::getNormals()
         float *normals = new float[faces.size() * 3 * 3];
         int i = 0;
 
-        for(std::vector<Face>::iterator it = faces.begin(); it != faces.end(); ++it, i += 9)
+        for(std::vector<Face>::iterator it = faces.begin(); it != faces.end(); ++it)
         {
                 Face face = *it;
 
-                for(std::vector<int>::iterator it = face.beginNormals(); it != face.endNormals(); ++it)
+                for(std::vector<int>::iterator itNormals = face.beginNormals(); itNormals != face.endNormals(); ++itNormals, i += 3)
                 {
-                        triplet<float, float, float> normal = this->normals[*it];
+                        int normalIndex = *itNormals;
+                        triplet<float, float, float> normal = this->normals[normalIndex];
 
                         normals[i + 0] = normal.first;
                         normals[i + 1] = normal.second;
