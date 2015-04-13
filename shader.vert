@@ -36,7 +36,7 @@ void main()
 	vertPos = vec3(transformedPosition) / transformedPosition.w;
 	
 	vec4 tmp = vec4(0.0, 0.0, 30.0, 1.0);
-	vec4 lightPos = vec4(1.0);
+	//vec4 lightPos = vec4(1.0);
 	lightPos.x = tmp.x * cos(radians) + tmp.z * -sin(radians);
 	lightPos.y = tmp.y;
 	lightPos.z = tmp.x * sin(radians) + tmp.z * cos(radians);
