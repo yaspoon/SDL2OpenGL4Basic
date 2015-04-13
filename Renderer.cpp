@@ -109,7 +109,7 @@ bool Renderer::initSDL()
                 window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mf_width, mf_height, SDL_WINDOW_OPENGL);
                 if(window != NULL)
                 {
-                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
                         context = SDL_GL_CreateContext(window);
@@ -195,13 +195,13 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
         cameraMatLocation = glGetUniformLocation(program, "cameraMatrix");
         if(cameraMatLocation == -1)
         {
-                std::cout << "Couldn't find modelMatrix in shader" << std::endl;
+                std::cout << "Couldn't find cameraMatrix in shader" << std::endl;
         }
 
         camPositionLocation = glGetUniformLocation(program, "camPosition");
         if(camPositionLocation == -1)
         {
-                std::cout << "Couldn't find modelMatrix in shader" << std::endl;
+                std::cout << "Couldn't find camPosition in shader" << std::endl;
         }
 
         lightPosLocation = glGetUniformLocation(program, "lightPos");
@@ -274,7 +274,7 @@ void Renderer::draw()
 
 void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize, size_t tsize, float *texCoords, float *normals, size_t nsize)
 {
-        triangleCount = vsize / sizeof(*vertices);
+        triangleCount = vsize / sizeof(*vertices) / 3;
         glBindVertexArray(vertArrays[TRIANGLES]);
 
         size_t bufSize = vsize + csize + tsize + nsize;
