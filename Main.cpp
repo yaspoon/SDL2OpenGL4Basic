@@ -45,13 +45,13 @@ void init()
 
 
         std::vector<struct ShaderList> list;
-        list.push_back((struct ShaderList){GL_VERTEX_SHADER, "./shader_diffuse.vert"});
-        list.push_back((struct ShaderList){GL_FRAGMENT_SHADER, "./shader_diffuse.frag"});
+        list.push_back((struct ShaderList){GL_VERTEX_SHADER, "shader_diffuse.vert"});
+        list.push_back((struct ShaderList){GL_FRAGMENT_SHADER, "shader_diffuse.frag"});
 
         renderer.initGL(list);
 
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), colours, sizeof(colours), b.tsize(), b.getTextureCoords(), b.getNormals(), b.nsize());
-        ObjLoader loader("resources/sphere.obj");
+        ObjLoader loader("resources/sphere2.obj");
         renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), 0, NULL, loader.getNormals(), loader.nsize());
         renderer.loadTexture("Test2.png");
 
