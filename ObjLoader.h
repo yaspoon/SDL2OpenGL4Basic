@@ -6,6 +6,7 @@
 #include <sstream>
 #include "triplet.h"
 #include "Face.h"
+#include "Vertex.h"
 
 class ObjLoader
 {
@@ -17,13 +18,15 @@ class ObjLoader
                 float *getNormals();
                 size_t nsize();
 
+                float *getAvgNormals();
+
                 float *getColours();
                 size_t csize();
 
                 virtual ~ObjLoader();
         protected:
         private:
-                std::vector<triplet<float, float,float> > vertices;
+                std::vector<Vertex> vertices;
                 std::vector<triplet<float, float, float> > normals;
                 std::vector<Face> faces;
 
