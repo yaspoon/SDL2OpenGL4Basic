@@ -23,7 +23,7 @@ ObjLoader::ObjLoader(std::string filepath)
                else if(identifier.compare("v") == 0)
                {
                         std::vector<float> vec3 = loadNumbers(ss);
-                        vertices.push_back(triplet<float, float, float>(vec3[0], vec3[1], vec3[2]));
+                        vertices.push_back(Vertex(vec3[0], vec3[1], vec3[2]));
                }
                else if(identifier.compare("vn") == 0)
                {
@@ -50,6 +50,15 @@ ObjLoader::ObjLoader(std::string filepath)
                                        newFace.addNormal(vec3[2].first);
                                }
                                ss >> face;
+                       }
+
+                       for(int i = 0; i < 3; i ++)
+                       {
+                               int vertexIdx = newFace.getVertex(i);
+                               Vertex vert = vertices[vertexIdx];
+                               triplet<float, float, float> normal = normals[newFace.getNormal(i)];
+                               vert.addNormal(normal.first, normal.second, normal.third);
+                               vertices[vertexIdx] = vert;
                        }
 
                        faces.push_back(newFace);
@@ -151,17 +160,18 @@ float *ObjLoader::getVertices()
         for(std::vector<Face>::iterator it = faces.begin(); it != faces.end(); ++it, i += 9)
         {
                 Face face = *it;
-                triplet<float, float, float> vertex1= this->vertices[face.getVertex(2)];
+
+                triplet<float, float, float> vertex1= (this->vertices[face.getVertex(2)]).getXyz();
                 vertices[i + 0] = vertex1.first;
                 vertices[i + 1] = vertex1.second;
                 vertices[i + 2] = vertex1.third;
 
-                triplet<float, float, float> vertex2 = this->vertices[face.getVertex(1)];
+                triplet<float, float, float> vertex2 = (this->vertices[face.getVertex(1)]).getXyz();
                 vertices[i + 3] = vertex2.first;
                 vertices[i + 4] = vertex2.second;
                 vertices[i + 5] = vertex2.third;
 
-                triplet<float, float, float> vertex3 = this->vertices[face.getVertex(0)];
+                triplet<float, float, float> vertex3 = (this->vertices[face.getVertex(0)]).getXyz();
                 vertices[i + 6] = vertex3.first;
                 vertices[i + 7] = vertex3.second;
                 vertices[i + 8] = vertex3.third;
@@ -193,6 +203,32 @@ float *ObjLoader::getNormals()
                 {
                         int normalIndex = *itNormals;
                         triplet<float, float, float> normal = this->normals[normalIndex];
+
+                        normals[i + 0] = normal.first;
+                        normals[i + 1] = normal.second;
+                        normals[i + 2] = normal.third;
+                }
+        }
+
+        return normals;
+}
+
+float *ObjLoader::getAvgNormals()
+{
+        float *normals = new float[faces.size() * 3 * 3];
+        int i = 0;
+
+        for(std::vector<Face>::iterator it = faces.begin(); it != faces.end(); ++it)
+        {
+                Face face = *it;
+
+                //Reverse normals because the vertices are in the wrong order so we had to reverse them
+                //so we have to reverse the order of normals as well!
+                for(int j = 2; j >= 0; j--, i += 3)
+                {
+                        int vertIdx = face.getVertex(j);
+                        Vertex vert = vertices[vertIdx];
+                        triplet<float, float, float> normal = vert.getNormal();
 
                         normals[i + 0] = normal.first;
                         normals[i + 1] = normal.second;
