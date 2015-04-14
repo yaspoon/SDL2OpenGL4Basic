@@ -55,6 +55,8 @@
 		<Unit filename="Math.h" />
 		<Unit filename="ObjLoader.cpp" />
 		<Unit filename="ObjLoader.h" />
+		<Unit filename="Renderable.cpp" />
+		<Unit filename="Renderable.h" />
 		<Unit filename="Renderer.cpp" />
 		<Unit filename="Renderer.h" />
 		<Unit filename="Shader.cpp" />
@@ -62,8 +64,8 @@
 		<Unit filename="Timer.cpp" />
 		<Unit filename="Timer.h" />
 		<Unit filename="Vec4.h" />
-		<Unit filename="include/Renderable.h" />
-		<Unit filename="src/Renderable.cpp" />
+		<Unit filename="Vertex.cpp" />
+		<Unit filename="Vertex.h" />
 		<Unit filename="triplet.h" />
 		<Extensions>
 			<code_completion />

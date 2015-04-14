@@ -1,18 +1,468 @@
 # depslib dependency file v1.0
-1418140224 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
+1428922981 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
+	<SDL2/SDL_image.h>
 	<iostream>
+	<sstream>
 	"Shader.h"
+	"MD2Model.h"
+	"Vec4.h"
+	"Mat4.h"
+	"Camera.h"
+	"Timer.h"
+	"ObjLoader.h"
+	"Box.h"
+	"Renderer.h"
 
-1418029516 source:/home/brock/code/cpp/Opengl4/basic/Shader.cpp
+1420473984 source:/home/brock/code/cpp/Opengl4/basic/Shader.cpp
 	"Shader.h"
 	<fstream>
 	<iostream>
 	<string.h>
+	<stdlib.h>
 
-1418029404 /home/brock/code/cpp/Opengl4/basic/Shader.h
+1422256069 /home/brock/code/cpp/Opengl4/basic/Shader.h
 	<string>
 	<SDL2/SDL_opengl.h>
 	<vector>
+
+1422256069 source:/home/brock/code/cpp/Opengl4/basic/EAngle.cpp
+	"EAngle.h"
+	"Math.h"
+
+1420377314 /home/brock/code/cpp/Opengl4/basic/EAngle.h
+	"Vec4.h"
+
+1427544757 /home/brock/code/cpp/Opengl4/basic/Vec4.h
+	<iostream>
+	"math.h"
+
+1419602067 /home/brock/code/cpp/Opengl4/basic/Math.h
+
+1427544578 source:/home/brock/code/cpp/Opengl4/basic/Face.cpp
+	"Face.h"
+
+1427544578 /home/brock/code/cpp/Opengl4/basic/Face.h
+	<vector>
+
+1419602081 source:/home/brock/code/cpp/Opengl4/basic/Math.cpp
+	"Math.h"
+
+1418990244 source:/home/brock/code/cpp/Opengl4/basic/MD2Model.cpp
+	<string>
+	<iostream>
+	<fstream>
+	"MD2Model.h"
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+
+1418990244 /home/brock/code/cpp/Opengl4/basic/MD2Model.h
+	<SDL2/SDL_opengl.h>
+	"anorms.h"
+
+1418990244 /home/brock/code/cpp/Opengl4/basic/anorms.h
+
+1428924285 source:/home/brock/code/cpp/Opengl4/basic/ObjLoader.cpp
+	"ObjLoader.h"
+	<iostream>
+	<fstream>
+
+1428921509 /home/brock/code/cpp/Opengl4/basic/ObjLoader.h
+	<string>
+	<vector>
+	<sstream>
+	"triplet.h"
+	"Face.h"
+	"Vertex.h"
+
+1428920337 /home/brock/code/cpp/Opengl4/basic/triplet.h
+
+1422269558 source:/home/brock/code/cpp/Opengl4/basic/src/Renderable.cpp
+	"Renderable.h"
+
+1422335209 /home/brock/code/cpp/Opengl4/basic/include/Renderable.h
+	<vector>
+	<SDL2/SDL.h>
+	<SDL2/SDL_opengl.h>
+
+1419594454 source:/home/brock/code/cpp/Opengl4/basic/Timer.cpp
+	"Timer.h"
+
+1419594454 /home/brock/code/cpp/Opengl4/basic/Timer.h
+	"SDL2/SDL.h"
+
+1427544757 source:/home/brock/code/cpp/Opengl4/basic/Camera.cpp
+	"Camera.h"
+	"Math.h"
+	"math.h"
+
+1427544757 /home/brock/code/cpp/Opengl4/basic/Camera.h
+	"Vec4.h"
+	"Mat4.h"
+	"EAngle.h"
+
+1422256069 /home/brock/code/cpp/Opengl4/basic/Mat4.h
+	<iostream>
+	"string.h"
+	"Vec4.h"
+
+1427612112 /home/brock/code/cpp/Opengl4/basic/Box.h
+	"Mat4.h"
+	"Vec4.h"
+	<cstdlib>
+
+1427795533 /home/brock/code/cpp/Opengl4/basic/Renderer.h
+	<SDL.h>
+	<SDL2/SDL_opengl.h>
+	"Mat4.h"
+	<vector>
+	"Shader.h"
+
+1394995323 /usr/include/SDL2/SDL.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_assert.h"
+	"SDL_atomic.h"
+	"SDL_audio.h"
+	"SDL_clipboard.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_filesystem.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_haptic.h"
+	"SDL_hints.h"
+	"SDL_loadso.h"
+	"SDL_log.h"
+	"SDL_messagebox.h"
+	"SDL_mutex.h"
+	"SDL_power.h"
+	"SDL_render.h"
+	"SDL_rwops.h"
+	"SDL_system.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_version.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<math.h>
+	<float.h>
+	<iconv.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_config.h
+	"SDL_platform.h"
+
+1394995323 /usr/include/SDL2/SDL_platform.h
+	"AvailabilityMacros.h"
+	"TargetConditionals.h"
+	<winapifamily.h>
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/begin_code.h
+
+1394995323 /usr/include/SDL2/close_code.h
+
+1394995323 /usr/include/SDL2/SDL_assert.h
+	"SDL_config.h"
+	"begin_code.h"
+	<signal.h>
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_atomic.h
+	"SDL_stdinc.h"
+	"SDL_platform.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_endian.h
+	"SDL_stdinc.h"
+	<endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_atomic.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_clipboard.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_cpuinfo.h
+	"SDL_stdinc.h"
+	<intrin.h>
+	<intrin.h>
+	<altivec.h>
+	<mmintrin.h>
+	<mm3dnow.h>
+	<xmmintrin.h>
+	<emmintrin.h>
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_quit.h"
+	"SDL_gesture.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_video.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_surface.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_pixels.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_rect.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_pixels.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_surface.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_blendmode.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_blendmode.h
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keycode.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_keycode.h
+	"SDL_stdinc.h"
+	"SDL_scancode.h"
+
+1394995323 /usr/include/SDL2/SDL_scancode.h
+	"SDL_stdinc.h"
+
+1394995323 /usr/include/SDL2/SDL_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_gamecontroller.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1394995323 /usr/include/SDL2/SDL_gesture.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_touch.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_filesystem.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_haptic.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_hints.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_log.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_messagebox.h
+	"SDL_stdinc.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_power.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_render.h
+	"SDL_stdinc.h"
+	"SDL_rect.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_system.h
+	"SDL_stdinc.h"
+	"SDL_keyboard.h"
+	"SDL_render.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1394995323 /usr/include/SDL2/SDL_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1427548789 source:/home/brock/code/cpp/Opengl4/basic/Box.cpp
+	"Box.h"
+	<string.h>
+
+1428836191 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
+	"Renderer.h"
+	"Common.h"
+	"Math.h"
+	<SOIL/SOIL.h>
+	<SDL2/SDL_image.h>
+
+1422256069 /home/brock/code/cpp/Opengl4/basic/Common.h
+	<iostream>
+
+1422269558 source:/home/brock/code/cpp/Opengl4/basic/Renderable.cpp
+	"Renderable.h"
+
+1422335209 /home/brock/code/cpp/Opengl4/basic/Renderable.h
+	<vector>
+	<SDL2/SDL.h>
+	<SDL2/SDL_opengl.h>
+
+1428920205 /home/brock/code/cpp/Opengl4/basic/Vertex.h
+	<vector>
+	"triplet.h"
+
+1428922911 source:/home/brock/code/cpp/Opengl4/basic/Vertex.cpp
+	"Vertex.h"
+	<cmath>
 
