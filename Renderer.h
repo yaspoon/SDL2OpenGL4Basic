@@ -78,6 +78,7 @@ public:
         void updateCameraMatrix(Mat4<float> camMat);
         void updateModelMatrix(Mat4<float> modMat);
         void updateCameraPosition(Vec4<float> camDir);
+        void updateLightPosition(Vec4<float> lightPos);
 
         void draw();
 

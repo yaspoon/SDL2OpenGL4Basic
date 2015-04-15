@@ -249,13 +249,18 @@ void Renderer::updateCameraPosition(Vec4<float> camDir)
         camPosition = camDir;
 }
 
+void Renderer::updateLightPosition(Vec4<float> lightPos)
+{
+        glUniform3f(lightPosLocation, lightPos[x], lightPos[y], lightPos[z]);
+}
+
 void Renderer::draw()
 {
         glUniformMatrix4fv(modelMatLocation, 1, false, &modelMatrix);
 
         glUniformMatrix4fv(cameraMatLocation, 1, false, &cameraMatrix);
 
-        glUniform3f(lightPosLocation, 0.0f, 0.0f, -5.0f);
+        //glUniform3f(lightPosLocation, 0.0f, 0.0f, -5.0f);
 
         glUniform1i(enableDiffuseLocation, diffuse);
         glUniform1i(enableSpecularLocation, specular);
