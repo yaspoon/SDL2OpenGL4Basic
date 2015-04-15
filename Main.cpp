@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include "Timer.h"
 #include "ObjLoader.h"
+#include "Math.h"
 
 
 #include "Box.h"
@@ -45,15 +46,15 @@ void init()
 
 
         std::vector<struct ShaderList> list;
-        list.push_back((struct ShaderList){GL_VERTEX_SHADER, "shader_diffuse.vert"});
-        list.push_back((struct ShaderList){GL_FRAGMENT_SHADER, "shader_diffuse.frag"});
+        list.push_back((struct ShaderList){GL_VERTEX_SHADER, "resources/shaders/shader_diffuse.vert"});
+        list.push_back((struct ShaderList){GL_FRAGMENT_SHADER, "resources/shaders/shader_diffuse.frag"});
 
         renderer.initGL(list);
 
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), colours, sizeof(colours), b.tsize(), b.getTextureCoords(), b.getNormals(), b.nsize());
         ObjLoader loader("resources/models/sphere2.obj");
         renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), 0, NULL, loader.getAvgNormals(), loader.nsize());
-        renderer.loadTexture("Test2.png");
+        renderer.loadTexture("resources/textures/Test2.png");
 
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), b.Colours(), b.csize(), b.Normals(), b.nsize());
 }
@@ -77,7 +78,7 @@ int main(int argc, char *argv[])
 
         init();
 
-        int rotStep = 0;
+        float rotStep = 0;
 
         GameTimer.start();
         float previousTime = GameTimer.getTicks();
@@ -91,6 +92,8 @@ int main(int argc, char *argv[])
         bool uncappedFps = false;
 
         FrameTimer.start();
+
+        Vec4<float> lightPos(0.0f, 0.0f, -5.0, 1.0f);
 
         while(!quit)
         {
@@ -172,6 +175,13 @@ int main(int argc, char *argv[])
                         timeSinceLastFrame = 0;
                         //SDL_Delay(FRAME_TIME - dt);
 
+                        float radians = Math::toRadians(rotStep);
+
+                        Vec4<float> newLightPos;
+                        newLightPos[x] = lightPos[x] * cos(radians) + lightPos[z] * sin(radians);
+                        newLightPos[z] = lightPos[x] * (-sin(radians)) + lightPos[z] * cos(radians);
+
+                        renderer.updateLightPosition(newLightPos);
                         renderer.updateCameraMatrix(cam.cameraMatrix());
                         renderer.updateCameraPosition(cam.getPosition());
 
@@ -180,8 +190,8 @@ int main(int argc, char *argv[])
 
                         renderer.draw();
 
-                        rotStep += 1;
-                        rotStep %= 360;
+                        rotStep += 1.0f;
+                        rotStep = rotStep < 360 ? rotStep : 0;
 
                         frame += 1;
                 }
