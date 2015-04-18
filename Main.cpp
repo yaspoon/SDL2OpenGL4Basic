@@ -127,7 +127,18 @@ int main(int argc, char *argv[])
                                         SDL_SetRelativeMouseMode(relativeMouse);
                                         break;
                                 case SDL_SCANCODE_O:
+                                {
                                         renderer.diffuse = !renderer.diffuse;
+                                        std::string diffuseState =  renderer.diffuse ? "On" : "Off";
+                                        std::cout << "Toggled Diffuse:" << diffuseState << std::endl;
+                                }
+                                        break;
+                                case SDL_SCANCODE_P:
+                                {
+                                        renderer.specular = !renderer.specular;
+                                        std::string specularState = renderer.specular ? "On" : "Off";
+                                        std::cout << "Toggled Specular:" << specularState << std::endl;
+                                }
                                         break;
                                 case SDL_SCANCODE_F2:
                                         uncappedFps = !uncappedFps;
