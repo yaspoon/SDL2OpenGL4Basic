@@ -190,6 +190,7 @@ int main(int argc, char *argv[])
 
                         Vec4<float> newLightPos;
                         newLightPos[x] = lightPos[x] * cos(radians) + lightPos[z] * sin(radians);
+                        newLightPos[y] = lightPos[y];
                         newLightPos[z] = lightPos[x] * (-sin(radians)) + lightPos[z] * cos(radians);
 
                         renderer.updateLightPosition(newLightPos);
