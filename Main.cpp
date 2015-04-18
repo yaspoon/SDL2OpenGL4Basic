@@ -140,6 +140,13 @@ int main(int argc, char *argv[])
                                         std::cout << "Toggled Specular:" << specularState << std::endl;
                                 }
                                         break;
+                                case SDL_SCANCODE_U:
+                                {
+                                        renderer.specularMode = !renderer.specularMode;
+                                        std::string specularModeState = renderer.specularMode ? "Blin-Phong" : "Phong";
+                                        std::cout << "Toggled Specular Mode:" << specularModeState << std::endl;
+                                }
+                                        break;
                                 case SDL_SCANCODE_F2:
                                         uncappedFps = !uncappedFps;
                                         break;
