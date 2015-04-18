@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
         FrameTimer.start();
 
-        Vec4<float> lightPos(0.0f, 0.0f, -5.0, 1.0f);
+        Vec4<float> lightPos(0.0f, 20.0f, -5.0f, 1.0f);
 
         while(!quit)
         {
