@@ -61,7 +61,7 @@ void init()
 
 int main(int argc, char *argv[])
 {
-        renderer = Renderer(1024, 768);
+        renderer = Renderer(1280, 720);
         SDL_bool relativeMouse = SDL_FALSE;
         Timer GameTimer; //Keep track of time between game frames
         Timer FrameTimer; //Keep track of time between actual drawn frames
