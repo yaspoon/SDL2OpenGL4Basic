@@ -5,13 +5,16 @@ layout(location=1) in vec3 vColour;
 layout(location=2) in vec3 vNormal;
 
 out vec3 colour;
-out vec3 normal;
-out vec3 lightDirection; 
+out vec3 normalInterp;
+out vec3 lightPosInterp; 
+out vec3 vertPos;
+out vec3 camDirection;
 
 uniform vec3 lightPos;
 uniform mat4 vprojectionMat;
 uniform mat4 modelMatrix;
 uniform mat4 cameraMatrix;
+uniform vec3 camPosition;
 
 void main()
 {
@@ -20,12 +23,13 @@ void main()
 	mat4 modelCamera = cameraMatrix * modelMatrix;
 	mat3 NormalMatrix = transpose(inverse(mat3(modelCamera)));
 	
-	normal = normalize(NormalMatrix * vNormal);
+	normalInterp = NormalMatrix * vNormal;
 	vec4 transformedPosition = modelCamera * vPosition;
-	vec3 vertPos = vec3(transformedPosition);
+	vertPos = vec3(transformedPosition);
 	vec4 lightTransform = modelCamera * vec4(lightPos, 1.0);//modelCamera * vec4(0.0, 0.0, -20.0, 1.0);
 
-	lightDirection = normalize(vec3(lightTransform) - vertPos);
+	lightPosInterp = vec3(lightTransform);
+	camDirection = normalize(camPosition - vertPos);
 
 	gl_Position = vprojectionMat * transformedPosition;
 }
