@@ -41,6 +41,7 @@ private:
         GLint lightPosLocation;
         GLint enableDiffuseLocation;
         GLint enableSpecularLocation;
+        GLint specularModeLocation;
         GLint program;
 
         int triangleCount;
@@ -89,5 +90,6 @@ public:
 
         bool diffuse;
         bool specular;
+        bool specularMode;
 };
 #endif

@@ -22,6 +22,7 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
 
         diffuse = false;
         specular = false;
+        specularMode = false;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
@@ -44,6 +45,7 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
 
         diffuse = false;
         specular = false;
+        specularMode = false;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
@@ -66,6 +68,7 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
 
         diffuse = false;
         specular = false;
+        specularMode = false;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
@@ -221,6 +224,13 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
         {
                 std::cout << "Failed to find enableSpecular in shader" << std::endl;
         }
+
+        specularModeLocation = glGetUniformLocation(program, "specularMode");
+        if(specularModeLocation == -1)
+        {
+                std::cout << "Failed to find specularMode in shader" << std::endl;
+        }
+
         return program;
 }
 
@@ -264,6 +274,7 @@ void Renderer::draw()
 
         glUniform1i(enableDiffuseLocation, diffuse);
         glUniform1i(enableSpecularLocation, specular);
+        glUniform1i(specularModeLocation, specularMode);
 
         glUniform3f(camPositionLocation, camPosition[x], camPosition[y], camPosition[z]);
 
