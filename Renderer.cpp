@@ -345,7 +345,7 @@ void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *
         {
                 glBufferSubData(GL_ARRAY_BUFFER, total, tsize, texCoords);
 
-                GLint texAttrib = glGetAttribLocation(program, "tCoord");
+                GLint texAttrib = glGetAttribLocation(program, "vTexCoord");
                 if(texAttrib == -1)
                 {
                         std::cout << "Couldn't find tCoord in shader" << std::endl;
