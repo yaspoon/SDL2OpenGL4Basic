@@ -148,7 +148,11 @@ int main(int argc, char *argv[])
                                 }
                                         break;
                                 case SDL_SCANCODE_F2:
+                                {
                                         uncappedFps = !uncappedFps;
+                                        std::string fpsMode = uncappedFps ? "off" : "on";
+                                        std::cout << "Toggled FPS cap:" << fpsMode << std::endl;
+                                }
                                         break;
                                 }
                         }
