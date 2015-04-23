@@ -272,11 +272,13 @@ void Renderer::updateLightPosition(Vec4<float> lightPos)
 
 void Renderer::draw()
 {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textures[0]);
+        glUniform1i(textureLocation, 0);
+
         glUniformMatrix4fv(modelMatLocation, 1, false, &modelMatrix);
 
         glUniformMatrix4fv(cameraMatLocation, 1, false, &cameraMatrix);
-
-        //glUniform3f(lightPosLocation, 0.0f, 0.0f, -5.0f);
 
         glUniform1i(enableDiffuseLocation, diffuse);
         glUniform1i(enableSpecularLocation, specular);
