@@ -3,8 +3,10 @@
 layout(location=0) in vec4 vPosition;
 layout(location=1) in vec3 vColour;
 layout(location=2) in vec3 vNormal;
+layout(location=3) in vec2 vTexCoord;
 
 out vec3 colour;
+out vec2 texCoord;
 out vec3 normalInterp;
 out vec3 lightPosInterp; 
 out vec3 vertPos;
@@ -19,6 +21,7 @@ uniform vec3 camPosition;
 void main()
 {
 	colour = vColour;
+	texCoord = vTexCoord;
 	
 	mat4 modelCamera = cameraMatrix * modelMatrix;
 	mat3 NormalMatrix = transpose(inverse(mat3(modelCamera)));
