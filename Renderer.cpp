@@ -372,15 +372,18 @@ void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *
 
 void Renderer::loadTexture(char *name)
 {
-        SDL_Surface *crate = IMG_Load(name);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textures[TEXTURE]);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, crate->w, crate->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, crate->pixels);
-        glUniform1i(glGetUniformLocation(program, "tex"), 0);
+        SDL_Surface *image = IMG_Load(name);
+        GLuint texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->pixels);
+
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        textures.push_back(texture);
 }
 
 void Renderer::loadTest()
