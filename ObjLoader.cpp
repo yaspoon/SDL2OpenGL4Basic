@@ -104,6 +104,19 @@ std::vector<float> ObjLoader::loadNumbers(std::stringstream &ss)
         return vec3;
 }
 
+std::pair<float, float> ObjLoader::loadTexCoords(std::stringstream &ss)
+{
+        std::pair<float, float> texCoord;
+
+        float number;
+        ss >> number;
+        texCoord.first = number;
+        ss >> number;
+        texCoord.second = 1.0f - number;
+
+        return texCoord;
+}
+
 std::vector<std::pair<int, bool> > ObjLoader::loadFace(std::string&ss)
 {
         std::vector<std::pair<int, bool> > face(3);
