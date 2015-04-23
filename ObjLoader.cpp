@@ -213,6 +213,11 @@ size_t ObjLoader::nsize()
         return sizeof(float) * faces.size() * 3 * 3;
 }
 
+size_t ObjLoader::tsize()
+{
+        return sizeof(float) * faces.size() * 3 * 2;
+}
+
 float *ObjLoader::getNormals()
 {
         float *normals = new float[faces.size() * 3 * 3];
