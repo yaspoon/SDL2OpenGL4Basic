@@ -25,7 +25,7 @@ private:
         GLuint vertArrays[NUM_VAOS];
         GLuint buffers[NUM_BUFFERS];
         GLuint ibo[NUM_INDEXS];
-        GLuint textures[NUM_TEXTURES];
+        //GLuint textures[NUM_TEXTURES];
 
         float mf_width;
         float mf_height;
@@ -42,7 +42,10 @@ private:
         GLint enableDiffuseLocation;
         GLint enableSpecularLocation;
         GLint specularModeLocation;
+        GLint textureLocation;
         GLint program;
+
+        GLint maxTextureUnits;
 
         int triangleCount;
 
@@ -59,6 +62,8 @@ private:
 
         SDL_Window *window = NULL;
         SDL_GLContext context = NULL;
+
+        std::vector<GLuint> textures;
 public:
         Renderer();
         Renderer(float width, float height);
