@@ -147,6 +147,10 @@ std::vector<std::pair<int, bool> > ObjLoader::loadFace(std::string&ss)
         if(start != end)
         {
                 std::string texCoord(start, end);
+                std::istringstream convert(texCoord);
+                int textureCoord;
+                convert >> textureCoord;
+                face.insert(face.begin() + 1, std::pair<int, bool>((textureCoord - 1), true));
 
         }
 
