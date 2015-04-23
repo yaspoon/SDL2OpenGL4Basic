@@ -30,6 +30,12 @@ ObjLoader::ObjLoader(std::string filepath)
                                std::vector<float> vec3 = loadNumbers(ss);
                                 normals.push_back(triplet<float, float, float>(vec3[0], vec3[1], vec3[2]));
                }
+               else if(identifier.compare("vt") == 0)
+               {
+                       //std::cout << "tex coord found" << std::endl;
+                       std::pair<float, float> texCoord = loadTexCoords(ss);
+                       texCoords.push_back(texCoord);
+               }
                else if(identifier.compare("f") == 0)
                {
                        std::string face;
