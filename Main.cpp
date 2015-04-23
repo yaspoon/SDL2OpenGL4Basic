@@ -52,9 +52,9 @@ void init()
         renderer.initGL(list);
 
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), colours, sizeof(colours), b.tsize(), b.getTextureCoords(), b.getNormals(), b.nsize());
-        ObjLoader loader("resources/models/sphere2.obj");
-        renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), 0, NULL, loader.getAvgNormals(), loader.nsize());
-        renderer.loadTexture("resources/textures/Test2.png");
+        ObjLoader loader("resources/models/texCube.obj");
+        renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
+        renderer.loadTexture("resources/textures/texCube.png");
 
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), b.Colours(), b.csize(), b.Normals(), b.nsize());
 }
