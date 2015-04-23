@@ -1,6 +1,7 @@
 #version 430
 
 in vec3 colour;
+in vec2 texCoord;
 in vec3 normalInterp;
 in vec3 lightPosInterp;
 in vec3 vertPos;
@@ -12,13 +13,15 @@ uniform bool enableDiffuse;
 uniform bool enableSpecular;
 uniform bool specularMode;
 
+uniform sampler2D tex;
+
 void main()
 {
 	float shininess = 4.0;
 	float strength = 10.0;
-	vec3 ambientLight = vec3(0.2, 0.2, 0.2);
+	vec3 ambientLight = vec3(0.3, 0.3, 0.3);
 	vec3 lightColour = vec3(1.0, 1.0, 1.0);
-	vec3 diffuseLight = vec3(0.5, 0.0, 0.0);
+	vec3 diffuseLight = vec3(0.4, 0.4, 0.4);
 	vec3 specularLight = vec3(1.0, 1.0, 1.0);
 
 	vec3 normal = normalize(normalInterp);
@@ -48,7 +51,7 @@ void main()
 		}
 	}
 
-	vec3 lValue = (colour * ambientLight) + max((diffuse * diffuseLight), 0.0) + max((specular * specularLight), 0.0f);
+	vec3 lValue = (texture(tex, texCoord).xyz * ambientLight) + max((diffuse * diffuseLight), 0.0) + max((specular * specularLight), 0.0f);
 	fColor = vec4(lValue, 1.0);
 	//vec3 scatteredLight = ambientLight + max(lightColour * diffuse, vec3(0.0));
 	//vec3 reflectedLight = lightColour * specular * strength;
