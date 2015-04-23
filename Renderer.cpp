@@ -231,6 +231,12 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Failed to find specularMode in shader" << std::endl;
         }
 
+        textureLocation = glGetUniformLocation(program, "tex");
+        if(textureLocation == -1)
+        {
+                std::cout << "Failed to find tex in shader" << std::endl;
+        }
+
         return program;
 }
 
