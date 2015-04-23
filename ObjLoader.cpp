@@ -267,6 +267,29 @@ float *ObjLoader::getAvgNormals()
         return normals;
 }
 
+float *ObjLoader::getTexCoords()
+{
+        float *textureCoords = new float[faces.size() * 3 * 2];
+        int i = 0;
+        for(std::vector<Face>::iterator it = faces.begin(); it != faces.end(); ++it, i += 6)
+        {
+                Face face = *it;
+                std::pair<float, float> coord1 = texCoords[face.getTexCoord(2)];
+                textureCoords[i + 0] = coord1.first;
+                textureCoords[i + 1] = coord1.second;
+
+                std::pair<float, float> coord2 = texCoords[face.getTexCoord(1)];
+                textureCoords[i + 2] = coord2.first;
+                textureCoords[i + 3] = coord2.second;
+
+                std::pair<float, float> coord3 = texCoords[face.getTexCoord(0)];
+                textureCoords[i + 4] = coord3.first;
+                textureCoords[i + 5] = coord3.second;
+        }
+
+        return textureCoords;
+}
+
 float *ObjLoader::getColours()
 {
         float *colours = new float[faces.size() * 3 * 3];
