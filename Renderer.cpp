@@ -138,6 +138,9 @@ bool Renderer::initSDL()
 
 void Renderer::initGL(std::vector<struct ShaderList> list)
 {
+
+        glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
+        std::cout << "Max texture units:" << maxTextureUnits << std::endl;
         glViewport(0, 0, mf_width, mf_height);
 
         glDepthRange(mf_near, mf_far); /*Tell opengl where the near and far planes sit*/
