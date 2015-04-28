@@ -43,6 +43,7 @@ private:
         GLint enableSpecularLocation;
         GLint specularModeLocation;
         GLint textureLocation;
+        GLint normalMapLocation;
         GLint program;
 
         GLint maxTextureUnits;

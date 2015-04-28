@@ -240,6 +240,12 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Failed to find tex in shader" << std::endl;
         }
 
+        normalMapLocation = glGetUniformLocation(program, "normalMap");
+        if(normalMapLocation == -1)
+        {
+                std::cout << "Failed to find normalMap in shader" << std::endl;
+        }
+
         return program;
 }
 
@@ -278,6 +284,10 @@ void Renderer::draw()
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textures[0]);
         glUniform1i(textureLocation, 0);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, textures[1]);
+        glUniform1i(normalMapLocation, 1);
 
         glUniformMatrix4fv(modelMatLocation, 1, false, &modelMatrix);
 
