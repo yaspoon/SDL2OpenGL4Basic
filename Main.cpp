@@ -55,6 +55,7 @@ void init()
         ObjLoader loader("resources/models/texCube.obj");
         renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
         renderer.loadTexture("resources/textures/texCube.png");
+        renderer.loadTexture("resources/textures/normalmap2.png");
 
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), b.Colours(), b.csize(), b.Normals(), b.nsize());
 }
@@ -200,9 +201,12 @@ int main(int argc, char *argv[])
                         float radians = Math::toRadians(rotStep);
 
                         Vec4<float> newLightPos;
-                        newLightPos[x] = lightPos[x] * cos(radians) + lightPos[z] * sin(radians);
-                        newLightPos[y] = lightPos[y];
-                        newLightPos[z] = lightPos[x] * (-sin(radians)) + lightPos[z] * cos(radians);
+                        newLightPos[x] = lightPos[x];//lightPos[x] * cos(radians) + lightPos[z] * sin(radians);
+                        newLightPos[y] = lightPos[y];//lightPos[y];
+                        newLightPos[z] = lightPos[z];//lightPos[x] * (-sin(radians)) + lightPos[z] * cos(radians);
+                        lightPos[z] = lightPos[z] > -100.0f ? lightPos[z] - 0.5f : -5.0f;
+
+                        std::cout << "LightPos[z]=" << lightPos[z] << std::endl;
 
                         renderer.updateLightPosition(newLightPos);
                         renderer.updateCameraMatrix(cam.cameraMatrix());
