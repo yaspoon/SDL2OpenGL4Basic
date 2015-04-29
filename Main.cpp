@@ -94,7 +94,12 @@ int main(int argc, char *argv[])
 
         FrameTimer.start();
 
-        Vec4<float> lightPos(0.0f, 0.0f, -5.0f, 1.0f);
+        Vec4<float> lightPos(0.0f, 5.0f, -20.0f, 0.0f);
+        Vec4<float> lightDirection(0.0f, 1.0f, 0.0f, 0.0f);
+        float lightAngle = Math::toRadians(45.0f);
+
+        renderer.updateLightNormal(lightDirection);
+        renderer.updateLightAngle(cos(lightAngle));
 
         while(!quit)
         {
