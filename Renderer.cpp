@@ -246,6 +246,18 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Failed to find normalMap in shader" << std::endl;
         }
 
+        lightNormalLocation = glGetUniformLocation(program, "lightNormal");
+        if(lightNormalLocation == -1)
+        {
+                std::cout << "Failed to find lightNormal in shader" << std::endl;
+        }
+
+        lightAngleLocation = glGetUniformLocation(program, "lightAngle");
+        if(lightAngleLocation == -1)
+        {
+                std::cout << "Failed to find lightAngle in shader" << std::endl;
+        }
+
         return program;
 }
 
@@ -277,6 +289,16 @@ void Renderer::updateCameraPosition(Vec4<float> camDir)
 void Renderer::updateLightPosition(Vec4<float> lightPos)
 {
         glUniform3f(lightPosLocation, lightPos[x], lightPos[y], lightPos[z]);
+}
+
+void Renderer::updateLightNormal(Vec4<float> lightNormal)
+{
+        glUniform3f(lightNormalLocation, lightNormal[x], lightNormal[y], lightNormal[z]);
+}
+
+void Renderer::updateLightAngle(float lightAngle)
+{
+        glUniform1f(lightAngleLocation, lightAngle);
 }
 
 void Renderer::draw()

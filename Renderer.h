@@ -39,6 +39,8 @@ private:
         GLint cameraMatLocation;
         GLint camPositionLocation;
         GLint lightPosLocation;
+        GLint lightNormalLocation;
+        GLint lightAngleLocation;
         GLint enableDiffuseLocation;
         GLint enableSpecularLocation;
         GLint specularModeLocation;
@@ -86,6 +88,8 @@ public:
         void updateModelMatrix(Mat4<float> modMat);
         void updateCameraPosition(Vec4<float> camDir);
         void updateLightPosition(Vec4<float> lightPos);
+        void updateLightNormal(Vec4<float> lightNormal);
+        void updateLightAngle(float lightAngle);
 
         void draw();
 
