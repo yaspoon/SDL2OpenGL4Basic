@@ -29,7 +29,8 @@ void main()
 	normalInterp = NormalMatrix * vNormal;
 	vec4 transformedPosition = modelCamera * vPosition;
 	vertPos = vec3(transformedPosition);
-	vec4 lightTransform = modelCamera * vec4(lightPos, 1.0);//modelCamera * vec4(0.0, 0.0, -20.0, 1.0);
+
+	vec4 lightTransform = cameraMatrix * vec4(lightPos, 1.0);
 
 	lightPosInterp = vec3(lightTransform);
 	camDirection = normalize(camPosition - vertPos);

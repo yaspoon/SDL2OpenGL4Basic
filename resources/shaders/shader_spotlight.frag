@@ -13,6 +13,9 @@ uniform bool enableDiffuse;
 uniform bool enableSpecular;
 uniform bool specularMode;
 
+uniform vec3 lightNormal;
+uniform float lightAngle;
+
 uniform sampler2D tex;
 uniform sampler2D normalMap;
 
@@ -26,7 +29,18 @@ void main()
 	vec3 specularLight = vec3(1.0, 1.0, 1.0);
 
 	vec3 normal = normalize(normalInterp);
-	vec3 lightDirection = normalize(lightPosInterp - vertPos);
+	vec3 lightVector = lightPosInterp - vertPos;
+	float lightLength = length(lightVector);
+	lightLength = max(lightLength, -lightLength);
+	vec3 lightDirection = normalize(lightVector);
+
+	float lightDot = dot(lightDirection, lightNormal);
+
+	float linearAtten = 1.0;
+	float quadAtten = 1.0;
+	float constAtten = 0.1;
+
+	float attenuation = 1.0 / (constAtten * lightLength); // (constAtten + linearAtten * lightLength + quadAtten * lightLength * lightLength);
 
 	float diffuse = 0.0;
 	if(enableDiffuse)
@@ -52,9 +66,10 @@ void main()
 		}
 	}
 
-	vec3 lValue = (texture(tex, texCoord).xyz * ambientLight) + max((diffuse * diffuseLight), 0.0) + max((specular * specularLight), 0.0f);
-	fColor = vec4(lValue, 1.0);
-	//vec3 scatteredLight = ambientLight + max(lightColour * diffuse, vec3(0.0));
-	//vec3 reflectedLight = lightColour * specular * strength;
-	//fColor = min(vec4(colour * scatteredLight + reflectedLight, 1.0), vec4(1.0));
+	//vec3 lValue = (texture(tex, texCoord).xyz * ambientLight) + max((diffuse * diffuseLight), 0.0) + max((specular * specularLight), 0.0f);
+	//fColor = vec4(lValue, 1.0);
+	vec3 scatteredLight = ambientLight * attenuation + max((diffuse * diffuseLight), 0.0) * attenuation;
+	vec3 reflectedLight = max((specular * specularLight), 0.0f) * attenuation;
+	fColor = min(vec4(texture(tex, texCoord).xyz * scatteredLight + reflectedLight, 1.0), vec4(1.0));
+
 }
