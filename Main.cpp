@@ -46,8 +46,8 @@ void init()
 
 
         std::vector<struct ShaderList> list;
-        list.push_back((struct ShaderList){GL_VERTEX_SHADER, "resources/shaders/shader_specular.vert"});
-        list.push_back((struct ShaderList){GL_FRAGMENT_SHADER, "resources/shaders/shader_specular.frag"});
+        list.push_back((struct ShaderList){GL_VERTEX_SHADER, "resources/shaders/shader_spotlight.vert"});
+        list.push_back((struct ShaderList){GL_FRAGMENT_SHADER, "resources/shaders/shader_spotlight.frag"});
 
         renderer.initGL(list);
 
