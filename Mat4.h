@@ -36,10 +36,12 @@ public:
         Mat4<T>(T d)
         {
                 memset(mat, 0, sizeof(T) * count);
-                for(int i = 0; i < cols; i++)
+                for(int i = 0; i < (cols - 1); i++)
                 {
                         mat[i * cols + i] = d;
                 }
+
+                mat[15] = 1.0f;
         }
 
         Mat4<T>(Vec4<T> a, Vec4<T> b, Vec4<T> c, Vec4<T> d)
