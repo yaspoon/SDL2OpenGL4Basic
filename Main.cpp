@@ -52,9 +52,9 @@ void init()
         renderer.initGL(list);
 
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), colours, sizeof(colours), b.tsize(), b.getTextureCoords(), b.getNormals(), b.nsize());
-        ObjLoader loader("resources/models/plane.obj");
+        ObjLoader loader("resources/models/invCubeRev.obj");
         renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
-        renderer.loadTexture("resources/textures/plane.png");
+        renderer.loadTexture("resources/textures/cube_texture.png");
         renderer.loadTexture("resources/textures/normalmap2.png");
 
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), b.Colours(), b.csize(), b.Normals(), b.nsize());
