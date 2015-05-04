@@ -11,12 +11,14 @@ out vec3 normalInterp;
 out vec3 lightPosInterp; 
 out vec3 vertPos;
 out vec3 camDirection;
+out vec3 lightNormalTransform;
 
 uniform vec3 lightPos;
 uniform mat4 vprojectionMat;
 uniform mat4 modelMatrix;
 uniform mat4 cameraMatrix;
 uniform vec3 camPosition;
+uniform vec3 lightNormal;
 
 void main()
 {
@@ -30,7 +32,8 @@ void main()
 	vec4 transformedPosition = modelCamera * vPosition;
 	vertPos = vec3(transformedPosition);
 
-	vec4 lightTransform = cameraMatrix * vec4(lightPos, 1.0);
+	vec4 lightTransform = modelCamera * vec4(lightPos, 1.0);
+	lightNormalTransform = normalize(NormalMatrix * lightNormal);
 
 	lightPosInterp = vec3(lightTransform);
 	camDirection = normalize(camPosition - vertPos);
