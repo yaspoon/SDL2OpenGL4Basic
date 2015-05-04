@@ -6,6 +6,7 @@ in vec3 normalInterp;
 in vec3 lightPosInterp;
 in vec3 vertPos;
 in vec3 camDirection;
+in vec3 lightNormalTransform;
 
 out vec4 fColor;
 
@@ -13,7 +14,6 @@ uniform bool enableDiffuse;
 uniform bool enableSpecular;
 uniform bool specularMode;
 
-uniform vec3 lightNormal;
 uniform float lightAngle;
 
 uniform sampler2D tex;
@@ -23,7 +23,7 @@ void main()
 {
 	float shininess = 4.0;
 	float strength = 10.0;
-	vec3 ambientLight = vec3(0.6, 0.6, 0.6);
+	vec3 ambientLight = vec3(0.3, 0.3, 0.3);
 	vec3 lightColour = vec3(1.0, 1.0, 1.0);
 	vec3 diffuseLight = vec3(0.4, 0.4, 0.4);
 	vec3 specularLight = vec3(1.0, 1.0, 1.0);
@@ -31,16 +31,26 @@ void main()
 	vec3 normal = normalize(normalInterp);
 	vec3 lightVector = lightPosInterp - vertPos;
 	float lightLength = length(lightVector);
-	lightLength = max(lightLength, -lightLength);
+	//lightLength = max(lightLength, -lightLength);
 	vec3 lightDirection = normalize(lightVector);
 
-	float lightDot = dot(lightDirection, lightNormal);
+	float spotponent = 2.0;
+	float lightDot = dot(lightDirection, lightNormalTransform);
 
 	float linearAtten = 1.0;
 	float quadAtten = 1.0;
 	float constAtten = 0.1;
 
 	float attenuation = 1.0 / (constAtten * lightLength); // (constAtten + linearAtten * lightLength + quadAtten * lightLength * lightLength);
+	
+	if(lightDot < lightAngle)
+	{
+		attenuation = 0.0;
+	}
+	else
+	{
+		attenuation *= pow(lightDot, spotponent);
+	}
 
 	float diffuse = 0.0;
 	if(enableDiffuse)
@@ -68,7 +78,7 @@ void main()
 
 	//vec3 lValue = (texture(tex, texCoord).xyz * ambientLight) + max((diffuse * diffuseLight), 0.0) + max((specular * specularLight), 0.0f);
 	//fColor = vec4(lValue, 1.0);
-	vec3 scatteredLight = ambientLight * attenuation + max((diffuse * diffuseLight), 0.0) * attenuation;
+	vec3 scatteredLight = ambientLight + max((diffuse * diffuseLight), 0.0) * attenuation;
 	vec3 reflectedLight = max((specular * specularLight), 0.0f) * attenuation;
 	fColor = min(vec4(texture(tex, texCoord).xyz * scatteredLight + reflectedLight, 1.0), vec4(1.0));
 
