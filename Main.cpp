@@ -215,18 +215,24 @@ int main(int argc, char *argv[])
                         float radians = Math::toRadians(rotStep);
 
                         Vec4<float> newLightPos;
-                        newLightPos[x] = lightPos[x] * cos(radians) + lightPos[z] * sin(radians);
+                        newLightPos[x] = lightPos[x];// * cos(radians) + lightPos[z] * sin(radians);
                         newLightPos[y] = lightPos[y];
-                        newLightPos[z] = lightPos[x] * (-sin(radians)) + lightPos[z] * cos(radians);
+                        newLightPos[z] = lightPos[z];// * (-sin(radians)) + lightPos[z] * cos(radians);
+
+                        Vec4<float> newLightNormal;
+                        newLightNormal[x] = lightNormal[x];// * cos(radians) + lightNormal[z] * sin(radians);
+                        newLightNormal[y] = lightNormal[y] * cos(radians) + lightNormal[z] * sin(radians);
+                        newLightNormal[z] = lightNormal[y] * (-sin(radians)) + lightNormal[z] * cos(radians);
 
                         //std::cout << "LightPos[z]=" << lightPos[z] << std::endl;
-
+                        renderer.updateLightNormal(newLightNormal);
                         renderer.updateLightPosition(newLightPos);
                         renderer.updateCameraMatrix(cam.cameraMatrix());
                         renderer.updateCameraPosition(cam.getPosition());
 
                         Mat4<float> rotMatrix(1.0f);
-                        renderer.updateModelMatrix(rotMatrix * transMatrix);
+                        Mat4<float> modelMatrix = rotMatrix * transMatrix;
+                        renderer.updateModelMatrix(modelMatrix);
 
                         renderer.draw();
 
