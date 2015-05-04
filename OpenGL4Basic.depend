@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1430219636 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
+1430735585 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
 	<SDL2/SDL_image.h>
@@ -35,7 +35,7 @@
 1420377314 /home/brock/code/cpp/Opengl4/basic/EAngle.h
 	"Vec4.h"
 
-1427544757 /home/brock/code/cpp/Opengl4/basic/Vec4.h
+1430571212 /home/brock/code/cpp/Opengl4/basic/Vec4.h
 	<iostream>
 	"math.h"
 
@@ -103,7 +103,7 @@
 	"Mat4.h"
 	"EAngle.h"
 
-1430216955 /home/brock/code/cpp/Opengl4/basic/Mat4.h
+1430388810 /home/brock/code/cpp/Opengl4/basic/Mat4.h
 	<iostream>
 	"string.h"
 	"Vec4.h"
@@ -113,7 +113,7 @@
 	"Vec4.h"
 	<cstdlib>
 
-1430217108 /home/brock/code/cpp/Opengl4/basic/Renderer.h
+1430388810 /home/brock/code/cpp/Opengl4/basic/Renderer.h
 	<SDL.h>
 	<SDL2/SDL_opengl.h>
 	"Mat4.h"
@@ -441,7 +441,7 @@
 	"Box.h"
 	<string.h>
 
-1430217135 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
+1430388810 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
 	"Renderer.h"
 	"Common.h"
 	"Math.h"
