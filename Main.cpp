@@ -159,6 +159,16 @@ int main(int argc, char *argv[])
                                         std::cout << "Toggled FPS cap:" << fpsMode << std::endl;
                                 }
                                         break;
+                                case SDL_SCANCODE_KP_PLUS:
+                                {
+                                        lightPos = lightPos + Vec4<float>(0.0f, 0.1f, 0.0f, 0.0f);
+                                }
+                                        break;
+                                case SDL_SCANCODE_KP_MINUS:
+                                {
+                                        lightPos = lightPos + Vec4<float>(0.0f, -0.1f, 0.0f, 0.0f);
+                                }
+                                        break;
                                 }
                         }
                         else if(event.type == SDL_KEYUP)
