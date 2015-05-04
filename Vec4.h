@@ -79,6 +79,11 @@ public:
                 return Vec4<T>(xyzw[x] + other[x], xyzw[y] + other[y], xyzw[z] + other[z], xyzw[w] + other[w]);
         }
 
+        Vec4<T> operator+(T scalar)
+        {
+                return Vec4<T>(xyzw[x] + scalar, xyzw[y] + scalar, xyzw[z] + scalar, xyzw[w] + scalar);
+        }
+
         T &operator[](int index)
         {
                 return xyzw[index];
