@@ -112,12 +112,12 @@ public:
 
         void setTriangleCount(float triangles);
 
+        Light newLight();
+
         void updateCameraMatrix(Mat4<float> camMat);
         void updateModelMatrix(Mat4<float> modMat);
         void updateCameraPosition(Vec4<float> camDir);
-        void updateLightPosition(Vec4<float> lightPos);
-        void updateLightNormal(Vec4<float> lightNormal);
-        void updateLightAngle(float lightAngle);
+        void updateLights(Light updatedLight);
 
         void draw();
 
@@ -125,9 +125,5 @@ public:
         void loadTexture(char *name);
 
         void loadTest();
-
-        bool diffuse;
-        bool specular;
-        bool specularMode;
 };
 #endif
