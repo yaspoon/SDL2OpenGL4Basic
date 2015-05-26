@@ -94,11 +94,20 @@ int main(int argc, char *argv[])
 
         FrameTimer.start();
 
-        Vec4<float> lightPos(0.0f, 0.0f, 0.0f, 0.0f);
-        Vec4<float> lightNormal(0.0f, 1.0f, 0.0f, 0.0f);
-        float lightAngle = Math::toRadians(45.0f);
+        Light light = renderer.newLight();
+        light.setAmbientLight(Vec4<GLfloat>(0.4f, 0.4f, 0.4f, 1.0f));
+        light.setDiffuseLight(Vec4<GLfloat>(0.4f, 0.4f, 0.4f, 1.0f));
+        light.setSpecularLight(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
+        light.setIsEnabled(true);
+        light.setPosition(Vec4<GLfloat>(0.0f, 1.0f, 0.0f, 0.0f));
+        light.setShininess(1.0f);
+        light.setConstAttenuation(0.5f);
+        light.setIsPointLight(true);
 
-        renderer.updateLightAngle(cos(lightAngle));
+        //light.enableDiffuse(true);
+        //light.enableSpecular(true);
+
+        renderer.updateLights(light);
 
         while(!quit)
         {
