@@ -9,6 +9,7 @@
 #include "Mat4.h"
 #include <vector>
 #include "Shader.h"
+#include "Light.h"
 
 class Renderer
 {
@@ -38,17 +39,44 @@ private:
         GLint modelMatLocation;
         GLint cameraMatLocation;
         GLint camPositionLocation;
-        GLint lightPosLocation;
-        GLint lightNormalLocation;
-        GLint lightAngleLocation;
-        GLint enableDiffuseLocation;
-        GLint enableSpecularLocation;
-        GLint specularModeLocation;
         GLint textureLocation;
         GLint normalMapLocation;
         GLint program;
 
         GLint maxTextureUnits;
+
+        const static int numUniforms = 18;
+        const char *shaderUniforms[numUniforms] = {
+                "isEnabled",
+                "enableDiffuse",
+                "enableSpecular",
+                "isSpotlight",
+                "isPointlight",
+                "specularMode",
+                "ambientLight",
+                "diffuseLight",
+                "specularLight",
+                "shininess",
+                "strength",
+                "position",
+                "normal",
+                "angle",
+                "linearAtten",
+                "quadAtten",
+                "constAtten",
+                "spotponent"
+        };
+
+        GLuint uboIndex;
+        GLint uboSize;
+        GLuint ubo;
+        //GLvoid *buffer; //We need to store the uniform structure in our application then upload it to gfx....
+
+        GLuint uniformIndices[numUniforms];
+        GLint uniformSizes[numUniforms];
+        GLint uniformOffsets[numUniforms];
+        GLint uniformType[numUniforms];
+
 
         int triangleCount;
 
