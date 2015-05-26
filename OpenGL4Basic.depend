@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1430735585 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
+1432352552 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
 	<SDL2/SDL_image.h>
@@ -35,7 +35,7 @@
 1420377314 /home/brock/code/cpp/Opengl4/basic/EAngle.h
 	"Vec4.h"
 
-1430571212 /home/brock/code/cpp/Opengl4/basic/Vec4.h
+1431598303 /home/brock/code/cpp/Opengl4/basic/Vec4.h
 	<iostream>
 	"math.h"
 
@@ -113,12 +113,13 @@
 	"Vec4.h"
 	<cstdlib>
 
-1430388810 /home/brock/code/cpp/Opengl4/basic/Renderer.h
+1432031871 /home/brock/code/cpp/Opengl4/basic/Renderer.h
 	<SDL.h>
 	<SDL2/SDL_opengl.h>
 	"Mat4.h"
 	<vector>
 	"Shader.h"
+	"Light.h"
 
 1394995323 /usr/include/SDL2/SDL.h
 	"SDL_main.h"
@@ -441,7 +442,7 @@
 	"Box.h"
 	<string.h>
 
-1430388810 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
+1432031863 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
 	"Renderer.h"
 	"Common.h"
 	"Math.h"
@@ -466,4 +467,23 @@
 1429361541 source:/home/brock/code/cpp/Opengl4/basic/Vertex.cpp
 	"Vertex.h"
 	<cmath>
+
+1430995441 /home/brock/code/cpp/Opengl4/basic/LightProperties.h
+
+1432551680 source:/home/brock/code/cpp/Opengl4/basic/Light.cpp
+	"Light.h"
+	<cstring>
+
+1432631513 /home/brock/code/cpp/Opengl4/basic/Light.h
+	<SDL2/SDL_opengl.h>
+	"Vec4.h"
+	"UBOUniform.h"
+	<map>
+	<string>
+
+1431601364 source:/home/brock/code/cpp/Opengl4/basic/UBOUniform.cpp
+	"UBOUniform.h"
+
+1431597738 /home/brock/code/cpp/Opengl4/basic/UBOUniform.h
+	<SDL2/SDL_opengl.h>
 

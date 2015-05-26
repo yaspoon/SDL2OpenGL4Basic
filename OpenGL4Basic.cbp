@@ -47,6 +47,8 @@
 		<Unit filename="EAngle.h" />
 		<Unit filename="Face.cpp" />
 		<Unit filename="Face.h" />
+		<Unit filename="Light.cpp" />
+		<Unit filename="Light.h" />
 		<Unit filename="MD2Model.cpp" />
 		<Unit filename="MD2Model.h" />
 		<Unit filename="Main.cpp" />
@@ -63,6 +65,8 @@
 		<Unit filename="Shader.h" />
 		<Unit filename="Timer.cpp" />
 		<Unit filename="Timer.h" />
+		<Unit filename="UBOUniform.cpp" />
+		<Unit filename="UBOUniform.h" />
 		<Unit filename="Vec4.h" />
 		<Unit filename="Vertex.cpp" />
 		<Unit filename="Vertex.h" />
