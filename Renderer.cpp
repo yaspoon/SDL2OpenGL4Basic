@@ -234,17 +234,22 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Failed to find normalMap in shader" << std::endl;
         }
 
-        lightNormalLocation = glGetUniformLocation(program, "lightNormal");
-        if(lightNormalLocation == -1)
-        {
-                std::cout << "Failed to find lightNormal in shader" << std::endl;
-        }
+        uboIndex = glGetUniformBlockIndex(program, "LightProperties");
+        glGetActiveUniformBlockiv(program, uboIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &uboSize);
 
-        lightAngleLocation = glGetUniformLocation(program, "lightAngle");
-        if(lightAngleLocation == -1)
-        {
-                std::cout << "Failed to find lightAngle in shader" << std::endl;
-        }
+        //buffer = new char[uboSize];
+
+        glGetUniformIndices(program, numUniforms, shaderUniforms, uniformIndices);
+        glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_OFFSET, uniformOffsets);
+        glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_SIZE, uniformSizes);
+        glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_TYPE, uniformType);
+
+        //memcpy()
+
+        glGenBuffers(1, &ubo);
+        glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+        glBufferData(GL_UNIFORM_BUFFER, uboSize, NULL, GL_STATIC_DRAW); //We'll init the buffer later?
+
 
         return program;
 }
