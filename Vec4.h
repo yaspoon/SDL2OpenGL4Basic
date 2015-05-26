@@ -129,6 +129,11 @@ public:
                 return retval;
         }*/
 
+        T *getData()
+        {
+                return xyzw;
+        }
+
         void print()
         {
                 std::cout << "x:" << xyzw[x] << " y:" << xyzw[y] << " z:" << xyzw[z] << " w:" << xyzw[w] << std::endl;
