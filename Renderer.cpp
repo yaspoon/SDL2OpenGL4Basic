@@ -279,19 +279,11 @@ void Renderer::updateCameraPosition(Vec4<float> camDir)
         camPosition = camDir;
 }
 
-void Renderer::updateLightPosition(Vec4<float> lightPos)
+void Renderer::updateLights(Light updatedLight)
 {
-        glUniform3f(lightPosLocation, lightPos[x], lightPos[y], lightPos[z]);
-}
-
-void Renderer::updateLightNormal(Vec4<float> lightNormal)
-{
-        glUniform3f(lightNormalLocation, lightNormal[x], lightNormal[y], lightNormal[z]);
-}
-
-void Renderer::updateLightAngle(float lightAngle)
-{
-        glUniform1f(lightAngleLocation, lightAngle);
+        glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, uboSize, updatedLight.getLightData());
+        glBindBufferBase(GL_UNIFORM_BUFFER, uboIndex, ubo);
 }
 
 void Renderer::draw()
