@@ -121,62 +121,81 @@ int main(int argc, char *argv[])
                         {
                                 switch(event.key.keysym.scancode)
                                 {
-                                case SDL_SCANCODE_Q:
-                                        quit = true;
+                                        case SDL_SCANCODE_Q:
+                                                quit = true;
                                         break;
-                                case SDL_SCANCODE_W:
-                                        cam.dirz(1.0f);
+                                        case SDL_SCANCODE_W:
+                                                cam.dirz(1.0f);
                                         break;
-                                case SDL_SCANCODE_S:
-                                        cam.dirz(-1.0f);
+                                        case SDL_SCANCODE_S:
+                                                cam.dirz(-1.0f);
                                         break;
-                                case SDL_SCANCODE_A:
-                                        cam.dirx(-1.0f);
+                                        case SDL_SCANCODE_A:
+                                                cam.dirx(-1.0f);
                                         break;
-                                case SDL_SCANCODE_D:
-                                        cam.dirx(1.0f);
+                                        case SDL_SCANCODE_D:
+                                                cam.dirx(1.0f);
                                         break;
-                                case SDL_SCANCODE_F:
-                                        relativeMouse = (SDL_bool)!relativeMouse;
-                                        SDL_SetRelativeMouseMode(relativeMouse);
+                                        case SDL_SCANCODE_F:
+                                                relativeMouse = (SDL_bool)!relativeMouse;
+                                                SDL_SetRelativeMouseMode(relativeMouse);
                                         break;
-                                case SDL_SCANCODE_O:
-                                {
-                                        renderer.diffuse = !renderer.diffuse;
-                                        std::string diffuseState =  renderer.diffuse ? "On" : "Off";
-                                        std::cout << "Toggled Diffuse:" << diffuseState << std::endl;
-                                }
+                                        case SDL_SCANCODE_L:
+                                        {
+                                                GLboolean isEnabled = !light.getIsEnabled();
+                                                light.setIsEnabled(isEnabled);
+                                                renderer.updateLights(light);
+                                                std::string lightState = isEnabled ? "On" : "Off";
+                                                std::cout << "Toggled light:" << lightState << std::endl;
+                                        }
                                         break;
-                                case SDL_SCANCODE_P:
-                                {
-                                        renderer.specular = !renderer.specular;
-                                        std::string specularState = renderer.specular ? "On" : "Off";
-                                        std::cout << "Toggled Specular:" << specularState << std::endl;
-                                }
+                                        case SDL_SCANCODE_O:
+                                        {
+                                                GLboolean diffuse =  !light.getIsDiffuseEnabled();
+                                                light.enableDiffuse(diffuse);
+                                                renderer.updateLights(light);
+                                                std::string diffuseState =  diffuse ? "On" : "Off";
+                                                std::cout << "Toggled Diffuse:" << diffuseState << std::endl;
+                                        }
                                         break;
-                                case SDL_SCANCODE_U:
-                                {
-                                        renderer.specularMode = !renderer.specularMode;
-                                        std::string specularModeState = renderer.specularMode ? "Blin-Phong" : "Phong";
-                                        std::cout << "Toggled Specular Mode:" << specularModeState << std::endl;
-                                }
+                                        case SDL_SCANCODE_P:
+                                        {
+                                                GLboolean specular = !light.getIsSpecularEnabled();
+                                                light.enableSpecular(specular);
+                                                renderer.updateLights(light);
+                                                std::string specularState = specular ? "On" : "Off";
+                                                std::cout << "Toggled Specular:" << specularState << std::endl;
+                                        }
                                         break;
-                                case SDL_SCANCODE_F2:
-                                {
-                                        uncappedFps = !uncappedFps;
-                                        std::string fpsMode = uncappedFps ? "off" : "on";
-                                        std::cout << "Toggled FPS cap:" << fpsMode << std::endl;
-                                }
+                                        case SDL_SCANCODE_U:
+                                        {
+                                                GLboolean specularMode = !light.getSpecularMode();
+                                                light.setSpecularMode(specularMode);
+                                                renderer.updateLights(light);
+                                                std::string specularModeState = specularMode ? "Blin-Phong" : "Phong";
+                                                std::cout << "Toggled Specular Mode:" << specularModeState << std::endl;
+                                        }
                                         break;
-                                case SDL_SCANCODE_KP_PLUS:
-                                {
-                                        lightPos = lightPos + Vec4<float>(0.0f, 0.1f, 0.0f, 0.0f);
-                                }
+                                        case SDL_SCANCODE_F2:
+                                        {
+                                                uncappedFps = !uncappedFps;
+                                                std::string fpsMode = uncappedFps ? "off" : "on";
+                                                std::cout << "Toggled FPS cap:" << fpsMode << std::endl;
+                                        }
                                         break;
-                                case SDL_SCANCODE_KP_MINUS:
-                                {
-                                        lightPos = lightPos + Vec4<float>(0.0f, -0.1f, 0.0f, 0.0f);
-                                }
+                                        case SDL_SCANCODE_1:
+                                        {
+                                                GLfloat shininess = light.getShininess() - 1.0f;
+                                                light.setShininess(shininess);
+                                                renderer.updateLights(light);
+                                        }
+                                        break;
+                                        case SDL_SCANCODE_2:
+                                        {
+                                                GLfloat shininess = light.getShininess() + 1.0f;
+                                                light.setShininess(shininess);
+                                                renderer.updateLights(light);
+                                        }
                                         break;
                                 }
                         }
@@ -223,19 +242,8 @@ int main(int argc, char *argv[])
 
                         float radians = Math::toRadians(rotStep);
 
-                        Vec4<float> newLightPos;
-                        newLightPos[x] = lightPos[x];// * cos(radians) + lightPos[z] * sin(radians);
-                        newLightPos[y] = lightPos[y];
-                        newLightPos[z] = lightPos[z];// * (-sin(radians)) + lightPos[z] * cos(radians);
-
-                        Vec4<float> newLightNormal;
-                        newLightNormal[x] = lightNormal[x];// * cos(radians) + lightNormal[z] * sin(radians);
-                        newLightNormal[y] = lightNormal[y] * cos(radians) + lightNormal[z] * sin(radians);
-                        newLightNormal[z] = lightNormal[y] * (-sin(radians)) + lightNormal[z] * cos(radians);
-
                         //std::cout << "LightPos[z]=" << lightPos[z] << std::endl;
-                        renderer.updateLightNormal(newLightNormal);
-                        renderer.updateLightPosition(newLightPos);
+                        //renderer.updateLights(lights);
                         renderer.updateCameraMatrix(cam.cameraMatrix());
                         renderer.updateCameraPosition(cam.getPosition());
 
