@@ -300,10 +300,6 @@ void Renderer::draw()
 
         glUniformMatrix4fv(cameraMatLocation, 1, false, &cameraMatrix);
 
-        glUniform1i(enableDiffuseLocation, diffuse);
-        glUniform1i(enableSpecularLocation, specular);
-        glUniform1i(specularModeLocation, specularMode);
-
         glUniform3f(camPositionLocation, camPosition[x], camPosition[y], camPosition[z]);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
