@@ -198,10 +198,10 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Couldn't find camPosition in shader" << std::endl;
         }
 
-        lightPosLocation = glGetUniformLocation(program, "lightPos");
-        if(lightPosLocation == -1)
+        /*lightsBlockLocation = glGetUniformBlockIndex(program, "lights");
+        if(lightsBlockLocation == -1)
         {
-                std::cout << "Failed to find lightPos in shader" << std::endl;
+                std::cout << "Failed to find lights in shader" << std::endl;
         }
 
         enableDiffuseLocation = glGetUniformLocation(program, "enableDiffuse");
@@ -220,7 +220,7 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
         if(specularModeLocation == -1)
         {
                 std::cout << "Failed to find specularMode in shader" << std::endl;
-        }
+        }*/
 
         textureLocation = glGetUniformLocation(program, "tex");
         if(textureLocation == -1)
