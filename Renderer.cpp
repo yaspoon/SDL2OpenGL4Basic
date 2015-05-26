@@ -450,3 +450,8 @@ void Renderer::setTriangleCount(float triangles)
         triangleCount = triangles;
 }
 
+Light Renderer::newLight()
+{
+        return Light(uboSize, numUniforms, shaderUniforms, uniformIndices, uniformSizes, uniformOffsets, uniformType);
+}
+
