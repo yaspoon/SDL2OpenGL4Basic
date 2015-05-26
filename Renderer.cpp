@@ -20,10 +20,6 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         cameraMatLocation = -1;
         modelMatLocation = -1;
 
-        diffuse = false;
-        specular = false;
-        specularMode = false;
-
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
 
@@ -43,10 +39,6 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         cameraMatLocation = -1;
         modelMatLocation = -1;
 
-        diffuse = false;
-        specular = false;
-        specularMode = false;
-
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
 
@@ -65,10 +57,6 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         projMatLocation = -1;
         cameraMatLocation = -1;
         modelMatLocation = -1;
-
-        diffuse = false;
-        specular = false;
-        specularMode = false;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
