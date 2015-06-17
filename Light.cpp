@@ -391,3 +391,13 @@ GLfloat Light::getConstAttenuation()
 
         return constAtten;
 }
+
+int Light::getIndex()
+{
+        return index;
+}
+
+size_t Light::getDataSize()
+{
+        return dataSize;
+}
