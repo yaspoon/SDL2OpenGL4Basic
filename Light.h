@@ -12,11 +12,11 @@ const static int numUniforms = 11;
 class Light
 {
         public:
-                Light(GLint bufferSize, GLint numElements, const char *uniformNames[numUniforms], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types);
+                Light(int index, GLsizei offset, GLint bufferSize, GLint numElements, const char *uniformNames[numUniforms], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types);
                 Light(const Light &copy);
                 virtual ~Light();
 
-                Light &operator=(Light &other);
+                Light &operator=(const Light &other);
 
                 void setIsEnabled(GLboolean enabled);
                 void enableDiffuse(GLboolean enabled);
