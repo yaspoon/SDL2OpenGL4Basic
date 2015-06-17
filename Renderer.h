@@ -41,12 +41,13 @@ private:
         GLint camPositionLocation;
         GLint textureLocation;
         GLint normalMapLocation;
+        GLint numEnabledLightsLocation;
         GLint program;
 
         GLint maxTextureUnits;
 
-        const static int numUniforms = 18;
-        const char *shaderUniforms[numUniforms] = {
+        const static int numUniforms = 180;
+        /*const char *shaderUniforms[numUniforms] = {
                 "isEnabled",
                 "enableDiffuse",
                 "enableSpecular",
