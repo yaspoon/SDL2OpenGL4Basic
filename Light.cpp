@@ -59,6 +59,7 @@ Light::Light(const Light &copy)
 {
         dataSize = copy.dataSize;
         lightData = new char[dataSize];
+        this->index = copy.index;
 
         memset(lightData, 0, dataSize);
         memcpy(lightData, copy.lightData, dataSize);
