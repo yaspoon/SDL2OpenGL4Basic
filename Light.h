@@ -53,6 +53,8 @@ class Light
                 GLfloat getQuadAtten();
                 GLfloat getConstAttenuation();
                 GLfloat getSpotponent();
+                int getIndex();
+                size_t getDataSize();
 
                 template <class T> void set(std::string uboname, T *data)
                 {
@@ -77,6 +79,7 @@ class Light
         size_t dataSize;
         char *lightData;
         std::map<std::string, UBOUniform> uniforms;
+        int index;
 };
 
 #endif // LIGHT_H
