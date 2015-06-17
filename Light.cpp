@@ -79,9 +79,25 @@ Light::~Light()
         }
 }
 
-Light &Light::operator=(Light &other)
+Light &Light::operator=(const Light &other)
 {
-        std::cout << "Light::operator= this isn't implemented BTW" << std::endl;
+        if(this != &other)
+        {
+                delete[] lightData;
+                dataSize = other.dataSize;
+                lightData = new char[dataSize];
+                this->index = other.index;
+
+                memset(lightData, 0, dataSize);
+                memcpy(lightData, other.lightData, dataSize);
+
+                for(std::map<std::string, UBOUniform>::const_iterator it = other.uniforms.begin(); it != other.uniforms.end(); it++)
+                {
+                        uniforms[it->first] = it->second;
+                }
+        }
+
+        return *this;
 }
 
 void Light::setIsEnabled(GLboolean enabled)
