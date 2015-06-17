@@ -91,7 +91,7 @@ public:
 
         T length() const
         {
-                T sum;
+                T sum = 0.0f;
                 for(int i = 0; i < count; i++)
                 {
                         sum += xyzw[i] * xyzw[i];
