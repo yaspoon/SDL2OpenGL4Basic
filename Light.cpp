@@ -1,5 +1,6 @@
 #include "Light.h"
 #include <cstring>
+#include "Math.h"
 
 struct LightProperties
 {
