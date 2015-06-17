@@ -37,8 +37,9 @@ struct LightProperties
 	float spotponent; // = 2.0;
 };
 
-Light::Light(GLint bufferSize, GLint numElements, const char *uniformNames[numUniforms], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types)
+Light::Light(int index, GLsizei offset, GLint bufferSize, GLint numElements, const char *uniformNames[numUniforms], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types)
 {
+        this->index = index;
         this->dataSize = bufferSize;
         lightData = new char[bufferSize];
         memset(lightData, 0, bufferSize);
