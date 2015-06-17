@@ -257,12 +257,14 @@ private:
         GLuint uboIndex;
         GLint uboSize;
         GLuint ubo;
+        GLuint uboStride;
         //GLvoid *buffer; //We need to store the uniform structure in our application then upload it to gfx....
 
         GLuint uniformIndices[numUniforms];
         GLint uniformSizes[numUniforms];
         GLint uniformOffsets[numUniforms];
         GLint uniformType[numUniforms];
+        GLint uniformStrides[numUniforms];
 
 
         int triangleCount;
