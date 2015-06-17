@@ -75,6 +75,7 @@ Light::~Light()
         if(lightData)
         {
                 delete[] lightData;
+                lightData = NULL;
         }
 }
 
