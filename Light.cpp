@@ -202,8 +202,9 @@ void Light::setNormal(Vec4<GLfloat> normal)
 
 void Light::setAngle(GLfloat angle)
 {
+        GLfloat radians = Math::toRadians(angle);
         UBOUniform angleUbo = uniforms[std::string("angle")];
-        memcpy(lightData + angleUbo.getOffset(), &angle, sizeof(angle));
+        memcpy(lightData + angleUbo.getOffset(), &radians, sizeof(radians));
 }
 
 void Light::setLinearAtten(GLfloat linearAtten)
