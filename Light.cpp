@@ -46,8 +46,11 @@ Light::Light(int index, GLsizei offset, GLint bufferSize, GLint numElements, con
 
         for(int i = 0; i < numElements; i++)
         {
-                std::string uniformName(uniformNames[i]);
-                UBOUniform uniformData(indices[i], sizes[i], offsets[i], types[i]);
+                std::string lightUniformName(uniformNames[i]);
+                std::size_t pos = lightUniformName.find('.');
+                pos++;
+                std::string uniformName = lightUniformName.substr(pos);
+                UBOUniform uniformData(indices[i], sizes[i], offsets[i] - offset, types[i]);
                 uniforms[uniformName] = uniformData;
         }
 }
