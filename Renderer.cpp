@@ -492,8 +492,8 @@ void Renderer::setTriangleCount(float triangles)
         triangleCount = triangles;
 }
 
-Light Renderer::newLight()
+void Renderer::setNumEnabledLights(int count)
 {
-        return Light(uboSize, numUniforms, shaderUniforms, uniformIndices, uniformSizes, uniformOffsets, uniformType);
+        glUniform1i(numEnabledLightsLocation, count);
 }
 
