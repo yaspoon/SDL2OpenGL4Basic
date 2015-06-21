@@ -298,15 +298,17 @@ public:
         GLint loadProgram(std::vector<struct ShaderList> list);
         void useProgram(GLint program);
         void setProjectionMatrix(Mat4<float> projMat);
+        void setNumEnabledLights(int count);
 
         void setTriangleCount(float triangles);
 
-        Light newLight();
+        Light newLight(int i);
 
         void updateCameraMatrix(Mat4<float> camMat);
         void updateModelMatrix(Mat4<float> modMat);
         void updateCameraPosition(Vec4<float> camDir);
-        void updateLights(Light updatedLight);
+        void updateLight(Light updatedLight);
+        void updateLights(std::vector<Light> lights);
 
         void draw();
 
@@ -314,5 +316,7 @@ public:
         void loadTexture(char *name);
 
         void loadTest();
+
+        const int getMaxLights();
 };
 #endif
