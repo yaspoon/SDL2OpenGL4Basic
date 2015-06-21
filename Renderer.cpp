@@ -505,3 +505,8 @@ Light Renderer::newLight(int index)
         int offset = uboSize / MAX_LIGHTS;
         return Light(index, stride, offset, numElements, shaderUniforms + uniformArrayOffset, uniformIndices + uniformArrayOffset, uniformSizes + uniformArrayOffset, uniformOffsets + uniformArrayOffset, uniformType + uniformArrayOffset);
 }
+
+const int Renderer::getMaxLights()
+{
+        return MAX_LIGHTS;
+}
