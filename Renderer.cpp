@@ -3,6 +3,7 @@
 #include "Math.h"
 #include <SOIL/SOIL.h>
 #include <SDL2/SDL_image.h>
+#include <iomanip>
 
 Renderer::Renderer():
 modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
@@ -234,15 +235,35 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Failed to find normalMap in shader" << std::endl;
         }
 
-        uboIndex = glGetUniformBlockIndex(program, "LightProperties");
+        /*GLint activeUniforms;
+        glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &activeUniforms);
+        std::cout << "Active uniform count:" << activeUniforms << std::endl;
+
+        for(int i = 0; i < activeUniforms; i++)
+        {
+                char buffer[100];
+                GLsizei length;
+                glGetActiveUniformName(program, i, 100, &length, buffer);
+                std::cout << std::string(buffer) << std::endl;
+        }*/
+
+        uboIndex = glGetUniformBlockIndex(program, "LightsBlock");
+        if(uboIndex == GL_INVALID_INDEX)
+        {
+                std::cout << "invalid index" << std::endl;
+        }
         glGetActiveUniformBlockiv(program, uboIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &uboSize);
 
-        //buffer = new char[uboSize];
+        uboStride = uboSize / MAX_LIGHTS;
 
+        //glGetUniformIndices(program, 2, test, uniformIndices);
         glGetUniformIndices(program, numUniforms, shaderUniforms, uniformIndices);
         glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_OFFSET, uniformOffsets);
         glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_SIZE, uniformSizes);
         glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_TYPE, uniformType);
+        GLint strides[numUniforms];
+
+        glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_ARRAY_STRIDE, strides);
 
         //memcpy()
 
