@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1432352552 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
+1434365872 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
 	<SDL2/SDL_image.h>
@@ -35,11 +35,11 @@
 1420377314 /home/brock/code/cpp/Opengl4/basic/EAngle.h
 	"Vec4.h"
 
-1431598303 /home/brock/code/cpp/Opengl4/basic/Vec4.h
+1433727054 /home/brock/code/cpp/Opengl4/basic/Vec4.h
 	<iostream>
 	"math.h"
 
-1419602067 /home/brock/code/cpp/Opengl4/basic/Math.h
+1433726789 /home/brock/code/cpp/Opengl4/basic/Math.h
 
 1429361541 source:/home/brock/code/cpp/Opengl4/basic/Face.cpp
 	"Face.h"
@@ -113,7 +113,7 @@
 	"Vec4.h"
 	<cstdlib>
 
-1432031871 /home/brock/code/cpp/Opengl4/basic/Renderer.h
+1433410488 /home/brock/code/cpp/Opengl4/basic/Renderer.h
 	<SDL.h>
 	<SDL2/SDL_opengl.h>
 	"Mat4.h"
@@ -442,12 +442,13 @@
 	"Box.h"
 	<string.h>
 
-1432031863 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
+1433759800 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
 	"Renderer.h"
 	"Common.h"
 	"Math.h"
 	<SOIL/SOIL.h>
 	<SDL2/SDL_image.h>
+	<iomanip>
 
 1422256069 /home/brock/code/cpp/Opengl4/basic/Common.h
 	<iostream>
@@ -470,11 +471,12 @@
 
 1430995441 /home/brock/code/cpp/Opengl4/basic/LightProperties.h
 
-1432551680 source:/home/brock/code/cpp/Opengl4/basic/Light.cpp
+1434164080 source:/home/brock/code/cpp/Opengl4/basic/Light.cpp
 	"Light.h"
 	<cstring>
+	"Math.h"
 
-1432631513 /home/brock/code/cpp/Opengl4/basic/Light.h
+1433726886 /home/brock/code/cpp/Opengl4/basic/Light.h
 	<SDL2/SDL_opengl.h>
 	"Vec4.h"
 	"UBOUniform.h"
