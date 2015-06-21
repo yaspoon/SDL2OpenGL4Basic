@@ -2,7 +2,7 @@
 
 const int MAX_LIGHTS = 10;
 
-uniform LightProperties
+struct LightProperties
 {
 	bool isEnabled;
 	bool enableDiffuse;
@@ -34,79 +34,105 @@ in vec3 vertPos;
 in vec3 camDirection;
 in vec3 lightNormalTransform;
 in mat3 NormalMatrix;
+in mat4 modelCamMatrix;
 
 out vec4 fColor;
 
 uniform sampler2D tex;
 uniform sampler2D normalMap;
-//uniform LightProperties lights[MAX_LIGHTS];
+uniform int numEnabledLights;
+uniform LightsBlock
+{
+	LightProperties lights[MAX_LIGHTS];
+};
+
 
 void main()
 {
-	if(!isEnabled)
+	vec3 scatteredLight = vec3(0.0);
+	vec3 reflectedLight = vec3(0.0);
+	vec4 outColour;
+	int i;
+	for(i = 0; i < numEnabledLights; i++)
 	{
-		fColor = vec4(0.0);
-	}
-	else
-	{
-
-		vec3 normal = normalize(normalInterp);
-		vec3 lightDirection;
-		float attenuation = 1.0;
-
-		if(isPointlight || isSpotlight)
+		if(lights[i].isEnabled)
 		{
-			vec3 lightVector = position - vertPos;
-			float lightLength = length(lightVector);
-			lightDirection = normalize(lightVector);
 
-			float lightDot = dot(lightDirection, normal);
+			vec3 normal = normalize(normalInterp);
+			vec3 lightDirection;
+			float attenuation = 0.0;
 
-			attenuation = 1.0 / (constAtten * lightLength); // (constAtten + linearAtten * lightLength + quadAtten * lightLength * lightLength);
-
-			if(isSpotlight && (lightDot < angle))
+			if(lights[i].constAtten > 0.0)
 			{
-				attenuation = 0.0;
+				attenuation = (1.0 / lights[i].constAtten);
+			}
+
+			if(lights[i].isPointlight || lights[i].isSpotlight)
+			{
+				vec4 lightTransformed = modelCamMatrix * vec4(lights[i].position, 1.0);
+				vec3 lightVector = vec3(lightTransformed) - vertPos;
+				float lightLength = length(lightVector);
+				lightDirection = normalize(lightVector);
+				vec3 lightNormal = normalize(NormalMatrix * lights[i].normal);
+
+				if(lights[i].linearAtten > 0.0) //Don't want divide by zero errors
+				{
+					attenuation += (lights[i].linearAtten / lightLength);
+				}
+
+				if(lights[i].quadAtten > 0.0) //Don't want divide by zero errors
+				{
+					attenuation += lights[i].quadAtten / (lightLength * lightLength);
+				}
+
+				if(lights[i].isSpotlight)
+				{
+					float lightDot = dot(lightDirection, lightNormal);
+					if(lightDot > lights[i].angle)
+					{
+						attenuation = 0.0;
+					}
+					else
+					{
+						attenuation *= pow(lightDot, lights[i].spotponent);
+					}
+				}
 			}
 			else
 			{
-				attenuation *= pow(lightDot, spotponent);
+				lightDirection = normalize(NormalMatrix * lights[i].position);
 			}
-		}
-		else
-		{
-			lightDirection = normalize(NormalMatrix * position);
-		}
 
-		float diffuse = 0.0;
-		if(enableDiffuse)
-		{
-			diffuse = dot(lightDirection, normal);
-		}
-
-		float specular = 0.0f;
-		if(enableSpecular && diffuse > 0.0)
-		{
-			if(specularMode)
+			float diffuse = 0.0;
+			if(lights[i].enableDiffuse)
 			{
-				vec3 reflectDir = reflect(-lightDirection, normal);
-				float specAngle = max(dot(reflectDir, camDirection), 0.0);
-				specular = pow(specAngle, shininess);
+				diffuse = dot(lightDirection, normal);
 			}
-			else
+
+			float specular = 0.0f;
+			if(lights[i].enableSpecular && diffuse > 0.0)
 			{
-				//shininess = 20.0;
-				vec3 halfVector = normalize(camDirection + lightDirection);
-				float specAngle = max(dot(halfVector, normal), 0.0);
-				specular = pow(specAngle, shininess);
+				if(lights[i].specularMode)
+				{
+					vec3 reflectDir = reflect(-lightDirection, normal);
+					float specAngle = max(dot(reflectDir, camDirection), 0.0);
+					specular = pow(specAngle, lights[i].shininess);
+				}
+				else
+				{
+					//shininess = 20.0;
+					vec3 halfVector = normalize(camDirection + lightDirection);
+					float specAngle = max(dot(halfVector, normal), 0.0);
+					specular = pow(specAngle, lights[i].shininess);
+				}
 			}
+
+			scatteredLight += (lights[i].ambientLight * attenuation) + max((diffuse * lights[i].diffuseLight), 0.0) * attenuation;
+			reflectedLight += max((specular * lights[i].specularLight), 0.0f) * attenuation;
+			
 		}
-
-		vec3 test = vec3(0.5);
-
-		vec3 scatteredLight = ambientLight + max((diffuse * test), 0.0) * attenuation;
-		vec3 reflectedLight = max((specular * specularLight), 0.0f) * attenuation;
-		fColor = min(vec4(texture(tex, texCoord).xyz * scatteredLight + reflectedLight, 1.0), vec4(1.0));
 	}
+	outColour = vec4(texture(tex, texCoord).xyz * scatteredLight + reflectedLight, 1.0);
+	fColor = min(outColour, vec4(1.0));
 
 }

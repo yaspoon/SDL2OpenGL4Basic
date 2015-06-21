@@ -13,6 +13,7 @@ out vec3 vertPos;
 out vec3 camDirection;
 out vec3 lightNormalTransform;
 out mat3 NormalMatrix;
+out mat4 modelCamMatrix;
 
 uniform vec3 lightPos;
 uniform mat4 vprojectionMat;
@@ -27,6 +28,7 @@ void main()
 	texCoord = vTexCoord;
 	
 	mat4 modelCamera = cameraMatrix * modelMatrix;
+	modelCamMatrix = modelCamera;
 	NormalMatrix = transpose(inverse(mat3(modelCamera)));
 	
 	normalInterp = NormalMatrix * vNormal;
