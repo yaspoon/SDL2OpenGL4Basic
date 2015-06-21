@@ -167,36 +167,37 @@ int main(int argc, char *argv[])
                                         break;
                                         case SDL_SCANCODE_L:
                                         {
-                                                GLboolean isEnabled = !light.getIsEnabled();
-                                                light.setIsEnabled(isEnabled);
-                                                renderer.updateLights(light);
+                                                Light tmpLight = lights[lightIndex];
+                                                GLboolean isEnabled = !tmpLight.getIsEnabled();
+                                                lights[lightIndex].setIsEnabled(isEnabled);
+                                                renderer.updateLight(tmpLight);
                                                 std::string lightState = isEnabled ? "On" : "Off";
                                                 std::cout << "Toggled light:" << lightState << std::endl;
                                         }
                                         break;
                                         case SDL_SCANCODE_O:
                                         {
-                                                GLboolean diffuse =  !light.getIsDiffuseEnabled();
-                                                light.enableDiffuse(diffuse);
-                                                renderer.updateLights(light);
+                                                GLboolean diffuse =  !lights[lightIndex].getIsDiffuseEnabled();
+                                                lights[lightIndex].enableDiffuse(diffuse);
+                                                renderer.updateLight(lights[lightIndex]);
                                                 std::string diffuseState =  diffuse ? "On" : "Off";
                                                 std::cout << "Toggled Diffuse:" << diffuseState << std::endl;
                                         }
                                         break;
                                         case SDL_SCANCODE_P:
                                         {
-                                                GLboolean specular = !light.getIsSpecularEnabled();
-                                                light.enableSpecular(specular);
-                                                renderer.updateLights(light);
+                                                GLboolean specular = !lights[lightIndex].getIsSpecularEnabled();
+                                                lights[lightIndex].enableSpecular(specular);
+                                                renderer.updateLight(lights[lightIndex]);
                                                 std::string specularState = specular ? "On" : "Off";
                                                 std::cout << "Toggled Specular:" << specularState << std::endl;
                                         }
                                         break;
                                         case SDL_SCANCODE_U:
                                         {
-                                                GLboolean specularMode = !light.getSpecularMode();
-                                                light.setSpecularMode(specularMode);
-                                                renderer.updateLights(light);
+                                                GLboolean specularMode = !lights[lightIndex].getSpecularMode();
+                                                lights[lightIndex].setSpecularMode(specularMode);
+                                                renderer.updateLight(lights[lightIndex]);
                                                 std::string specularModeState = specularMode ? "Blin-Phong" : "Phong";
                                                 std::cout << "Toggled Specular Mode:" << specularModeState << std::endl;
                                         }
@@ -210,16 +211,29 @@ int main(int argc, char *argv[])
                                         break;
                                         case SDL_SCANCODE_1:
                                         {
-                                                GLfloat shininess = light.getShininess() - 1.0f;
-                                                light.setShininess(shininess);
-                                                renderer.updateLights(light);
+                                                GLfloat shininess = lights[lightIndex].getShininess() - 1.0f;
+                                                lights[lightIndex].setShininess(shininess);
+                                                renderer.updateLight(lights[lightIndex]);
                                         }
                                         break;
                                         case SDL_SCANCODE_2:
                                         {
-                                                GLfloat shininess = light.getShininess() + 1.0f;
-                                                light.setShininess(shininess);
-                                                renderer.updateLights(light);
+                                                GLfloat shininess = lights[lightIndex].getShininess() + 1.0f;
+                                                lights[lightIndex].setShininess(shininess);
+                                                renderer.updateLight(lights[lightIndex]);
+                                        }
+                                        break;
+                                        case SDL_SCANCODE_MINUS:
+                                        {
+                                                lightIndex = lightIndex > 0 ? --lightIndex : lightIndex;
+                                                std::cout << "light[" << lightIndex << "] selected" << std::endl;
+                                        }
+                                        break;
+                                        case SDL_SCANCODE_EQUALS:
+                                        {
+                                                /*Yeah I'm using the ternery operator like an ass hat*/
+                                                lightIndex = lightIndex < (lights.size() - 1) ? ++lightIndex : lightIndex;
+                                                std::cout << "light[" << lightIndex << "] selected" << std::endl;
                                         }
                                         break;
                                 }
