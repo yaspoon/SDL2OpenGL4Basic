@@ -497,3 +497,11 @@ void Renderer::setNumEnabledLights(int count)
         glUniform1i(numEnabledLightsLocation, count);
 }
 
+Light Renderer::newLight(int index)
+{
+        int stride = (uboSize / MAX_LIGHTS) * index;
+        int numElements = numUniforms / MAX_LIGHTS;
+        int uniformArrayOffset = numElements * index; //This is how much we need to offset into the uniform arrays to get the correct data. i.e offset into uniformIndices Array etc
+        int offset = uboSize / MAX_LIGHTS;
+        return Light(index, stride, offset, numElements, shaderUniforms + uniformArrayOffset, uniformIndices + uniformArrayOffset, uniformSizes + uniformArrayOffset, uniformOffsets + uniformArrayOffset, uniformType + uniformArrayOffset);
+}
