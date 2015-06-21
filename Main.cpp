@@ -93,21 +93,46 @@ int main(int argc, char *argv[])
         bool uncappedFps = false;
 
         FrameTimer.start();
+        int lightIndex = 0;
 
-        Light light = renderer.newLight();
-        light.setAmbientLight(Vec4<GLfloat>(0.4f, 0.4f, 0.4f, 1.0f));
-        light.setDiffuseLight(Vec4<GLfloat>(0.4f, 0.4f, 0.4f, 1.0f));
-        light.setSpecularLight(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
-        light.setIsEnabled(true);
-        light.setPosition(Vec4<GLfloat>(0.0f, 1.0f, 0.0f, 0.0f));
-        light.setShininess(1.0f);
-        light.setConstAttenuation(0.5f);
-        light.setIsPointLight(true);
+        std::vector<Light> lights;
 
-        //light.enableDiffuse(true);
-        //light.enableSpecular(true);
+        lights.insert(lights.end(), renderer.newLight(lights.size()));
+        lights[0].setAmbientLight(Vec4<GLfloat>(0.3f, 0.3f, 0.3f, 1.0f));
+        lights[0].setDiffuseLight(Vec4<GLfloat>(0.4f, 0.4f, 0.4f, 1.0f));
+        lights[0].setSpecularLight(Vec4<GLfloat>(0.6f, 0.6f, 0.6f, 1.0f));
+        lights[0].setIsEnabled(true);
+        lights[0].enableDiffuse(true);
+        lights[0].enableSpecular(true);
+        lights[0].setPosition(Vec4<GLfloat>(0.0f, 5.0f, 0.0f, 0.0f));
+        lights[0].setNormal(Vec4<GLfloat>(0.0f, 1.0f, 0.0f, 0.0f));
+        lights[0].setShininess(16.0f);
+        lights[0].setConstAttenuation(1.0f);
+        lights[0].setLinearAtten(0.0f);
+        lights[0].setQuadAtten(1.0f);
+        lights[0].setIsPointLight(true);
+        lights[0].setAngle(90.0f);
+        lights[0].setSpotponent(16.0f);
 
-        renderer.updateLights(light);
+        lights.insert(lights.end(), renderer.newLight(lights.size()));
+        lights[1].setAmbientLight(Vec4<GLfloat>(0.4f, 0.4f, 0.4f, 1.0f));
+        lights[1].setDiffuseLight(Vec4<GLfloat>(0.4f, 0.4f, 0.4f, 1.0f));
+        lights[1].setSpecularLight(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
+        lights[1].setIsEnabled(true);
+        lights[1].enableDiffuse(true);
+        lights[1].enableSpecular(true);
+        lights[1].setPosition(Vec4<GLfloat>(5.0f, 5.0f, 0.0f, 0.0f));
+        lights[1].setNormal(Vec4<GLfloat>(0.0f, 1.0f, 0.0f, 0.0f));
+        lights[1].setShininess(1.0f);
+        lights[1].setConstAttenuation(1.0f);
+        lights[1].setIsSpotLight(true);
+        lights[1].setLinearAtten(1.0f);
+        lights[1].setAngle(90.0f);
+        lights[1].setSpotponent(16.0f);
+
+
+        renderer.updateLights(lights);
+        renderer.setNumEnabledLights(lights.size());
 
         while(!quit)
         {
