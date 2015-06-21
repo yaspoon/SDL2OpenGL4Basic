@@ -305,10 +305,12 @@ void Renderer::updateCameraPosition(Vec4<float> camDir)
         camPosition = camDir;
 }
 
-void Renderer::updateLights(Light updatedLight)
+void Renderer::updateLight(Light updatedLight)
 {
         glBindBuffer(GL_UNIFORM_BUFFER, ubo);
-        glBufferSubData(GL_UNIFORM_BUFFER, 0, uboSize, updatedLight.getLightData());
+        GLintptr offset = updatedLight.getIndex() * uboStride;
+        GLsizei size = updatedLight.getDataSize();
+        glBufferSubData(GL_UNIFORM_BUFFER, offset, updatedLight.getDataSize(), updatedLight.getLightData());
         glBindBufferBase(GL_UNIFORM_BUFFER, uboIndex, ubo);
 }
 
