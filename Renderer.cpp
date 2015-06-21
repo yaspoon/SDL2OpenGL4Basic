@@ -314,6 +314,20 @@ void Renderer::updateLight(Light updatedLight)
         glBindBufferBase(GL_UNIFORM_BUFFER, uboIndex, ubo);
 }
 
+void Renderer::updateLights(std::vector<Light> lights)
+{
+        glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+        for( std::vector<Light>::iterator it = lights.begin(); it != lights.end(); ++it)
+        {
+                Light light = *it;
+                GLintptr offset = light.getIndex() * uboStride;
+                GLsizei size = light.getDataSize();
+                char *data = light.getLightData();
+                glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);// light.getLightData());
+                glBindBufferBase(GL_UNIFORM_BUFFER, uboIndex, ubo);
+        }
+}
+
 void Renderer::draw()
 {
         glActiveTexture(GL_TEXTURE0);
