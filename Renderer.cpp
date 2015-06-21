@@ -271,6 +271,11 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
         glBindBuffer(GL_UNIFORM_BUFFER, ubo);
         glBufferData(GL_UNIFORM_BUFFER, uboSize, NULL, GL_STATIC_DRAW); //We'll init the buffer later?
 
+        numEnabledLightsLocation = glGetUniformLocation(program, "numEnabledLights");
+        if(numEnabledLightsLocation == -1)
+        {
+                std::cout << "Failed to find numEnabledLights in shader" << std::endl;
+        }
 
         return program;
 }
