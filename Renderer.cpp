@@ -199,30 +199,6 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Couldn't find camPosition in shader" << std::endl;
         }
 
-        /*lightsBlockLocation = glGetUniformBlockIndex(program, "lights");
-        if(lightsBlockLocation == -1)
-        {
-                std::cout << "Failed to find lights in shader" << std::endl;
-        }
-
-        enableDiffuseLocation = glGetUniformLocation(program, "enableDiffuse");
-        if(enableDiffuseLocation== -1)
-        {
-                std::cout << "Failed to enableDiffuse in shader" << std::endl;
-        }
-
-        enableSpecularLocation = glGetUniformLocation(program, "enableSpecular");
-        if(enableSpecularLocation == -1)
-        {
-                std::cout << "Failed to find enableSpecular in shader" << std::endl;
-        }
-
-        specularModeLocation = glGetUniformLocation(program, "specularMode");
-        if(specularModeLocation == -1)
-        {
-                std::cout << "Failed to find specularMode in shader" << std::endl;
-        }*/
-
         textureLocation = glGetUniformLocation(program, "tex");
         if(textureLocation == -1)
         {
@@ -235,7 +211,7 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 std::cout << "Failed to find normalMap in shader" << std::endl;
         }
 
-        /*GLint activeUniforms;
+        GLint activeUniforms;
         glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &activeUniforms);
         std::cout << "Active uniform count:" << activeUniforms << std::endl;
 
@@ -245,9 +221,9 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
                 GLsizei length;
                 glGetActiveUniformName(program, i, 100, &length, buffer);
                 std::cout << std::string(buffer) << std::endl;
-        }*/
+        }
 
-        uboIndex = glGetUniformBlockIndex(program, "LightsBlock");
+        uboIndex = glGetUniformBlockIndex(program, "UniformBlock");
         if(uboIndex == GL_INVALID_INDEX)
         {
                 std::cout << "invalid index" << std::endl;
@@ -256,7 +232,6 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
 
         uboStride = uboSize / MAX_LIGHTS;
 
-        //glGetUniformIndices(program, 2, test, uniformIndices);
         glGetUniformIndices(program, numUniforms, shaderUniforms, uniformIndices);
         glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_OFFSET, uniformOffsets);
         glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_SIZE, uniformSizes);
@@ -265,7 +240,14 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
 
         glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_ARRAY_STRIDE, strides);
 
-        //memcpy()
+        glGetUniformIndices(program, numMatUniforms, materialUniforms, matUniformIndices);
+        glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_OFFSET, matUniformOffsets);
+        glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_SIZE, matUniformSizes);
+        glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_TYPE, matUniformType);
+
+        GLint matStrides[numMatUniforms];
+        glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_ARRAY_STRIDE, matStrides);
+
 
         glGenBuffers(1, &ubo);
         glBindBuffer(GL_UNIFORM_BUFFER, ubo);
@@ -499,11 +481,7 @@ void Renderer::setNumEnabledLights(int count)
 
 Light Renderer::newLight(int index)
 {
-        int stride = (uboSize / MAX_LIGHTS) * index;
-        int numElements = numUniforms / MAX_LIGHTS;
-        int uniformArrayOffset = numElements * index; //This is how much we need to offset into the uniform arrays to get the correct data. i.e offset into uniformIndices Array etc
-        int offset = uboSize / MAX_LIGHTS;
-        return Light(index, stride, offset, numElements, shaderUniforms + uniformArrayOffset, uniformIndices + uniformArrayOffset, uniformSizes + uniformArrayOffset, uniformOffsets + uniformArrayOffset, uniformType + uniformArrayOffset);
+        return Light(index, uboStride, numUniforms, shaderUniforms, uniformIndices, uniformSizes, uniformOffsets, uniformType);
 }
 
 const int Renderer::getMaxLights()
