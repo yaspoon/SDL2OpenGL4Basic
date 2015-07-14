@@ -7,14 +7,12 @@
 #include <map>
 #include <string>
 
-const static int numUniforms = 11;
-
 class Light
 {
         public:
-                Light(int index, GLsizei offset, GLint bufferSize, GLint numElements, const char *uniformNames[numUniforms], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types);
+                Light(int index, GLint bufferSize, GLint numElements, const char *uniformNames[], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types);
                 Light(const Light &copy);
-                virtual ~Light();
+                ~Light();
 
                 Light &operator=(const Light &other);
 
@@ -27,7 +25,6 @@ class Light
                 void setAmbientLight(Vec4<GLfloat> light);
                 void setDiffuseLight(Vec4<GLfloat> light);
                 void setSpecularLight(Vec4<GLfloat> light);
-                void setShininess(GLfloat shininess);
                 void setStrength(GLfloat strength);
                 void setPosition(Vec4<GLfloat> pos);
                 void setNormal(Vec4<GLfloat> normal);
@@ -47,7 +44,6 @@ class Light
                 Vec4<GLfloat> getAmbientLight();
                 Vec4<GLfloat> getDiffuseLight();
                 Vec4<GLfloat> getSpecularLight();
-                GLfloat getShininess();
                 GLfloat getStrength();
                 GLfloat getLinearAtten();
                 GLfloat getQuadAtten();
@@ -56,7 +52,8 @@ class Light
                 int getIndex();
                 size_t getDataSize();
 
-                template <class T> void set(std::string uboname, T *data)
+                template <class T>
+                void set(std::string uboname, T *data)
                 {
                         UBOUniform ubo = uniforms[uboname];
                         size_t size = ubo.getSize() * typeSize(ubo.getType());

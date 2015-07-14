@@ -2,42 +2,7 @@
 #include <cstring>
 #include "Math.h"
 
-struct LightProperties
-{
-	bool isEnabled;
-	bool pad1[3];
-	bool enableDiffuse;
-	bool pad2[3];
-	bool enableSpecular;
-	bool pad3[3];
-	bool isSpotlight;
-	bool pad4[3];
-	bool isPointlight;
-	bool pad5[3];
-	bool specularMode;
-	bool pad6[11];
-	float ambientLight[3];
-	bool pad7;
-        float diffuseLight[3];
-        bool pad8;
-	float specularLight[3];
-	bool pad9;
-	float shininess;
-	float strength;
-
-	float position[3]; //For directional lights this is instead the direction the light points, yup terrible naming I know.
-	bool pad10;
-	float normal[3]; //Direction spotlights are pointing
-	bool pad11;
-	float angle; //How many degrees left and right of the light normal does this light `shine` it's in cos(theta) form
-
-	float linearAtten; //= 1.0;
-	float quadAtten; // = 1.0;
-	float constAtten; // = 0.1;
-	float spotponent; // = 2.0;
-};
-
-Light::Light(int index, GLsizei offset, GLint bufferSize, GLint numElements, const char *uniformNames[numUniforms], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types)
+Light::Light(int index, GLint bufferSize, GLint numElements, const char *uniformNames[], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types)
 {
         this->index = index;
         this->dataSize = bufferSize;
@@ -50,7 +15,7 @@ Light::Light(int index, GLsizei offset, GLint bufferSize, GLint numElements, con
                 std::size_t pos = lightUniformName.find('.');
                 pos++;
                 std::string uniformName = lightUniformName.substr(pos);
-                UBOUniform uniformData(indices[i], sizes[i], offsets[i] - offset, types[i]);
+                UBOUniform uniformData(indices[i], sizes[i], offsets[i], types[i]);
                 uniforms[uniformName] = uniformData;
         }
 }
@@ -155,12 +120,7 @@ void Light::setDiffuseLight(Vec4<GLfloat> light)
 {
         UBOUniform diffuseLight = uniforms[std::string("diffuseLight")];
 
-        struct LightProperties* sss = (struct LightProperties*)0;
-        int *asdf = (int*)&sss->diffuseLight;
-
         size_t size =  diffuseLight.getSize() * typeSize(diffuseLight.getType());
-        struct LightProperties *blah = (struct LightProperties*)lightData;
-        size_t test = sizeof(struct LightProperties);
         memcpy(lightData + diffuseLight.getOffset(), light.getData(), size);
 }
 
@@ -170,13 +130,6 @@ void Light::setSpecularLight(Vec4<GLfloat> light)
 
         size_t size =  specularLight.getSize() * typeSize(specularLight.getType());
         memcpy(lightData + specularLight.getOffset(), light.getData(), size);
-}
-
-void Light::setShininess(GLfloat shininess)
-{
-        UBOUniform shininessUBO = uniforms[std::string("shininess")];
-
-        memcpy(lightData + shininessUBO.getOffset(), &shininess, sizeof(GLfloat));
 }
 
 void Light::setStrength(GLfloat strength)
@@ -334,16 +287,6 @@ Vec4<GLfloat> Light::getSpecularLight()
         memcpy(specularLight, lightData + specularLightUbo.getOffset(), size);
 
         return Vec4<GLfloat>(specularLight[0], specularLight[1], specularLight[2], 0.0f);
-}
-
-GLfloat Light::getShininess()
-{
-        GLfloat shininess;
-        UBOUniform shininessUBO = uniforms[std::string("shininess")];
-        memcpy(&shininess, lightData + shininessUBO.getOffset(), sizeof(shininess));
-
-        return shininess;
-
 }
 
 GLfloat Light::getStrength()
