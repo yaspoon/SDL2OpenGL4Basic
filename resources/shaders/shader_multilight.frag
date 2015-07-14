@@ -1,6 +1,7 @@
 #version 430
 
 const int MAX_LIGHTS = 10;
+const int MAX_MATERIALS = 10;
 
 struct LightProperties
 {
@@ -13,7 +14,7 @@ struct LightProperties
 	vec3 ambientLight;
 	vec3 diffuseLight;
 	vec3 specularLight;
-	float shininess;
+	//float shininess;
 	float strength;
 
 	vec3 position; //For directional lights this is instead the direction the light points, yup terrible naming I know. 
@@ -26,6 +27,15 @@ struct LightProperties
 	float spotponent; // = 2.0;
 };
 
+struct MaterialProperties
+{
+	vec3 emission;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float shininess;
+};
+
 in vec3 colour;
 in vec2 texCoord;
 in vec3 normalInterp;
@@ -35,17 +45,18 @@ in vec3 camDirection;
 in vec3 lightNormalTransform;
 in mat3 NormalMatrix;
 in mat4 modelCamMatrix;
+flat in int enabledMaterials;
 
 out vec4 fColor;
 
 uniform sampler2D tex;
 uniform sampler2D normalMap;
 uniform int numEnabledLights;
-uniform LightsBlock
+uniform UniformBlock
 {
 	LightProperties lights[MAX_LIGHTS];
+	MaterialProperties materials[MAX_MATERIALS];
 };
-
 
 void main()
 {
@@ -53,6 +64,27 @@ void main()
 	vec3 reflectedLight = vec3(0.0);
 	vec4 outColour;
 	int i;
+
+	vec3 totalEmission = vec3(0.0);
+	vec3 totalDiffuse = vec3(0.0);
+	vec3 totalSpecular = vec3(0.0);
+	float totalShininess = 0.0;
+
+	for(i = 0; i < MAX_MATERIALS; i++)
+	{
+		if((enabledMaterials & i) != 0)
+		{
+			totalEmission += materials[i].emission;
+			totalDiffuse += materials[i].diffuse;
+			totalSpecular += materials[i].specular;
+			totalShininess += materials[i].shininess;
+		}
+	}
+
+	totalEmission = min(totalEmission, vec3(1.0));
+	totalDiffuse = min(totalDiffuse, vec3(1.0));
+	totalSpecular = min(totalSpecular, vec3(1.0));
+
 	for(i = 0; i < numEnabledLights; i++)
 	{
 		if(lights[i].isEnabled)
@@ -116,14 +148,14 @@ void main()
 				{
 					vec3 reflectDir = reflect(-lightDirection, normal);
 					float specAngle = max(dot(reflectDir, camDirection), 0.0);
-					specular = pow(specAngle, lights[i].shininess);
+					specular = pow(specAngle, totalShininess);
 				}
 				else
 				{
 					//shininess = 20.0;
 					vec3 halfVector = normalize(camDirection + lightDirection);
 					float specAngle = max(dot(halfVector, normal), 0.0);
-					specular = pow(specAngle, lights[i].shininess);
+					specular = pow(specAngle, totalShininess);
 				}
 			}
 

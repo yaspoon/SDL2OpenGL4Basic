@@ -14,6 +14,7 @@ out vec3 camDirection;
 out vec3 lightNormalTransform;
 out mat3 NormalMatrix;
 out mat4 modelCamMatrix;
+flat out int enabledMaterials;
 
 uniform vec3 lightPos;
 uniform mat4 vprojectionMat;
@@ -26,6 +27,7 @@ void main()
 {
 	colour = vColour;
 	texCoord = vTexCoord;
+	enabledMaterials = 0;
 	
 	mat4 modelCamera = cameraMatrix * modelMatrix;
 	modelCamMatrix = modelCamera;
