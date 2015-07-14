@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
         lights[0].enableSpecular(true);
         lights[0].setPosition(Vec4<GLfloat>(0.0f, 5.0f, 0.0f, 0.0f));
         lights[0].setNormal(Vec4<GLfloat>(0.0f, 1.0f, 0.0f, 0.0f));
-        lights[0].setShininess(16.0f);
+        //lights[0].setShininess(16.0f);
         lights[0].setConstAttenuation(1.0f);
         lights[0].setLinearAtten(0.0f);
         lights[0].setQuadAtten(1.0f);
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
         lights[1].enableSpecular(true);
         lights[1].setPosition(Vec4<GLfloat>(5.0f, 5.0f, 0.0f, 0.0f));
         lights[1].setNormal(Vec4<GLfloat>(0.0f, 1.0f, 0.0f, 0.0f));
-        lights[1].setShininess(1.0f);
+        //lights[1].setShininess(1.0f);
         lights[1].setConstAttenuation(1.0f);
         lights[1].setIsSpotLight(true);
         lights[1].setLinearAtten(1.0f);
@@ -211,16 +211,12 @@ int main(int argc, char *argv[])
                                         break;
                                         case SDL_SCANCODE_1:
                                         {
-                                                GLfloat shininess = lights[lightIndex].getShininess() - 1.0f;
-                                                lights[lightIndex].setShininess(shininess);
-                                                renderer.updateLight(lights[lightIndex]);
+                                                std::cout << "REMOVED: lights arn't shiny anymore...." << std::endl;
                                         }
                                         break;
                                         case SDL_SCANCODE_2:
                                         {
-                                                GLfloat shininess = lights[lightIndex].getShininess() + 1.0f;
-                                                lights[lightIndex].setShininess(shininess);
-                                                renderer.updateLight(lights[lightIndex]);
+                                                std::cout << "REMOVED: lights arn't shiny anymore...." << std::endl;
                                         }
                                         break;
                                         case SDL_SCANCODE_MINUS:
