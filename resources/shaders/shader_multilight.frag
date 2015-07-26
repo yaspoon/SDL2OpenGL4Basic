@@ -51,6 +51,7 @@ out vec4 fColor;
 
 uniform sampler2D tex;
 uniform sampler2D normalMap;
+
 uniform int numEnabledLights;
 uniform UniformBlock
 {
