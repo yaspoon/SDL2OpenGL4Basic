@@ -1,7 +1,8 @@
 #include "Material.h"
+#include "Light.h"
 #include <cstring>
 
-Material::Material(int index, size_t bufSize, int numElements, char *uniformNames[], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types)
+Material::Material(int index, size_t bufSize, int numElements, const char *uniformNames[], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types)
 {
         this->index = index;
         this->dataSize = bufSize;
@@ -37,7 +38,7 @@ Material::Material(const Material &copy)
 
 Material::~Material()
 {
-
+        delete[] materialData;
 }
 
 Material &Material::operator=(const Material &copy)
@@ -55,4 +56,71 @@ Material &Material::operator=(const Material &copy)
         }
 
         return *this;
+}
+
+void Material::setEmission(Vec4<GLfloat> emission)
+{
+        UBOUniform emUbo = uniforms[std::string("emission")];
+
+        size_t size = emUbo.getSize() * typeSize(emUbo.getType());
+        memcpy(materialData, emission.getData(), size);
+}
+
+void Material::setAmbient(Vec4<GLfloat> ambient)
+{
+        UBOUniform amUbo = uniforms[std::string("ambient")];
+
+        size_t size = amUbo.getSize() * typeSize(amUbo.getType());
+        memcpy(materialData, ambient.getData(), size);
+}
+
+void Material::setDiffuse(Vec4<GLfloat> diffuse)
+{
+        UBOUniform diffUbo = uniforms[std::string("diffuse")];
+
+        size_t size = diffUbo.getSize() * typeSize(diffUbo.getType());
+        memcpy(materialData, diffuse.getData(), size);
+}
+
+void Material::setSpecular(Vec4<GLfloat> specular)
+{
+        UBOUniform specUbo = uniforms[std::string("specular")];
+
+        size_t size = specUbo.getSize() * typeSize(specUbo.getType());
+        memcpy(materialData, specular.getData(), size);
+}
+
+Vec4<GLfloat> Material::getEmission()
+{
+
+}
+
+Vec4<GLfloat> Material::getDiffuse()
+{
+
+}
+
+Vec4<GLfloat> Material::getSpecular()
+{
+
+}
+
+char *Material::getMaterialData()
+{
+        return materialData;
+}
+
+int Material::getIndex()
+{
+        return index;
+}
+
+size_t Material::getDataSize()
+{
+        return dataSize;
+}
+
+int Material::getNumUniforms()
+{
+        return numUniforms;
 }
