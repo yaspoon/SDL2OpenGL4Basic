@@ -10,6 +10,7 @@
 #include <vector>
 #include "Shader.h"
 #include "Light.h"
+#include "Material.h"
 
 class Renderer
 {
@@ -94,11 +95,11 @@ private:
         GLint uniformType[numUniforms];
         GLint uniformStrides[numUniforms];
 
-        GLuint matUniformIndices[numUniforms];
-        GLint matUniformSizes[numUniforms];
-        GLint matUniformOffsets[numUniforms];
-        GLint matUniformType[numUniforms];
-        GLint matUniformStrides[numUniforms];
+        GLuint matUniformIndices[numMatUniforms];
+        GLint matUniformSizes[numMatUniforms];
+        GLint matUniformOffsets[numMatUniforms];
+        GLint matUniformType[numMatUniforms];
+        GLint matUniformStrides[numMatUniforms];
 
         int triangleCount;
 
@@ -136,6 +137,7 @@ public:
         void setTriangleCount(float triangles);
 
         Light newLight(int i);
+        Material newMaterial(int index);
 
         void updateCameraMatrix(Mat4<float> camMat);
         void updateModelMatrix(Mat4<float> modMat);

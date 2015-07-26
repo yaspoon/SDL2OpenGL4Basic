@@ -1,7 +1,6 @@
 #include "Renderer.h"
 #include "Common.h"
 #include "Math.h"
-#include <SOIL/SOIL.h>
 #include <SDL2/SDL_image.h>
 #include <iomanip>
 
@@ -230,8 +229,6 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
         }
         glGetActiveUniformBlockiv(program, uboIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &uboSize);
 
-        uboStride = uboSize / MAX_LIGHTS;
-
         glGetUniformIndices(program, numUniforms, shaderUniforms, uniformIndices);
         glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_OFFSET, uniformOffsets);
         glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_SIZE, uniformSizes);
@@ -248,6 +245,8 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
         GLint matStrides[numMatUniforms];
         glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_ARRAY_STRIDE, matStrides);
 
+        uboStride = (uboSize - matUniformOffsets[0]) / MAX_LIGHTS;
+        matUboStride = uboSize - uboStride;
 
         glGenBuffers(1, &ubo);
         glBindBuffer(GL_UNIFORM_BUFFER, ubo);
@@ -482,6 +481,12 @@ void Renderer::setNumEnabledLights(int count)
 Light Renderer::newLight(int index)
 {
         return Light(index, uboStride, numUniforms, shaderUniforms, uniformIndices, uniformSizes, uniformOffsets, uniformType);
+}
+
+Material Renderer::newMaterial(int index)
+{
+        return Material(index, matUboStride, numMatUniforms, materialUniforms, matUniformIndices,
+                        matUniformSizes, matUniformOffsets, matUniformType);
 }
 
 const int Renderer::getMaxLights()
