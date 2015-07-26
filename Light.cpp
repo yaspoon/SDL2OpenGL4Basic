@@ -190,7 +190,7 @@ char *Light::getLightData()
         return lightData;
 }
 
-size_t Light::typeSize(GLenum type)
+size_t typeSize(GLenum type)
 {
         size_t size;
 

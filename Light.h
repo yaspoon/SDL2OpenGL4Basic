@@ -7,6 +7,8 @@
 #include <map>
 #include <string>
 
+size_t typeSize(GLenum type);
+
 class Light
 {
         public:
@@ -70,7 +72,6 @@ class Light
                         return data;
                 }
 
-                size_t typeSize(GLenum type);
         protected:
         private:
         size_t dataSize;
