@@ -68,13 +68,15 @@ private:
                 "lights[0].spotponent",
         };
         const static int MAX_LIGHTS = 10;
+        const static int MAX_MATERIALS = 10;
 
-        const static int numMatUniforms = 4;
+        const static int numMatUniforms = 5;
         const char *materialUniforms[numMatUniforms] = {
-                "materials[0].diffuse",
                 "materials[0].emission",
-                "materials[0].shininess",
-                "materials[0].specular"
+                "materials[0].ambient",
+                "materials[0].diffuse",
+                "materials[0].specular",
+                "materials[0].shininess"
         };
 
 
