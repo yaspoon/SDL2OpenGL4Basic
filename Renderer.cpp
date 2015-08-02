@@ -245,8 +245,9 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
         GLint matStrides[numMatUniforms];
         glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_ARRAY_STRIDE, matStrides);
 
-        uboStride = (uboSize - matUniformOffsets[0]) / MAX_LIGHTS;
-        matUboStride = uboSize - uboStride;
+        uboStride = matUniformOffsets[0];
+        matUboStride = (uboSize - uboStride) / MAX_MATERIALS;
+        uboStride = uboStride / MAX_LIGHTS;
 
         glGenBuffers(1, &ubo);
         glBindBuffer(GL_UNIFORM_BUFFER, ubo);
