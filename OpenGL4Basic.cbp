@@ -57,6 +57,8 @@
 		<Unit filename="Material.h" />
 		<Unit filename="Math.cpp" />
 		<Unit filename="Math.h" />
+		<Unit filename="Model.cpp" />
+		<Unit filename="Model.h" />
 		<Unit filename="ObjLoader.cpp" />
 		<Unit filename="ObjLoader.h" />
 		<Unit filename="Renderable.cpp" />
