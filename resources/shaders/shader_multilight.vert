@@ -27,7 +27,7 @@ void main()
 {
 	colour = vColour;
 	texCoord = vTexCoord;
-	enabledMaterials = 0;
+	enabledMaterials = 1;
 	
 	mat4 modelCamera = cameraMatrix * modelMatrix;
 	modelCamMatrix = modelCamera;
