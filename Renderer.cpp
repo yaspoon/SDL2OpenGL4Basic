@@ -310,6 +310,20 @@ void Renderer::updateLights(std::vector<Light> lights)
         }
 }
 
+void Renderer::updateMaterials(std::vector<Material> materials)
+{
+        glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+        for(std::vector<Material>::iterator it = materials.begin(); it != materials.end(); ++it)
+        {
+                Material material = *it;
+                GLintptr offset = material.getIndex() * matUboStride;
+                GLsizei size = material.getDataSize();
+                char *data = material.getMaterialData();
+                glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
+                glBindBufferBase(GL_UNIFORM_BUFFER, uboIndex, ubo);
+        }
+}
+
 void Renderer::draw()
 {
         glActiveTexture(GL_TEXTURE0);

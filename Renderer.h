@@ -146,6 +146,7 @@ public:
         void updateCameraPosition(Vec4<float> camDir);
         void updateLight(Light updatedLight);
         void updateLights(std::vector<Light> lights);
+        void updateMaterials(std::vector<Material> materials);
 
         void draw();
 
