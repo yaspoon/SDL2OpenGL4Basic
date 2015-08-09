@@ -28,11 +28,13 @@ public:
         void setAmbient(Vec4<GLfloat> ambient);
         void setDiffuse(Vec4<GLfloat> diffuse);
         void setSpecular(Vec4<GLfloat> specular);
+        void setShininess(GLfloat shininess);
 
         Vec4<GLfloat> getEmission();
         Vec4<GLfloat> getAmbient();
         Vec4<GLfloat> getDiffuse();
         Vec4<GLfloat> getSpecular();
+        GLfloat getShininess();
 
         char *getMaterialData();
         int getIndex();

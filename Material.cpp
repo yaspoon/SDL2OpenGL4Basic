@@ -90,6 +90,14 @@ void Material::setSpecular(Vec4<GLfloat> specular)
         memcpy(materialData, specular.getData(), size);
 }
 
+void Material::setShininess(float shininess)
+{
+        UBOUniform shinUbo = uniforms[std::string("shininess")];
+
+        size_t size = shinUbo.getSize() * typeSize(shinUbo.getType());
+        memcpy(materialData, &shininess, size);
+}
+
 Vec4<GLfloat> Material::getEmission()
 {
 
@@ -123,4 +131,9 @@ size_t Material::getDataSize()
 int Material::getNumUniforms()
 {
         return numUniforms;
+}
+
+float Material::getShininess()
+{
+
 }
