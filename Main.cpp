@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
         int lightIndex = 0;
 
         std::vector<Light> lights;
+        std::vector<Material> materials;
 
         lights.insert(lights.end(), renderer.newLight(lights.size()));
         lights[0].setAmbientLight(Vec4<GLfloat>(0.3f, 0.3f, 0.3f, 1.0f));
@@ -130,8 +131,16 @@ int main(int argc, char *argv[])
         lights[1].setAngle(90.0f);
         lights[1].setSpotponent(16.0f);
 
+        materials.insert(materials.end(), renderer.newMaterial(materials.size()));
+        materials[0].setEmission(Vec4<GLfloat>(1.0f, 0.0f, 0.0f, 0.0f));
+        materials[0].setAmbient(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
+        materials[0].setDiffuse(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
+        materials[0].setSpecular(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
+        materials[0].setShininess(16.0f);
+
 
         renderer.updateLights(lights);
+        renderer.updateMaterials(materials);
         renderer.setNumEnabledLights(lights.size());
 
         while(!quit)
