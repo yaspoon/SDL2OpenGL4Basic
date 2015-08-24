@@ -5,6 +5,8 @@
 
 ObjLoader::ObjLoader(std::string filepath)
 {
+        size_t found = (filepath.find_last_of("/") + 1);
+        std::string path = filepath.substr(0, found);
         std::ifstream file;
         file.open(filepath.c_str(), std::ios::in);
 
@@ -18,7 +20,7 @@ ObjLoader::ObjLoader(std::string filepath)
 
                if(identifier.compare("#") ==0)
                {
-                       std::cout << "Found comment" << std::endl;
+                       std::cout << "Found a comment" << std::endl;
                }
                else if(identifier.compare("v") == 0)
                {
@@ -68,6 +70,13 @@ ObjLoader::ObjLoader(std::string filepath)
                        }
 
                        faces.push_back(newFace);
+               }
+              else if(identifier.compare("mtllib") == 0)
+               {
+                        std::string materialFile;
+                        ss >> materialFile;
+                        ObjMaterial mat(path + materialFile);
+                        materials.push_back(mat);
                }
        }
 
@@ -307,4 +316,9 @@ float *ObjLoader::getColours()
 size_t ObjLoader::csize()
 {
         return sizeof(float) * faces.size() * 3 * 3;
+}
+
+std::vector<ObjMaterial> ObjLoader::getMaterials()
+{
+        return materials;
 }

@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include "Timer.h"
 #include "ObjLoader.h"
+#include "ObjMaterial.h"
 #include "Math.h"
 
 
@@ -54,7 +55,12 @@ void init()
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), colours, sizeof(colours), b.tsize(), b.getTextureCoords(), b.getNormals(), b.nsize());
         ObjLoader loader("resources/models/plane.obj");
         renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
-        renderer.loadTexture("resources/textures/plane.png");
+        std::vector<ObjMaterial> mats = loader.getMaterials();
+        for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
+        {
+                renderer.loadTexture();
+        }
+        //renderer.loadTexture("resources/textures/plane.png");
         renderer.loadTexture("resources/textures/normalmap2.png");
 
         //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), b.Colours(), b.csize(), b.Normals(), b.nsize());

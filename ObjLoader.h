@@ -7,6 +7,7 @@
 #include "triplet.h"
 #include "Face.h"
 #include "Vertex.h"
+#include "ObjMaterial.h"
 
 class ObjLoader
 {
@@ -25,6 +26,8 @@ class ObjLoader
                 float *getColours();
                 size_t csize();
 
+                std::vector<ObjMaterial> getMaterials();
+
                 virtual ~ObjLoader();
         protected:
         private:
@@ -36,6 +39,8 @@ class ObjLoader
                 std::vector<float> loadNumbers(std::stringstream &ss);
                 std::vector<std::pair<int, bool> > loadFace(std::string &ss);
                 std::pair<float, float> loadTexCoords(std::stringstream &ss);
+
+                std::vector<ObjMaterial> materials;
 };
 
 #endif // OBJLOADER_H

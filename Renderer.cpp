@@ -214,14 +214,6 @@ GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
         glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &activeUniforms);
         std::cout << "Active uniform count:" << activeUniforms << std::endl;
 
-        for(int i = 0; i < activeUniforms; i++)
-        {
-                char buffer[100];
-                GLsizei length;
-                glGetActiveUniformName(program, i, 100, &length, buffer);
-                std::cout << std::string(buffer) << std::endl;
-        }
-
         uboIndex = glGetUniformBlockIndex(program, "UniformBlock");
         if(uboIndex == GL_INVALID_INDEX)
         {
