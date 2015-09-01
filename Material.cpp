@@ -100,17 +100,43 @@ void Material::setShininess(float shininess)
 
 Vec4<GLfloat> Material::getEmission()
 {
+        UBOUniform uniform = uniforms["emission"];
+        float emissionArray[4];
+        memset(emissionArray, 0, sizeof(emissionArray));
+        size_t size = uniform.getSize() * typeSize(uniform.getType());
+        memcpy(emissionArray, materialData, size);
 
+        Vec4<GLfloat> emission(emissionArray[0], emissionArray[1], emissionArray[2], emissionArray[3]);
+
+        return emission;
 }
 
 Vec4<GLfloat> Material::getDiffuse()
 {
+        UBOUniform uniform = uniforms["diffuse"];
+        float diffuseArray[4];
+        memset(diffuseArray, 0 , sizeof(diffuseArray));
+        size_t size = uniform.getSize() * typeSize(uniform.getType());
 
+        memcpy(diffuseArray, materialData, size);
+
+        Vec4<GLfloat> diffuse(diffuseArray[0], diffuseArray[1], diffuseArray[2], diffuseArray[3]);
+
+        return diffuse;
 }
 
 Vec4<GLfloat> Material::getSpecular()
 {
+        UBOUniform uniform = uniforms["specular"];
+        float specularArray[4];
+        memset(specularArray, 0, sizeof(specularArray));
+        size_t size = uniform.getSize() * typeSize(uniform.getType());
 
+        memcpy(specularArray, materialData, size);
+
+        Vec4<GLfloat> specular(specularArray[0], specularArray[1], specularArray[2], specular[3]);
+
+        return specular;
 }
 
 char *Material::getMaterialData()
