@@ -95,6 +95,8 @@ Mat4<float> Renderer::perspectiveProjection(float FOV, float aspectRatio, float 
 
 bool Renderer::initSDL()
 {
+        bool retval = false;
+
         if(SDL_Init(SDL_INIT_EVERYTHING) == 0)
         {
                 window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mf_width, mf_height, SDL_WINDOW_OPENGL);
@@ -111,6 +113,8 @@ bool Renderer::initSDL()
                                 SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
                                 SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
                                 printf("Opengl context version %d.%d\n", major, minor);
+
+                                retval = true;
                         }
                 }
                 else
@@ -122,6 +126,8 @@ bool Renderer::initSDL()
         {
                 STUB("Implement proper error stuff");
         }
+
+        return retval;
 }
 
 void Renderer::initGL(std::vector<struct ShaderList> list)
