@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1438582599 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
+1440412025 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
 	<SDL2/SDL_image.h>
@@ -12,6 +12,7 @@
 	"Camera.h"
 	"Timer.h"
 	"ObjLoader.h"
+	"ObjMaterial.h"
 	"Math.h"
 	"Box.h"
 	"Renderer.h"
@@ -39,7 +40,7 @@
 	<iostream>
 	"math.h"
 
-1434865630 /home/brock/code/cpp/Opengl4/basic/Math.h
+1440412212 /home/brock/code/cpp/Opengl4/basic/Math.h
 
 1429361541 source:/home/brock/code/cpp/Opengl4/basic/Face.cpp
 	"Face.h"
@@ -444,7 +445,7 @@
 	"Box.h"
 	<string.h>
 
-1439967517 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
+1440665251 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
 	"Renderer.h"
 	"Common.h"
 	"Math.h"
@@ -490,7 +491,7 @@
 1434865630 /home/brock/code/cpp/Opengl4/basic/UBOUniform.h
 	<SDL2/SDL_opengl.h>
 
-1438581460 source:/home/brock/code/cpp/Opengl4/basic/Material.cpp
+1440665167 source:/home/brock/code/cpp/Opengl4/basic/Material.cpp
 	"Material.h"
 	"Light.h"
 	<cstring>
