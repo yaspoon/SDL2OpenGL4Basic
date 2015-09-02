@@ -130,9 +130,9 @@ bool Renderer::initSDL()
         return retval;
 }
 
-void Renderer::initGL(std::vector<struct ShaderList> list)
+bool Renderer::initGL(std::vector<struct ShaderList> list)
 {
-
+        bool retval = true;
         glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
         std::cout << "Max texture units:" << maxTextureUnits << std::endl;
         glViewport(0, 0, mf_width, mf_height);
@@ -145,14 +145,25 @@ void Renderer::initGL(std::vector<struct ShaderList> list)
         //glEnable(GL_DEPTH_TEST);
         //glDepthFunc(GL_LESS);
 
-        program = loadProgram(list);
-        glUseProgram(program);
+        std::pair<GLuint, bool> programPair = loadProgram(list);
 
-        glUniformMatrix4fv(projMatLocation, 1, GL_FALSE, &projectionMatrix);
+        if(programPair.second)
+        {
+                program = programPair.first;
+                glUseProgram(program);
 
-        glGenBuffers(NUM_INDEXS, ibo);
-        glGenVertexArrays(NUM_VAOS, vertArrays);
-        glGenBuffers(NUM_BUFFERS, buffers);
+                glUniformMatrix4fv(projMatLocation, 1, GL_FALSE, &projectionMatrix);
+
+                glGenBuffers(NUM_INDEXS, ibo);
+                glGenVertexArrays(NUM_VAOS, vertArrays);
+                glGenBuffers(NUM_BUFFERS, buffers);
+        }
+        else
+        {
+                retval = false;
+        }
+
+        return retval;
 }
 
 void Renderer::cleanup()
@@ -176,88 +187,95 @@ void Renderer::setWindowTitle(std::string title)
         SDL_SetWindowTitle(window, newTitle.c_str());
 }
 
-GLint Renderer::loadProgram(std::vector<struct ShaderList> list)
+std::pair<GLint, bool> Renderer::loadProgram(std::vector<struct ShaderList> list)
 {
-        GLint program = Shader::LoadShaders(list);
+        std::pair<GLuint, bool> programLink = Shader::LoadShaders(list);
+        bool retval = false;
 
-        projMatLocation = glGetUniformLocation(program, "vprojectionMat");
-        if(projMatLocation == -1)
+        if(programLink.second)
         {
-                std::cout << "Couldn't find vprojectionMat in shader" << std::endl;
+
+                projMatLocation = glGetUniformLocation(program, "vprojectionMat");
+                if(projMatLocation == -1)
+                {
+                        std::cout << "Couldn't find vprojectionMat in shader" << std::endl;
+                }
+
+                modelMatLocation = glGetUniformLocation(program, "modelMatrix");
+                if(modelMatLocation == -1)
+                {
+                        std::cout << "Couldn't find modelMatrix in shader" << std::endl;
+                }
+
+                cameraMatLocation = glGetUniformLocation(program, "cameraMatrix");
+                if(cameraMatLocation == -1)
+                {
+                        std::cout << "Couldn't find cameraMatrix in shader" << std::endl;
+                }
+
+                camPositionLocation = glGetUniformLocation(program, "camPosition");
+                if(camPositionLocation == -1)
+                {
+                        std::cout << "Couldn't find camPosition in shader" << std::endl;
+                }
+
+                textureLocation = glGetUniformLocation(program, "tex");
+                if(textureLocation == -1)
+                {
+                        std::cout << "Failed to find tex in shader" << std::endl;
+                }
+
+                normalMapLocation = glGetUniformLocation(program, "normalMap");
+                if(normalMapLocation == -1)
+                {
+                        std::cout << "Failed to find normalMap in shader" << std::endl;
+                }
+
+                GLint activeUniforms;
+                glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &activeUniforms);
+                std::cout << "Active uniform count:" << activeUniforms << std::endl;
+
+                uboIndex = glGetUniformBlockIndex(program, "UniformBlock");
+                if(uboIndex == GL_INVALID_INDEX)
+                {
+                        std::cout << "invalid index" << std::endl;
+                }
+                glGetActiveUniformBlockiv(program, uboIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &uboSize);
+
+                glGetUniformIndices(program, numUniforms, shaderUniforms, uniformIndices);
+                glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_OFFSET, uniformOffsets);
+                glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_SIZE, uniformSizes);
+                glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_TYPE, uniformType);
+                GLint strides[numUniforms];
+
+                glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_ARRAY_STRIDE, strides);
+
+                glGetUniformIndices(program, numMatUniforms, materialUniforms, matUniformIndices);
+                glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_OFFSET, matUniformOffsets);
+                glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_SIZE, matUniformSizes);
+                glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_TYPE, matUniformType);
+
+                GLint matStrides[numMatUniforms];
+                glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_ARRAY_STRIDE, matStrides);
+
+                uboStride = matUniformOffsets[0];
+                matUboStride = (uboSize - uboStride) / MAX_MATERIALS;
+                uboStride = uboStride / MAX_LIGHTS;
+
+                glGenBuffers(1, &ubo);
+                glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+                glBufferData(GL_UNIFORM_BUFFER, uboSize, NULL, GL_STATIC_DRAW); //We'll init the buffer later?
+
+                numEnabledLightsLocation = glGetUniformLocation(program, "numEnabledLights");
+                if(numEnabledLightsLocation == -1)
+                {
+                        std::cout << "Failed to find numEnabledLights in shader" << std::endl;
+                }
+
+                retval = true;
         }
 
-        modelMatLocation = glGetUniformLocation(program, "modelMatrix");
-        if(modelMatLocation == -1)
-        {
-                std::cout << "Couldn't find modelMatrix in shader" << std::endl;
-        }
-
-        cameraMatLocation = glGetUniformLocation(program, "cameraMatrix");
-        if(cameraMatLocation == -1)
-        {
-                std::cout << "Couldn't find cameraMatrix in shader" << std::endl;
-        }
-
-        camPositionLocation = glGetUniformLocation(program, "camPosition");
-        if(camPositionLocation == -1)
-        {
-                std::cout << "Couldn't find camPosition in shader" << std::endl;
-        }
-
-        textureLocation = glGetUniformLocation(program, "tex");
-        if(textureLocation == -1)
-        {
-                std::cout << "Failed to find tex in shader" << std::endl;
-        }
-
-        normalMapLocation = glGetUniformLocation(program, "normalMap");
-        if(normalMapLocation == -1)
-        {
-                std::cout << "Failed to find normalMap in shader" << std::endl;
-        }
-
-        GLint activeUniforms;
-        glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &activeUniforms);
-        std::cout << "Active uniform count:" << activeUniforms << std::endl;
-
-        uboIndex = glGetUniformBlockIndex(program, "UniformBlock");
-        if(uboIndex == GL_INVALID_INDEX)
-        {
-                std::cout << "invalid index" << std::endl;
-        }
-        glGetActiveUniformBlockiv(program, uboIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &uboSize);
-
-        glGetUniformIndices(program, numUniforms, shaderUniforms, uniformIndices);
-        glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_OFFSET, uniformOffsets);
-        glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_SIZE, uniformSizes);
-        glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_TYPE, uniformType);
-        GLint strides[numUniforms];
-
-        glGetActiveUniformsiv(program, numUniforms, uniformIndices, GL_UNIFORM_ARRAY_STRIDE, strides);
-
-        glGetUniformIndices(program, numMatUniforms, materialUniforms, matUniformIndices);
-        glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_OFFSET, matUniformOffsets);
-        glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_SIZE, matUniformSizes);
-        glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_TYPE, matUniformType);
-
-        GLint matStrides[numMatUniforms];
-        glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_ARRAY_STRIDE, matStrides);
-
-        uboStride = matUniformOffsets[0];
-        matUboStride = (uboSize - uboStride) / MAX_MATERIALS;
-        uboStride = uboStride / MAX_LIGHTS;
-
-        glGenBuffers(1, &ubo);
-        glBindBuffer(GL_UNIFORM_BUFFER, ubo);
-        glBufferData(GL_UNIFORM_BUFFER, uboSize, NULL, GL_STATIC_DRAW); //We'll init the buffer later?
-
-        numEnabledLightsLocation = glGetUniformLocation(program, "numEnabledLights");
-        if(numEnabledLightsLocation == -1)
-        {
-                std::cout << "Failed to find numEnabledLights in shader" << std::endl;
-        }
-
-        return program;
+        return std::pair<GLuint, bool>(programLink.first, retval);
 }
 
 void Renderer::useProgram(GLint program)

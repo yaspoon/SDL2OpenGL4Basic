@@ -126,12 +126,12 @@ public:
         Renderer(float width, float height, float near, float far, float fov);
 
         bool initSDL();
-        void initGL(std::vector<struct ShaderList> list);
+        bool initGL(std::vector<struct ShaderList> list);
         void cleanup();
 
         void setWindowTitle(std::string title);
 
-        GLint loadProgram(std::vector<struct ShaderList> list);
+        std::pair<GLint, bool> loadProgram(std::vector<struct ShaderList> list);
         void useProgram(GLint program);
         void setProjectionMatrix(Mat4<float> projMat);
         void setNumEnabledLights(int count);

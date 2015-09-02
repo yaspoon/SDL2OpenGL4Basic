@@ -16,11 +16,11 @@ class Shader
 {
 private:
         static std::string readText(std::string filepath);
-        static void validateShader(GLuint shader, const char* file=0);
+        static bool validateShader(GLuint shader, const char* file=0);
         static bool validateProgram(GLuint program);
 public:
         Shader();
         Shader(std::string filepath);
-        static GLuint LoadShaders(std::vector<struct ShaderList> shaders);
+        static std::pair<GLuint, bool> LoadShaders(std::vector<struct ShaderList> shaders);
 };
 #endif // SHADER_H

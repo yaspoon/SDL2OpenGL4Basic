@@ -41,10 +41,11 @@ std::string Shader::readText(std::string filepath)
         return retval;
 }
 
-GLuint Shader::LoadShaders(std::vector<struct ShaderList> shaders)
+std::pair<GLuint, bool> Shader::LoadShaders(std::vector<struct ShaderList> shaders)
 {
         GLuint program = glCreateProgram();
         std::vector<GLuint> compiled_shaders;
+        bool failure = false;
         for(std::vector<struct ShaderList>::iterator it = shaders.begin(); it != shaders.end(); it++)
         {
                 struct ShaderList current = *it;
@@ -55,22 +56,54 @@ GLuint Shader::LoadShaders(std::vector<struct ShaderList> shaders)
 
                 glShaderSource(shaderid, 1, &blah, 0);
                 glCompileShader(shaderid);
-                validateShader(shaderid, current.path.c_str());
-                glAttachShader(program, shaderid);
+                if(validateShader(shaderid, current.path.c_str()))
+                {
+                        glAttachShader(program, shaderid);
+                        glDeleteShader(shaderid);
+                }
+                else
+                {
+                        glDeleteShader(shaderid);
+                        failure = true;
+                }
         }
 
-        glLinkProgram(program);
-        validateProgram(program);
+        if(!failure)
+        {
+                glLinkProgram(program);
 
-        return program;
+                GLint linkStatus;
+
+                glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+
+                if(linkStatus != GL_FALSE)
+                {
+                        validateProgram(program);
+                }
+                else
+                {
+                        failure = true;
+                        glDeleteProgram(program);
+                        program = 0;
+                }
+        }
+        else
+        {
+                glDeleteProgram(program);
+                program = 0;
+        }
+
+        return std::pair<GLuint, GLint>(program, failure);
 }
 
-void Shader::validateShader(GLuint shader, const char* file)
+bool Shader::validateShader(GLuint shader, const char* file)
 {
         GLint status;
+        bool retval = false;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
         if(status == GL_TRUE)
         {
+                retval = true;
                 std::cout << "Loaded \"" << file << "\" successfully" << std::endl;
         }
         else
@@ -86,7 +119,10 @@ void Shader::validateShader(GLuint shader, const char* file)
                 {
                         std::cerr << "Shader:" << shader << (file? file : "") << " compile error: " << buffer << std::endl;
                 }
+                retval = true;
         }
+
+        return retval;
 }
 
 bool Shader::validateProgram(GLuint program)
