@@ -15,12 +15,12 @@ struct ShaderList
 class Shader
 {
 private:
-        static std::string readText(std::string filepath);
-        static bool validateShader(GLuint shader, const char* file=0);
-        static bool validateProgram(GLuint program);
+        std::string readText(std::string filepath);
+        bool validateShader(GLuint shader, const char* file=0);
+        bool validateProgram(GLuint program);
 public:
         Shader();
         Shader(std::string filepath);
-        static std::pair<GLuint, bool> LoadShaders(std::vector<struct ShaderList> shaders);
+        std::pair<GLuint, bool> LoadShaders(std::vector<struct ShaderList> shaders);
 };
 #endif // SHADER_H
