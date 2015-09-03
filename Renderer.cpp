@@ -189,7 +189,7 @@ void Renderer::setWindowTitle(std::string title)
 
 std::pair<GLint, bool> Renderer::loadProgram(std::vector<struct ShaderList> list)
 {
-        std::pair<GLuint, bool> programLink = Shader::LoadShaders(list);
+        std::pair<GLuint, bool> programLink = shader.LoadShaders(list);
         bool retval = false;
 
         if(programLink.second)

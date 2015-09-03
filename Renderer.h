@@ -120,6 +120,8 @@ private:
         SDL_GLContext context = NULL;
 
         std::vector<GLuint> textures;
+
+        Shader shader;
 public:
         Renderer();
         Renderer(float width, float height);
