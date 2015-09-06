@@ -19,5 +19,6 @@ private:
 public:
 
         ObjMaterial(std::string filepath);
+        std::string getMapkd();
 };
 #endif // OBJ_MATERIAL_H
