@@ -67,6 +67,7 @@ private:
                 "lights[0].constAtten",
                 "lights[0].spotponent",
         };
+
         const static int MAX_LIGHTS = 10;
         const static int MAX_MATERIALS = 10;
 
@@ -153,7 +154,7 @@ public:
         void draw();
 
         void loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount, size_t tsize, float *texCoords, float *normals, size_t nsize);
-        void loadTexture(char *name);
+        void loadTexture(const char *name);
 
         void loadTest();
 
