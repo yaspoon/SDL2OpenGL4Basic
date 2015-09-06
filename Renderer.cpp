@@ -276,7 +276,7 @@ std::pair<GLint, bool> Renderer::loadProgram(std::vector<struct ShaderList> list
                 retval = true;
         }
 
-        return std::pair<GLuint, bool>(programLink.first, retval);
+        return std::pair<GLuint, bool>(program, retval);
 }
 
 void Renderer::useProgram(GLint program)
