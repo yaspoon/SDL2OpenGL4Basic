@@ -75,3 +75,33 @@ std::string ObjMaterial::getMapkd()
 {
         return map_kd;
 }
+
+std::vector<float> ObjMaterial::getAmbient()
+{
+        return ka;
+}
+
+std::vector<float> ObjMaterial::getDiffuse()
+{
+        return kd;
+}
+
+std::vector<float> ObjMaterial::getSpecular()
+{
+        return ks;
+}
+
+float ObjMaterial::getSpecularExponent()
+{
+        return ns;
+}
+
+float ObjMaterial::getDisolved()
+{
+        return d;
+}
+
+int ObjMaterial::getIllumination()
+{
+        return illum;
+}

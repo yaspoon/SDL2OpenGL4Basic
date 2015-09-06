@@ -8,8 +8,8 @@ class ObjMaterial
 {
 private:
         std::string name;
-        int ns;
-        int d;
+        float ns;
+        float d;
         int illum;
         std::vector<float> ka;
         std::vector<float> kd;
@@ -20,5 +20,11 @@ public:
 
         ObjMaterial(std::string filepath);
         std::string getMapkd();
+        std::vector<float> getAmbient();
+        std::vector<float> getDiffuse();
+        std::vector<float> getSpecular();
+        float getSpecularExponent();
+        float getDisolved();
+        int getIllumination();
 };
 #endif // OBJ_MATERIAL_H
