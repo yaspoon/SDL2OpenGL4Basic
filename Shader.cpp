@@ -86,7 +86,7 @@ std::pair<GLuint, bool> Shader::LoadShaders(std::vector<struct ShaderList> shade
                 program = 0;
         }
 
-        return std::pair<GLuint, GLint>(program, failure);
+        return std::pair<GLuint, bool>(program, failure);
 }
 
 bool Shader::validateShader(GLuint shader, const char* file)
