@@ -309,7 +309,7 @@ void Renderer::updateLight(Light updatedLight)
         glBindBuffer(GL_UNIFORM_BUFFER, ubo);
         GLintptr offset = updatedLight.getIndex() * uboStride;
         GLsizei size = updatedLight.getDataSize();
-        glBufferSubData(GL_UNIFORM_BUFFER, offset, updatedLight.getDataSize(), updatedLight.getLightData());
+        glBufferSubData(GL_UNIFORM_BUFFER, offset, size, updatedLight.getLightData());
         glBindBufferBase(GL_UNIFORM_BUFFER, uboIndex, ubo);
 }
 
