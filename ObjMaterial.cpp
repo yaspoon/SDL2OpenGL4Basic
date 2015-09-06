@@ -70,3 +70,8 @@ ObjMaterial::ObjMaterial(std::string filepath)
                 }
         }
 }
+
+std::string ObjMaterial::getMapkd()
+{
+        return map_kd;
+}
