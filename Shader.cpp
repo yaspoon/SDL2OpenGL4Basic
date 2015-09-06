@@ -71,20 +71,13 @@ std::pair<GLuint, bool> Shader::LoadShaders(std::vector<struct ShaderList> shade
         if(!failure)
         {
                 glLinkProgram(program);
-
-                GLint linkStatus;
-
-                glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
-
-                if(linkStatus != GL_FALSE)
+                if(validateProgram(program))
                 {
-                        validateProgram(program);
+                        failure = false;
                 }
                 else
                 {
                         failure = true;
-                        glDeleteProgram(program);
-                        program = 0;
                 }
         }
         else
