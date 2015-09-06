@@ -150,11 +150,12 @@ int main(int argc, char *argv[])
                 lights[1].setSpotponent(16.0f);
 
                 materials.insert(materials.end(), renderer.newMaterial(materials.size()));
-                materials[0].setEmission(Vec4<GLfloat>(1.0f, 0.0f, 0.0f, 0.0f));
+                /*materials[0].setEmission(Vec4<GLfloat>(1.0f, 0.0f, 0.0f, 0.0f));
                 materials[0].setAmbient(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
                 materials[0].setDiffuse(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
                 materials[0].setSpecular(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
-                materials[0].setShininess(16.0f);
+                materials[0].setShininess(16.0f);*/
+                materials[0].loadObjMaterial()
 
 
                 renderer.updateLights(lights);
