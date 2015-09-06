@@ -112,7 +112,7 @@ bool Shader::validateShader(GLuint shader, const char* file)
                 {
                         std::cerr << "Shader:" << shader << (file? file : "") << " compile error: " << buffer << std::endl;
                 }
-                retval = true;
+                retval = false;
         }
 
         return retval;
