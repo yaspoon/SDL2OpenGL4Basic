@@ -563,7 +563,7 @@
 
 1347992174 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/anorms.h
 
-1441190855 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Shader.cpp
+1441446531 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Shader.cpp
 	"Shader.h"
 	<fstream>
 	<iostream>
@@ -581,7 +581,7 @@
 1407126426 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Timer.h
 	"SDL2/SDL.h"
 
-1437042613 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Light.cpp
+1441431387 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Light.cpp
 	"Light.h"
 	<cstring>
 	"Math.h"
@@ -596,7 +596,7 @@
 1436870253 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/UBOUniform.h
 	<SDL2/SDL_opengl.h>
 
-1441191922 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Main.cpp
+1441500296 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Main.cpp
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
 	<SDL2/SDL_image.h>
@@ -629,7 +629,7 @@
 	<vector>
 	"triplet.h"
 
-1441275551 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Renderer.h
+1441456285 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Renderer.h
 	<SDL.h>
 	<SDL2/SDL_opengl.h>
 	"Mat4.h"
@@ -663,7 +663,7 @@
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
 
-1441275559 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Renderer.cpp
+1441456273 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Renderer.cpp
 	"Renderer.h"
 	"Common.h"
 	"Math.h"
@@ -692,13 +692,13 @@
 	<fstream>
 	<sstream>
 
-1441101834 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjMaterial.h
+1441453013 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjMaterial.h
 	<string>
 	<vector>
 
 1441101834 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Model.cpp
 
-1441101834 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjMaterial.cpp
+1441453092 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjMaterial.cpp
 	"ObjMaterial.h"
 	<iostream>
 	<fstream>
