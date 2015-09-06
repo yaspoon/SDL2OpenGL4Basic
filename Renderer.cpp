@@ -441,7 +441,7 @@ void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *
         }
 }
 
-void Renderer::loadTexture(char *name)
+void Renderer::loadTexture(const char *name)
 {
         SDL_Surface *image = IMG_Load(name);
         GLuint texture;
