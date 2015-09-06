@@ -59,7 +59,7 @@ std::pair<GLuint, bool> Shader::LoadShaders(std::vector<struct ShaderList> shade
                 if(validateShader(shaderid, current.path.c_str()))
                 {
                         glAttachShader(program, shaderid);
-                        glDeleteShader(shaderid);
+                        compiled_shaders.push_back(shaderid);
                 }
                 else
                 {
