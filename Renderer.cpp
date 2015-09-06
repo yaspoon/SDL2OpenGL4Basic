@@ -190,9 +190,10 @@ void Renderer::setWindowTitle(std::string title)
 std::pair<GLint, bool> Renderer::loadProgram(std::vector<struct ShaderList> list)
 {
         std::pair<GLuint, bool> programLink = shader.LoadShaders(list);
+        program = programLink.first;
         bool retval = false;
 
-        if(programLink.second)
+        if(!programLink.second)
         {
 
                 projMatLocation = glGetUniformLocation(program, "vprojectionMat");
