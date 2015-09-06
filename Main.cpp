@@ -57,10 +57,12 @@ bool init()
                 ObjLoader loader("resources/models/plane.obj");
                 renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
                 std::vector<ObjMaterial> mats = loader.getMaterials();
-                /*for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
+                for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
                 {
-                        renderer.loadTexture();
-                }*/
+                        ObjMaterial mat = *it;
+                        std::cout << "Loading texture:" << mat.getMapkd() << std::endl;
+                        renderer.loadTexture(mat.getMapkd().c_str());
+                }
                 //renderer.loadTexture("resources/textures/plane.png");
                 renderer.loadTexture("resources/textures/normalmap2.png");
 
