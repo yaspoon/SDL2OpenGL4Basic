@@ -120,17 +120,18 @@ bool Shader::validateShader(GLuint shader, const char* file)
 
 bool Shader::validateProgram(GLuint program)
 {
-        bool retval = true;
+        bool retval = false;
         GLint status;
         glGetProgramiv(program, GL_LINK_STATUS, &status);
 
         if(status == GL_TRUE)
         {
-                retval =- true;
+                retval = true;
                 std::cout << "Successfully linked shaders into program" << std::endl;
         }
         else
         {
+                retval = false;
                 GLsizei logLength;
                 glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
                 GLsizei length = 0;
