@@ -78,7 +78,7 @@ void Light::enableDiffuse(GLboolean enabled)
         UBOUniform diffuse = uniforms[std::string("enableDiffuse")];
 
         size_t size = diffuse.getSize() * typeSize(diffuse.getType());
-        memcpy(lightData + diffuse.getOffset(), &enabled, sizeof(enabled));
+        memcpy(lightData + diffuse.getOffset(), &enabled, size);
 }
 
 void Light::enableSpecular(GLboolean enabled)
@@ -86,7 +86,7 @@ void Light::enableSpecular(GLboolean enabled)
         UBOUniform specular = uniforms[std::string("enableSpecular")];
 
         size_t size = specular.getSize() * typeSize(specular.getType());
-        memcpy(lightData + specular.getOffset(), &enabled, sizeof(enabled));
+        memcpy(lightData + specular.getOffset(), &enabled, size);
 }
 
 void Light::setIsSpotLight(GLboolean enabled)
@@ -239,6 +239,8 @@ GLboolean Light::getIsSpotLight()
         GLboolean spotLight;
         UBOUniform spotLightUbo = uniforms[std::string("isSpotlight")];
         memcpy(&spotLight, lightData + spotLightUbo.getOffset(), sizeof(spotLight));
+
+        return spotLight;
 }
 
 GLboolean Light::getIsPointLight()
