@@ -161,5 +161,19 @@ int Material::getNumUniforms()
 
 float Material::getShininess()
 {
+        float shinness = 0;
+        UBOUniform uniform = uniforms["shinness"];
+        size_t size = uniform.getSize() * typeSize(uniform.getType());
+        memcpy(&shinness, materialData + uniform.getOffset(), size);
 
+        return shinness;
+}
+
+void Material::loadObjMaterial(ObjMaterial newMat)
+{
+        setAmbient(newMat.getAmbient());
+        setDiffuse(newMat.getDiffuse());
+        setSpecular(newMat.getSpecular());
+        setShininess(16.0f);
+        setEmission(1.0f, 1.0f, 1.0f, 0.0f);
 }

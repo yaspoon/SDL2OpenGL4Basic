@@ -2,6 +2,7 @@
 #define MATERIAL_H
 
 #include "UBOUniform.h"
+#include "ObjMaterial.h"
 #include "Vec4.h"
 
 #include <SDL2/SDL_opengl.h>
@@ -40,6 +41,8 @@ public:
         int getIndex();
         size_t getDataSize();
         int getNumUniforms();
+
+        void loadObjMaterial(ObjMaterial newMat);
 };
 
 #endif // MATERIAL_H
