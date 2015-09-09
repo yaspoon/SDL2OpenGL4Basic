@@ -53,20 +53,7 @@ bool init()
 
         if(renderer.initGL(list))
         {
-                //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), colours, sizeof(colours), b.tsize(), b.getTextureCoords(), b.getNormals(), b.nsize());
-                ObjLoader loader("resources/models/plane.obj");
-                renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
-                std::vector<ObjMaterial> mats = loader.getMaterials();
-                for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
-                {
-                        ObjMaterial mat = *it;
-                        std::cout << "Loading texture:" << mat.getMapkd() << std::endl;
-                        renderer.loadTexture(mat.getMapkd().c_str());
-                }
-                //renderer.loadTexture("resources/textures/plane.png");
-                renderer.loadTexture("resources/textures/normalmap2.png");
-
-                //renderer.loadPrimitiveData(b.Vertices(), b.vsize(), b.getIndices(), b.isize(), b.Colours(), b.csize(), b.Normals(), b.nsize());
+                std::cout << "Initialised GL successfully" << std::endl;
         }
         else
         {
@@ -155,7 +142,18 @@ int main(int argc, char *argv[])
                 materials[0].setDiffuse(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
                 materials[0].setSpecular(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
                 materials[0].setShininess(16.0f);*/
-                materials[0].loadObjMaterial()
+
+                ObjLoader loader("resources/models/plane.obj");
+                renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
+                std::vector<ObjMaterial> mats = loader.getMaterials();
+                for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
+                {
+                        ObjMaterial mat = *it;
+                        std::cout << "Loading texture:" << mat.getMapkd() << std::endl;
+                        renderer.loadTexture(mat.getMapkd().c_str());
+                        materials[0].loadObjMaterial(mat);
+                }
+                renderer.loadTexture("resources/textures/normalmap2.png");
 
 
                 renderer.updateLights(lights);

@@ -63,7 +63,7 @@ void Material::setEmission(Vec4<GLfloat> emission)
         UBOUniform emUbo = uniforms[std::string("emission")];
 
         size_t size = emUbo.getSize() * typeSize(emUbo.getType());
-        memcpy(materialData, emission.getData(), size);
+        memcpy(materialData + emUbo.getOffset(), emission.getData(), size);
 }
 
 void Material::setAmbient(Vec4<GLfloat> ambient)
@@ -71,7 +71,7 @@ void Material::setAmbient(Vec4<GLfloat> ambient)
         UBOUniform amUbo = uniforms[std::string("ambient")];
 
         size_t size = amUbo.getSize() * typeSize(amUbo.getType());
-        memcpy(materialData, ambient.getData(), size);
+        memcpy(materialData + amUbo.getOffset(), ambient.getData(), size);
 }
 
 void Material::setDiffuse(Vec4<GLfloat> diffuse)
@@ -79,7 +79,7 @@ void Material::setDiffuse(Vec4<GLfloat> diffuse)
         UBOUniform diffUbo = uniforms[std::string("diffuse")];
 
         size_t size = diffUbo.getSize() * typeSize(diffUbo.getType());
-        memcpy(materialData, diffuse.getData(), size);
+        memcpy(materialData + diffUbo.getOffset(), diffuse.getData(), size);
 }
 
 void Material::setSpecular(Vec4<GLfloat> specular)
@@ -87,7 +87,7 @@ void Material::setSpecular(Vec4<GLfloat> specular)
         UBOUniform specUbo = uniforms[std::string("specular")];
 
         size_t size = specUbo.getSize() * typeSize(specUbo.getType());
-        memcpy(materialData, specular.getData(), size);
+        memcpy(materialData + specUbo.getOffset(), specular.getData(), size);
 }
 
 void Material::setShininess(float shininess)
@@ -95,7 +95,7 @@ void Material::setShininess(float shininess)
         UBOUniform shinUbo = uniforms[std::string("shininess")];
 
         size_t size = shinUbo.getSize() * typeSize(shinUbo.getType());
-        memcpy(materialData, &shininess, size);
+        memcpy(materialData + shinUbo.getOffset(), &shininess, size);
 }
 
 Vec4<GLfloat> Material::getEmission()
@@ -104,7 +104,7 @@ Vec4<GLfloat> Material::getEmission()
         float emissionArray[4];
         memset(emissionArray, 0, sizeof(emissionArray));
         size_t size = uniform.getSize() * typeSize(uniform.getType());
-        memcpy(emissionArray, materialData, size);
+        memcpy(emissionArray + uniform.getOffset(), materialData, size);
 
         Vec4<GLfloat> emission(emissionArray[0], emissionArray[1], emissionArray[2], emissionArray[3]);
 
@@ -118,7 +118,7 @@ Vec4<GLfloat> Material::getDiffuse()
         memset(diffuseArray, 0 , sizeof(diffuseArray));
         size_t size = uniform.getSize() * typeSize(uniform.getType());
 
-        memcpy(diffuseArray, materialData, size);
+        memcpy(diffuseArray + uniform.getOffset(), materialData, size);
 
         Vec4<GLfloat> diffuse(diffuseArray[0], diffuseArray[1], diffuseArray[2], diffuseArray[3]);
 
@@ -132,7 +132,7 @@ Vec4<GLfloat> Material::getSpecular()
         memset(specularArray, 0, sizeof(specularArray));
         size_t size = uniform.getSize() * typeSize(uniform.getType());
 
-        memcpy(specularArray, materialData, size);
+        memcpy(specularArray + uniform.getOffset(), materialData, size);
 
         Vec4<GLfloat> specular(specularArray[0], specularArray[1], specularArray[2], specular[3]);
 
@@ -175,5 +175,5 @@ void Material::loadObjMaterial(ObjMaterial newMat)
         setDiffuse(newMat.getDiffuse());
         setSpecular(newMat.getSpecular());
         setShininess(16.0f);
-        setEmission(1.0f, 1.0f, 1.0f, 0.0f);
+        setEmission(Vec4<float>(1.0f, 0.0f, 0.0f, 0.0f));
 }

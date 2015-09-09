@@ -31,30 +31,36 @@ ObjMaterial::ObjMaterial(std::string filepath)
                 }
                 else if(identifier.compare("Ka") == 0)
                 {
+                        std::vector<float> kaVec;
                         for(int i = 0; i < 3; i++)
                         {
                                 float tmp;
                                 ss >> tmp;
-                                ka.push_back(tmp);
+                                kaVec.push_back(tmp);
                         }
+                        ka = Vec4<float>(kaVec[0], kaVec[1], kaVec[2], 1.0f);
                 }
                 else if(identifier.compare("Kd") == 0)
                 {
+                        std::vector<float> kdVec;
                         for(int i = 0; i < 3; i++)
                         {
                                 float tmp;
                                 ss >> tmp;
-                                kd.push_back(tmp);
+                                kdVec.push_back(tmp);
                         }
+                        kd = Vec4<float>(kdVec[0], kdVec[1], kdVec[2], 1.0f);
                 }
                 else if(identifier.compare("Ks") == 0)
                 {
+                        std::vector<float> ksVec;
                         for(int i = 0; i < 3; i++)
                         {
                                 float tmp;
                                 ss >> tmp;
-                                ks.push_back(tmp);
+                                ksVec.push_back(tmp);
                         }
+                        ks = Vec4<float>(ksVec[0], ksVec[1], ksVec[2], 1.0f);
                 }
                 else if(identifier.compare("d") == 0)
                 {
@@ -76,17 +82,17 @@ std::string ObjMaterial::getMapkd()
         return map_kd;
 }
 
-std::vector<float> ObjMaterial::getAmbient()
+Vec4<float> ObjMaterial::getAmbient()
 {
         return ka;
 }
 
-std::vector<float> ObjMaterial::getDiffuse()
+Vec4<float> ObjMaterial::getDiffuse()
 {
         return kd;
 }
 
-std::vector<float> ObjMaterial::getSpecular()
+Vec4<float> ObjMaterial::getSpecular()
 {
         return ks;
 }
