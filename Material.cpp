@@ -2,13 +2,20 @@
 #include "Light.h"
 #include <cstring>
 
-Material::Material(int index, size_t bufSize, int numElements, const char *uniformNames[], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types)
+Material::Material(int index, size_t bufSize, int numElements, const char *uniformNames[], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types, GLuint matUboOffset)
 {
         this->index = index;
         this->dataSize = bufSize;
         this->numUniforms = numElements;
+        this->matUboStride = matUboStride;
         this->materialData = new char[this->dataSize];
         memset(this->materialData, 0, dataSize);
+
+        GLint *m_offsets = new int[numElements];
+        for(int i = 0; i < numElements; i++)
+        {
+                m_offsets[i] = offsets[i] - matUboOffset - (index * bufSize);
+        }
 
         for(int i = 0; i < numElements; i++)
         {
@@ -16,9 +23,10 @@ Material::Material(int index, size_t bufSize, int numElements, const char *unifo
                 size_t pos = stringUniform.find('.');
                 pos++;
                 std::string uniformName = stringUniform.substr(pos);
-                UBOUniform uniformData(indices[i], sizes[i], offsets[i], types[i]);
+                UBOUniform uniformData(indices[i], sizes[i], m_offsets[i], types[i]);
                 uniforms[uniformName] = uniformData;
         }
+        delete[] m_offsets;
 }
 
 Material::Material(const Material &copy)
@@ -87,7 +95,8 @@ void Material::setSpecular(Vec4<GLfloat> specular)
         UBOUniform specUbo = uniforms[std::string("specular")];
 
         size_t size = specUbo.getSize() * typeSize(specUbo.getType());
-        memcpy(materialData + specUbo.getOffset(), specular.getData(), size);
+        size_t offset = specUbo.getOffset();
+        memcpy(materialData + offset, specular.getData(), size);
 }
 
 void Material::setShininess(float shininess)
@@ -95,7 +104,8 @@ void Material::setShininess(float shininess)
         UBOUniform shinUbo = uniforms[std::string("shininess")];
 
         size_t size = shinUbo.getSize() * typeSize(shinUbo.getType());
-        memcpy(materialData + shinUbo.getOffset(), &shininess, size);
+        size_t offset = shinUbo.getOffset();
+        memcpy(materialData + offset, &shininess, size);
 }
 
 Vec4<GLfloat> Material::getEmission()
@@ -175,5 +185,5 @@ void Material::loadObjMaterial(ObjMaterial newMat)
         setDiffuse(newMat.getDiffuse());
         setSpecular(newMat.getSpecular());
         setShininess(16.0f);
-        setEmission(Vec4<float>(1.0f, 0.0f, 0.0f, 0.0f));
+        setEmission(Vec4<float>(0.0f, 0.0f, 0.0f, 0.0f));
 }
