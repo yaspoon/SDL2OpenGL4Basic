@@ -85,6 +85,7 @@ private:
         GLint uboSize;
         GLuint ubo;
         GLuint uboStride;
+        GLuint matUboOffset;
 
         GLuint matBlockIndex;
         GLint matBlockSize;
