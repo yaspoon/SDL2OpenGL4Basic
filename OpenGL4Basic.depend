@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1441521231 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
+1441792853 source:/home/brock/code/cpp/Opengl4/basic/Main.cpp
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
 	<SDL2/SDL_image.h>
@@ -115,7 +115,7 @@
 	"Vec4.h"
 	<cstdlib>
 
-1441521231 /home/brock/code/cpp/Opengl4/basic/Renderer.h
+1441795204 /home/brock/code/cpp/Opengl4/basic/Renderer.h
 	<SDL.h>
 	<SDL2/SDL_opengl.h>
 	"Mat4.h"
@@ -445,7 +445,7 @@
 	"Box.h"
 	<string.h>
 
-1441521231 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
+1441796447 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
 	"Renderer.h"
 	"Common.h"
 	"Math.h"
@@ -473,7 +473,7 @@
 
 1430995441 /home/brock/code/cpp/Opengl4/basic/LightProperties.h
 
-1441521231 source:/home/brock/code/cpp/Opengl4/basic/Light.cpp
+1441798841 source:/home/brock/code/cpp/Opengl4/basic/Light.cpp
 	"Light.h"
 	<cstring>
 	"Math.h"
@@ -491,12 +491,12 @@
 1434865630 /home/brock/code/cpp/Opengl4/basic/UBOUniform.h
 	<SDL2/SDL_opengl.h>
 
-1440665167 source:/home/brock/code/cpp/Opengl4/basic/Material.cpp
+1441797141 source:/home/brock/code/cpp/Opengl4/basic/Material.cpp
 	"Material.h"
 	"Light.h"
 	<cstring>
 
-1441529746 /home/brock/code/cpp/Opengl4/basic/Material.h
+1441795314 /home/brock/code/cpp/Opengl4/basic/Material.h
 	"UBOUniform.h"
 	"ObjMaterial.h"
 	"Vec4.h"
@@ -684,11 +684,12 @@
 
 1407749562 source:/home/brock/code/cpp/Opengl4/basic/Model.cpp
 
-1441523686 /home/brock/code/cpp/Opengl4/basic/ObjMaterial.h
+1441792853 /home/brock/code/cpp/Opengl4/basic/ObjMaterial.h
 	<string>
 	<vector>
+	"Vec4.h"
 
-1441523637 source:/home/brock/code/cpp/Opengl4/basic/ObjMaterial.cpp
+1441792853 source:/home/brock/code/cpp/Opengl4/basic/ObjMaterial.cpp
 	"ObjMaterial.h"
 	<iostream>
 	<fstream>
