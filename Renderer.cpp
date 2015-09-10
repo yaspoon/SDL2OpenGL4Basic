@@ -260,6 +260,7 @@ std::pair<GLint, bool> Renderer::loadProgram(std::vector<struct ShaderList> list
                 glGetActiveUniformsiv(program, numMatUniforms, matUniformIndices, GL_UNIFORM_ARRAY_STRIDE, matStrides);
 
                 uboStride = matUniformOffsets[0];
+                matUboOffset = uboStride;
                 matUboStride = (uboSize - uboStride) / MAX_MATERIALS;
                 uboStride = uboStride / MAX_LIGHTS;
 
@@ -333,7 +334,7 @@ void Renderer::updateMaterials(std::vector<Material> materials)
         for(std::vector<Material>::iterator it = materials.begin(); it != materials.end(); ++it)
         {
                 Material material = *it;
-                GLintptr offset = material.getIndex() * matUboStride;
+                GLintptr offset = (material.getIndex() * matUboStride) + matUboOffset;
                 GLsizei size = material.getDataSize();
                 char *data = material.getMaterialData();
                 glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
@@ -518,7 +519,7 @@ Light Renderer::newLight(int index)
 Material Renderer::newMaterial(int index)
 {
         return Material(index, matUboStride, numMatUniforms, materialUniforms, matUniformIndices,
-                        matUniformSizes, matUniformOffsets, matUniformType);
+                        matUniformSizes, matUniformOffsets, matUniformType, matUboOffset);
 }
 
 const int Renderer::getMaxLights()
