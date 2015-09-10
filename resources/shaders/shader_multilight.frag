@@ -143,7 +143,7 @@ void main()
 			}
 
 			float specular = 0.0f;
-			if(lights[i].enableSpecular && diffuse > 0.0)
+			if(lights[i].enableSpecular && diffuse > 0.0 && totalShininess > 0.0)
 			{
 				if(lights[i].specularMode)
 				{
