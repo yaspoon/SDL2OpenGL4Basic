@@ -16,10 +16,11 @@ private:
         int numUniforms;
         char *materialData;
         int index;
+        GLuint matUboStride;
         std::map<std::string, UBOUniform > uniforms;
 
 public:
-        Material(int index, size_t bufSize, int numElements, const char *uniformNames[], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types);
+        Material(int index, size_t bufSize, int numElements, const char *uniformNames[], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types, GLuint matUboOffset);
         Material(const Material &copy);
         ~Material();
 
