@@ -24,9 +24,9 @@ private:
         GLint vColour;
         GLint vNormal;
 
-        GLuint vertArrays[NUM_VAOS];
-        GLuint buffers[NUM_BUFFERS];
-        GLuint ibo[NUM_INDEXS];
+        //GLuint vertArrays[NUM_VAOS];
+        //GLuint buffers[NUM_BUFFERS];
+        //GLuint ibo[NUM_INDEXS];
         //GLuint textures[NUM_TEXTURES];
 
         float mf_width;
@@ -105,7 +105,10 @@ private:
         GLint matUniformType[numMatUniforms];
         GLint matUniformStrides[numMatUniforms];
 
-        int triangleCount;
+        std::vector<int> triangleCounts;
+        std::vector<GLuint> vertexArrays;
+        std::vector<GLuint> buffers;
+        std::vector<GLuint> ibos;
 
         Mat4<float> modelMatrix;
         Mat4<float> projectionMatrix;
