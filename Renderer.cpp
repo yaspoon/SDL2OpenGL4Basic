@@ -360,28 +360,45 @@ void Renderer::draw()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glBindVertexArray(vertArrays[TRIANGLES]);
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
+        for(int i = 0; i < vertexArrays.size(); i++)
+        {
+                GLuint vao = vertexArrays.at(i);
+                int triangleCount = triangleCounts.at(i);
+                glBindVertexArray(vao);
+                //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
 
-        glDrawArrays(GL_TRIANGLES, 0, triangleCount);
+                glDrawArrays(GL_TRIANGLES, 0, triangleCount);
+        }
 
         SDL_GL_SwapWindow(window);
 }
 
 void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize, size_t tsize, float *texCoords, float *normals, size_t nsize)
 {
-        triangleCount = vsize / sizeof(*vertices) / 3;
-        glBindVertexArray(vertArrays[TRIANGLES]);
+
+        GLuint vao;
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+
+        vertexArrays.push_back(vao);
+        int triangleCount = vsize / sizeof(*vertices) / 3;
+        triangleCounts.push_back(triangleCount);
 
         size_t bufSize = vsize + csize + tsize + nsize;
 
         if(indices)
         {
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
+                GLuint ibo;
+                glGenBuffers(1, &ibo);
+                ibos.push_back(ibo);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
                 glBufferData(GL_ELEMENT_ARRAY_BUFFER, icount, indices, GL_STATIC_DRAW);
         }
 
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[ARRAY_BUFFER]);
+        GLuint buffer;
+        glGenBuffers(1, &buffer);
+        buffers.push_back(buffer);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glBufferData(GL_ARRAY_BUFFER,  bufSize, NULL, GL_STATIC_DRAW);
 
         size_t total = 0.0f;
