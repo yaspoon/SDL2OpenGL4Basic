@@ -153,6 +153,9 @@ int main(int argc, char *argv[])
                 }
                 renderer.loadTexture("resources/textures/normalmap2.png");
 
+                ObjLoader sphere("resources/models/sphere.obj");
+                //renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
+
 
                 renderer.updateLights(lights);
                 renderer.updateMaterials(materials);
