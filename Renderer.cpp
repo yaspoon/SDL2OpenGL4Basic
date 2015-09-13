@@ -154,9 +154,9 @@ bool Renderer::initGL(std::vector<struct ShaderList> list)
 
                 glUniformMatrix4fv(projMatLocation, 1, GL_FALSE, &projectionMatrix);
 
-                glGenBuffers(NUM_INDEXS, ibo);
-                glGenVertexArrays(NUM_VAOS, vertArrays);
-                glGenBuffers(NUM_BUFFERS, buffers);
+                //glGenBuffers(NUM_INDEXS, ibo);
+                //glGenVertexArrays(NUM_VAOS, vertArrays);
+                //glGenBuffers(NUM_BUFFERS, buffers);
         }
         else
         {
