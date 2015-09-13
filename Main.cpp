@@ -75,8 +75,6 @@ int main(int argc, char *argv[])
         Mat4<float> transMatrix(30.0f);
         transMatrix[3][2] = 0.0f;
 
-        MD2Model skel;
-        skel.loadModel("./hueteotl/tris.md2");
         bool quit = false;
 
         SDL_Event event;
@@ -112,15 +110,15 @@ int main(int argc, char *argv[])
                 lights[0].enableSpecular(true);
                 lights[0].setPosition(Vec4<GLfloat>(0.0f, 5.0f, 0.0f, 0.0f));
                 lights[0].setNormal(Vec4<GLfloat>(0.0f, 1.0f, 0.0f, 0.0f));
-                //lights[0].setShininess(16.0f);
                 lights[0].setConstAttenuation(1.0f);
                 lights[0].setLinearAtten(0.0f);
                 lights[0].setQuadAtten(1.0f);
-                lights[0].setIsPointLight(true);
+                //lights[0].setIsPointLight(true);
+                lights[0].setIsSpotLight(true);
                 lights[0].setAngle(90.0f);
                 lights[0].setSpotponent(16.0f);
 
-                lights.insert(lights.end(), renderer.newLight(lights.size()));
+                /*lights.insert(lights.end(), renderer.newLight(lights.size()));
                 lights[1].setAmbientLight(Vec4<GLfloat>(0.4f, 0.4f, 0.4f, 1.0f));
                 lights[1].setDiffuseLight(Vec4<GLfloat>(0.4f, 0.4f, 0.4f, 1.0f));
                 lights[1].setSpecularLight(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
@@ -134,7 +132,7 @@ int main(int argc, char *argv[])
                 lights[1].setIsSpotLight(true);
                 lights[1].setLinearAtten(1.0f);
                 lights[1].setAngle(90.0f);
-                lights[1].setSpotponent(16.0f);
+                lights[1].setSpotponent(16.0f);*/
 
                 materials.insert(materials.end(), renderer.newMaterial(materials.size()));
                 /*materials[0].setEmission(Vec4<GLfloat>(1.0f, 0.0f, 0.0f, 0.0f));
