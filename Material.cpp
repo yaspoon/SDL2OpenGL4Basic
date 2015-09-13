@@ -185,5 +185,5 @@ void Material::loadObjMaterial(ObjMaterial newMat)
         setDiffuse(newMat.getDiffuse());
         setSpecular(newMat.getSpecular());
         setShininess(16.0f);
-        setEmission(Vec4<float>(0.0f, 0.0f, 0.0f, 0.0f));
+        setEmission(Vec4<float>(1.0f, 0.0f, 0.0f, 0.0f));
 }
