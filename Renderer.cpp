@@ -475,7 +475,7 @@ void Renderer::loadTexture(const char *name)
         textures.push_back(texture);
 }
 
-void Renderer::loadTest()
+/*void Renderer::loadTest()
 {
         unsigned short indexs[] = {0, 1, 2, //Front face
                              2, 3, 0};
@@ -516,12 +516,12 @@ void Renderer::loadTest()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-}
+}*/
 
-void Renderer::setTriangleCount(float triangles)
+/*void Renderer::setTriangleCount(float triangles)
 {
         triangleCount = triangles;
-}
+}*/
 
 void Renderer::setNumEnabledLights(int count)
 {
