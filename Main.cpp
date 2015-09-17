@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
                 lights[1].setAngle(90.0f);
                 lights[1].setSpotponent(16.0f);*/
 
-                materials.insert(materials.end(), renderer.newMaterial(materials.size()));
+                //materials.insert(materials.end(), renderer.newMaterial(materials.size()));
                 /*materials[0].setEmission(Vec4<GLfloat>(1.0f, 0.0f, 0.0f, 0.0f));
                 materials[0].setAmbient(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
                 materials[0].setDiffuse(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
@@ -143,20 +143,20 @@ int main(int argc, char *argv[])
 
                 ObjLoader loader("resources/models/plane.obj");
                 renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
-                std::vector<ObjMaterial> mats = loader.getMaterials();
+                ObjLoader sphere("resources/models/monkey.obj");
+                renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
+
+                std::vector<ObjMaterial> mats = loader.getMaterials() + sphere.getMaterials();
                 for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
                 {
                         ObjMaterial mat = *it;
                         std::cout << "Loading texture:" << mat.getMapkd() << std::endl;
                         renderer.loadTexture(mat.getMapkd().c_str());
-                        materials[0].loadObjMaterial(mat);
+                        int i = materials.size();
+                        materials.insert(materials.end(), renderer.newMaterial(materials.size()));
+                        materials[i].loadObjMaterial(mat);
                 }
-                renderer.loadTexture("resources/textures/normalmap2.png");
-
-                ObjLoader sphere("resources/models/sphere.obj");
-                //renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
-
-
+                //renderer.loadTexture("resources/textures/normalmap2.png");
                 renderer.updateLights(lights);
                 renderer.updateMaterials(materials);
                 renderer.setNumEnabledLights(lights.size());
