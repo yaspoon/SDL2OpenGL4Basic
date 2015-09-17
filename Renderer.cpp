@@ -364,6 +364,8 @@ void Renderer::draw()
         {
                 GLuint vao = vertexArrays.at(i);
                 int triangleCount = triangleCounts.at(i);
+                GLuint texture = textures.at(i);
+                glBindTexture(GL_TEXTURE_2D, texture);
                 glBindVertexArray(vao);
                 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
 
