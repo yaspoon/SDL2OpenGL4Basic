@@ -146,15 +146,27 @@ int main(int argc, char *argv[])
                 ObjLoader sphere("resources/models/monkey.obj");
                 renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
 
-                std::vector<ObjMaterial> mats = loader.getMaterials() + sphere.getMaterials();
+                std::vector<ObjMaterial> mats = loader.getMaterials();
+                mats.insert(mats.end(), sphere.getMaterials().begin(), sphere.getMaterials().end());
                 for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
                 {
                         ObjMaterial mat = *it;
-                        std::cout << "Loading texture:" << mat.getMapkd() << std::endl;
-                        renderer.loadTexture(mat.getMapkd().c_str());
                         int i = materials.size();
                         materials.insert(materials.end(), renderer.newMaterial(materials.size()));
                         materials[i].loadObjMaterial(mat);
+
+                        if(mat.getMapkd().length() != 0) //There is a texture string
+                        {
+                                std::cout << "Loading texture:" << mat.getMapkd() << std::endl;
+                                renderer.loadTexture(mat.getMapkd().c_str());
+                                materials[i].setHasTexture(true);
+                        }
+                        else
+                        {
+                                materials[i].setColour(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
+                                materials[i].setHasTexture(false);
+                        }
+
                 }
                 //renderer.loadTexture("resources/textures/normalmap2.png");
                 renderer.updateLights(lights);
