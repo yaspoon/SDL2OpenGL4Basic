@@ -34,9 +34,10 @@ struct MaterialProperties
 	vec3 diffuse;
 	vec3 specular;
 	float shininess;
+	vec3 colour;
+	bool hasTexture;
 };
 
-in vec3 colour;
 in vec2 texCoord;
 in vec3 normalInterp;
 in vec3 lightPosInterp; 
@@ -70,6 +71,9 @@ void main()
 	vec3 totalDiffuse = vec3(0.0);
 	vec3 totalSpecular = vec3(0.0);
 	float totalShininess = 0.0;
+	vec3 colour = vec3(1.0);
+	
+	bool hasTexture = true; /*Sigh these shaders just keep getting more gross*/
 
 	for(i = 0; i < MAX_MATERIALS; i++)
 	{
@@ -79,7 +83,17 @@ void main()
 			totalDiffuse += materials[i].diffuse;
 			totalSpecular += materials[i].specular;
 			totalShininess += materials[i].shininess;
+			if(!hasTexture)
+			{
+				colour += materials[i].colour;
+				hasTexture = false;
+			}
 		}
+	}
+	
+	if(hasTexture)
+	{
+		colour = texture(tex, texCoord).xyz;
 	}
 
 	totalEmission = min(totalEmission, vec3(1.0));
@@ -165,7 +179,7 @@ void main()
 			
 		}
 	}
-	outColour = vec4(texture(tex, texCoord).xyz * scatteredLight + reflectedLight, 1.0);
+	outColour = vec4(colour * scatteredLight + reflectedLight, 1.0);
 	fColor = min(outColour, vec4(1.0));
 
 }
