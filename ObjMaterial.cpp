@@ -9,6 +9,8 @@ ObjMaterial::ObjMaterial(std::string filepath)
         std::ifstream matFile;
         matFile.open(filepath.c_str(), std::ios::in);
 
+        map_kd = std::string();
+
         for(std::string line; std::getline(matFile, line); /*void*/)
         {
                 std::stringstream ss(line);
