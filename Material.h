@@ -18,6 +18,8 @@ private:
         int index;
         GLuint matUboStride;
         std::map<std::string, UBOUniform > uniforms;
+        Vec4<GLfloat> colour;
+        GLboolean hasTexture;
 
 public:
         Material(int index, size_t bufSize, int numElements, const char *uniformNames[], GLuint *indices, GLint *sizes, GLint *offsets, GLint *types, GLuint matUboOffset);
@@ -31,6 +33,8 @@ public:
         void setDiffuse(Vec4<GLfloat> diffuse);
         void setSpecular(Vec4<GLfloat> specular);
         void setShininess(GLfloat shininess);
+        void setColour(Vec4<GLfloat> colour);
+        void setHasTexture(GLboolean hasTexture);
 
         Vec4<GLfloat> getEmission();
         Vec4<GLfloat> getAmbient();

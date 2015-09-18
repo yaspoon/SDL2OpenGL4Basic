@@ -10,6 +10,7 @@ Material::Material(int index, size_t bufSize, int numElements, const char *unifo
         this->matUboStride = matUboStride;
         this->materialData = new char[this->dataSize];
         memset(this->materialData, 0, dataSize);
+        this->hasTexture = false;
 
         GLint *m_offsets = new int[numElements];
         for(int i = 0; i < numElements; i++)
@@ -35,6 +36,7 @@ Material::Material(const Material &copy)
         this->dataSize = copy.dataSize;
         this->numUniforms = copy.numUniforms;
         this->materialData = new char[dataSize];
+        this->hasTexture = false;
         memset(materialData, 0, dataSize);
         memcpy(materialData, copy.materialData, dataSize);
 
@@ -186,4 +188,14 @@ void Material::loadObjMaterial(ObjMaterial newMat)
         setSpecular(newMat.getSpecular());
         setShininess(16.0f);
         setEmission(Vec4<float>(1.0f, 0.0f, 0.0f, 0.0f));
+}
+
+void Material::setColour(Vec4<GLfloat> colour)
+{
+        this->colour = colour;
+}
+
+void Material::setHasTexture(GLboolean hasTexture)
+{
+        this->hasTexture = hasTexture;
 }
