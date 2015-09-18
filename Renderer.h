@@ -71,13 +71,15 @@ private:
         const static int MAX_LIGHTS = 10;
         const static int MAX_MATERIALS = 10;
 
-        const static int numMatUniforms = 5;
+        const static int numMatUniforms = 7;
         const char *materialUniforms[numMatUniforms] = {
                 "materials[0].emission",
                 "materials[0].ambient",
                 "materials[0].diffuse",
                 "materials[0].specular",
-                "materials[0].shininess"
+                "materials[0].shininess",
+                "materials[0].colour",
+                "materials[0].hasTexture"
         };
 
 
