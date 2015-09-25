@@ -142,12 +142,14 @@ int main(int argc, char *argv[])
                 materials[0].setShininess(16.0f);*/
 
                 ObjLoader loader("resources/models/plane.obj");
-                renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
+                //renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
+                renderer.loadModel(loader);
                 ObjLoader sphere("resources/models/monkey.obj");
-                renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
+                //renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
+                renderer.loadModel(sphere);
 
-                std::vector<ObjMaterial> mats = loader.getMaterials();
-                mats.insert(mats.end(), sphere.getMaterials().begin(), sphere.getMaterials().end());
+                /*std::vector<ObjMaterial> mats = loader.getMaterials();
+                //mats.insert(mats.end(), sphere.getMaterials().begin(), sphere.getMaterials().end());
                 for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
                 {
                         ObjMaterial mat = *it;
@@ -169,8 +171,8 @@ int main(int argc, char *argv[])
 
                 }
                 //renderer.loadTexture("resources/textures/normalmap2.png");
+                renderer.updateMaterials(materials);*/
                 renderer.updateLights(lights);
-                renderer.updateMaterials(materials);
                 renderer.setNumEnabledLights(lights.size());
 
                 while(!quit)
