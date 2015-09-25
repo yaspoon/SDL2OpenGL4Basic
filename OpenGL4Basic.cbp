@@ -76,6 +76,8 @@
 		<Unit filename="Vec4.h" />
 		<Unit filename="Vertex.cpp" />
 		<Unit filename="Vertex.h" />
+		<Unit filename="include/ModelLoader.h" />
+		<Unit filename="src/ModelLoader.cpp" />
 		<Unit filename="triplet.h" />
 		<Extensions>
 			<code_completion />
