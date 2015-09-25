@@ -4,23 +4,19 @@
 #include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#include "ObjMaterial.h"
 
 class Renderable
 {
         public:
                 Renderable();
+                Renderable(GLuint vao, std::vector<ObjMaterial> mats);
                 virtual ~Renderable();
                 GLuint getVao();
         protected:
         private:
                 GLuint vao;
-                GLuint vbo;
-                GLuint tex;
-                std::vector<GLfloat> vertices;
-                std::vector<GLushort> indices; /*Index drawing is best drawing.*/
-                std::vector<GLfloat> colours;
-                std::vector<GLfloat> texCoords;
-                SDL_Surface *texture;
+                std::vector<GLuint> textures;
 };
 
 #endif // RENDERABLE_H
