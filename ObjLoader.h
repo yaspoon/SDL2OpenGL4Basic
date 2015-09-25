@@ -1,6 +1,8 @@
 #ifndef OBJLOADER_H
 #define OBJLOADER_H
 
+#include "ModelLoader.h"
+
 #include <string>
 #include <vector>
 #include <sstream>
@@ -9,7 +11,7 @@
 #include "Vertex.h"
 #include "ObjMaterial.h"
 
-class ObjLoader
+class ObjLoader: public ModelLoader
 {
         public:
                 ObjLoader(std::string filepath);
