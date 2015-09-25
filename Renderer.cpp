@@ -375,7 +375,18 @@ void Renderer::draw()
         SDL_GL_SwapWindow(window);
 }
 
-void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize, size_t tsize, float *texCoords, float *normals, size_t nsize)
+void Renderer::loadModel(ModelLoader &model)
+{
+        GLuint vao = loadPrimitiveData(model.getVertices(), model.vsize(), NULL, 0, model.getColours(), model.csize(), model.tsize(), model.getTexCoords(), model.getNormals(), model.nsize());
+        std::vector<ObjMaterial> mats = model.getMaterials();
+
+        for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
+        {
+                std::cout << "mat" << std::endl;
+        }
+}
+
+GLuint Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize, size_t tsize, float *texCoords, float *normals, size_t nsize)
 {
 
         GLuint vao;
@@ -459,9 +470,11 @@ void Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *
                 glEnableVertexAttribArray(vNormal);
                 total += nsize;
         }
+
+        return vao;
 }
 
-void Renderer::loadTexture(const char *name)
+GLuint Renderer::loadTexture(const char *name)
 {
         SDL_Surface *image = IMG_Load(name);
         GLuint texture;
@@ -475,6 +488,7 @@ void Renderer::loadTexture(const char *name)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         textures.push_back(texture);
+        return texture;
 }
 
 /*void Renderer::loadTest()

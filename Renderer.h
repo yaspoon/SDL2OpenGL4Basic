@@ -11,6 +11,7 @@
 #include "Shader.h"
 #include "Light.h"
 #include "Material.h"
+#include "ModelLoader.h"
 
 class Renderer
 {
@@ -120,7 +121,7 @@ private:
 
         Mat4<float> frustumProjection(float left, float right, float top, float bottom, float near, float far);
         Mat4<float> perspectiveProjection(float FOV, float aspectRatio, float near, float far);
-
+        GLuint loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount, size_t tsize, float *texCoords, float *normals, size_t nsize);
         std::string title;
 
         SDL_Window *window = NULL;
@@ -159,8 +160,8 @@ public:
 
         void draw();
 
-        void loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount, size_t tsize, float *texCoords, float *normals, size_t nsize);
-        void loadTexture(const char *name);
+        void loadModel(ModelLoader &model);
+        GLuint loadTexture(const char *name);
 
         void loadTest();
 
