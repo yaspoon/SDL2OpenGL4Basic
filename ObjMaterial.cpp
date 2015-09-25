@@ -79,6 +79,24 @@ ObjMaterial::ObjMaterial(std::string filepath)
         }
 }
 
+ObjMaterial::ObjMaterial(const ObjMaterial &copy)
+{
+        this->name = copy.name;
+        this->ns = copy.ns;
+        this->d = copy.d;
+        this->illum = copy.illum;
+        this->ka = copy.ka;
+        this->kd = copy.kd;
+        this->ks = copy.ks;
+        this->map_kd = copy.map_kd;
+}
+
+ObjMaterial& ObjMaterial::operator=(const ObjMaterial &copy)
+{
+        ObjMaterial mat(copy);
+        return mat;
+}
+
 std::string ObjMaterial::getMapkd()
 {
         return map_kd;
