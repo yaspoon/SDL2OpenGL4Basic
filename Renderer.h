@@ -110,10 +110,11 @@ private:
         GLint matUniformType[numMatUniforms];
         GLint matUniformStrides[numMatUniforms];
 
-        std::vector<int> triangleCounts;
-        std::vector<GLuint> vertexArrays;
+        //std::vector<int> triangleCounts;
+        //std::vector<GLuint> vertexArrays;
         std::vector<GLuint> buffers;
         std::vector<GLuint> ibos;
+        int materialIndex;
 
         Mat4<float> modelMatrix;
         Mat4<float> projectionMatrix;
@@ -123,13 +124,14 @@ private:
 
         Mat4<float> frustumProjection(float left, float right, float top, float bottom, float near, float far);
         Mat4<float> perspectiveProjection(float FOV, float aspectRatio, float near, float far);
-        GLuint loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount, size_t tsize, float *texCoords, float *normals, size_t nsize);
+        std::pair<GLuint, int> loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount, size_t tsize, float *texCoords, float *normals, size_t nsize);
         std::string title;
 
         SDL_Window *window = NULL;
         SDL_GLContext context = NULL;
 
         std::vector<GLuint> textures;
+        std::vector<Renderable> renderables;
 
         Shader shader;
 public:
@@ -159,6 +161,7 @@ public:
         void updateLight(Light updatedLight);
         void updateLights(std::vector<Light> lights);
         void updateMaterials(std::vector<Material> materials);
+        void updateMaterial(Material material);
 
         void draw();
 
