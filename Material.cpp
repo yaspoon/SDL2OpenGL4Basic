@@ -11,6 +11,7 @@ Material::Material(int index, size_t bufSize, int numElements, const char *unifo
         this->materialData = new char[this->dataSize];
         memset(this->materialData, 0, dataSize);
         this->hasTexture = false;
+        this->enabled = false;
 
         GLint *m_offsets = new int[numElements];
         for(int i = 0; i < numElements; i++)
@@ -37,6 +38,7 @@ Material::Material(const Material &copy)
         this->numUniforms = copy.numUniforms;
         this->materialData = new char[dataSize];
         this->hasTexture = false;
+        this->enabled = false;
         memset(materialData, 0, dataSize);
         memcpy(materialData, copy.materialData, dataSize);
 
