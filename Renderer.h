@@ -12,6 +12,7 @@
 #include "Light.h"
 #include "Material.h"
 #include "ModelLoader.h"
+#include "Renderable.h"
 
 class Renderer
 {
@@ -81,6 +82,7 @@ private:
                 "materials[0].shininess",
                 "materials[0].colour",
                 "materials[0].hasTexture"
+                "materials[0].enabled"
         };
 
 
