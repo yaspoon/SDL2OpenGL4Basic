@@ -16,6 +16,7 @@ private:
         Vec4<float> kd;
         Vec4<float> ks;
         std::string map_kd;
+        bool texture;
 
 public:
 
@@ -29,5 +30,6 @@ public:
         float getSpecularExponent();
         float getDisolved();
         int getIllumination();
+        bool hasTexture();
 };
 #endif // OBJ_MATERIAL_H
