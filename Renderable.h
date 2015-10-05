@@ -10,13 +10,23 @@ class Renderable
 {
         public:
                 Renderable();
-                Renderable(GLuint vao, std::vector<ObjMaterial> mats);
+                Renderable(GLuint vao, int triangleCount);
+                Renderable(GLuint vao, std::vector<int> mats, int triangleCount);
                 virtual ~Renderable();
                 GLuint getVao();
+                std::vector<int> getMaterials();
+                int getTriangleCount();
+                std::vector<GLuint> getTextures();
+                void addMaterial(int index);
+                void addTexture(GLuint texture);
+                void setTriangleCount(int triangleCount);
+
         protected:
         private:
                 GLuint vao;
+                int triangleCount;
                 std::vector<GLuint> textures;
+                std::vector<int> materials;
 };
 
 #endif // RENDERABLE_H
