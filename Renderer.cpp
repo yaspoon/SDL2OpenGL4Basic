@@ -19,6 +19,7 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         projMatLocation = -1;
         cameraMatLocation = -1;
         modelMatLocation = -1;
+        materialIndex = 0;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
@@ -38,6 +39,7 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         projMatLocation = -1;
         cameraMatLocation = -1;
         modelMatLocation = -1;
+        materialIndex = 0;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
@@ -57,6 +59,7 @@ modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
         projMatLocation = -1;
         cameraMatLocation = -1;
         modelMatLocation = -1;
+        materialIndex = 0;
 
         projectionMatrix = perspectiveProjection(mf_fov, mf_aspectRatio, mf_near, mf_far);
 }
