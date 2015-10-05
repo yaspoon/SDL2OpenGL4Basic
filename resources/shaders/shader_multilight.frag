@@ -36,6 +36,7 @@ struct MaterialProperties
 	float shininess;
 	vec3 colour;
 	bool hasTexture;
+	bool enabled;
 };
 
 in vec2 texCoord;
