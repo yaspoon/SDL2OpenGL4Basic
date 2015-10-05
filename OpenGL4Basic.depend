@@ -116,7 +116,7 @@
 	"Vec4.h"
 	<cstdlib>
 
-1443182644 /home/brock/code/cpp/Opengl4/basic/Renderer.h
+1443702804 /home/brock/code/cpp/Opengl4/basic/Renderer.h
 	<SDL.h>
 	<SDL2/SDL_opengl.h>
 	"Mat4.h"
@@ -125,6 +125,7 @@
 	"Light.h"
 	"Material.h"
 	"ModelLoader.h"
+	"Renderable.h"
 
 1394995323 /usr/include/SDL2/SDL.h
 	"SDL_main.h"
@@ -447,7 +448,7 @@
 	"Box.h"
 	<string.h>
 
-1443182644 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
+1443703116 source:/home/brock/code/cpp/Opengl4/basic/Renderer.cpp
 	"Renderer.h"
 	"Common.h"
 	"Math.h"
@@ -457,10 +458,10 @@
 1422256069 /home/brock/code/cpp/Opengl4/basic/Common.h
 	<iostream>
 
-1443182644 source:/home/brock/code/cpp/Opengl4/basic/Renderable.cpp
+1443614726 source:/home/brock/code/cpp/Opengl4/basic/Renderable.cpp
 	"Renderable.h"
 
-1443182644 /home/brock/code/cpp/Opengl4/basic/Renderable.h
+1443269997 /home/brock/code/cpp/Opengl4/basic/Renderable.h
 	<vector>
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
@@ -494,12 +495,12 @@
 1434865630 /home/brock/code/cpp/Opengl4/basic/UBOUniform.h
 	<SDL2/SDL_opengl.h>
 
-1442666822 source:/home/brock/code/cpp/Opengl4/basic/Material.cpp
+1443186208 source:/home/brock/code/cpp/Opengl4/basic/Material.cpp
 	"Material.h"
 	"Light.h"
 	<cstring>
 
-1442666822 /home/brock/code/cpp/Opengl4/basic/Material.h
+1443186220 /home/brock/code/cpp/Opengl4/basic/Material.h
 	"UBOUniform.h"
 	"ObjMaterial.h"
 	"Vec4.h"
@@ -690,12 +691,12 @@
 
 1407749562 source:/home/brock/code/cpp/Opengl4/basic/Model.cpp
 
-1443182644 /home/brock/code/cpp/Opengl4/basic/ObjMaterial.h
+1443703175 /home/brock/code/cpp/Opengl4/basic/ObjMaterial.h
 	<string>
 	<vector>
 	"Vec4.h"
 
-1443182644 source:/home/brock/code/cpp/Opengl4/basic/ObjMaterial.cpp
+1443703204 source:/home/brock/code/cpp/Opengl4/basic/ObjMaterial.cpp
 	"ObjMaterial.h"
 	<iostream>
 	<fstream>
