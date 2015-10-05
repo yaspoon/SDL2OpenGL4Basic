@@ -345,15 +345,25 @@ void Renderer::updateMaterials(std::vector<Material> materials)
         }
 }
 
+void Renderer::updateMaterial(Material material)
+{
+        glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+        GLintptr offset = (material.getIndex() * matUboStride) + matUboOffset;
+        GLsizei size = material.getDataSize();
+        char *data = material.getMaterialData();
+        glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
+        glBindBufferBase(GL_UNIFORM_BUFFER, uboIndex, ubo);
+}
+
 void Renderer::draw()
 {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textures[0]);
-        glUniform1i(textureLocation, 0);
+        //glActiveTexture(GL_TEXTURE0);
+        //glBindTexture(GL_TEXTURE_2D, textures[0]);
+        //glUniform1i(textureLocation, 0);
 
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, textures[1]);
-        glUniform1i(normalMapLocation, 1);
+        //glActiveTexture(GL_TEXTURE1);
+        //glBindTexture(GL_TEXTURE_2D, textures[1]);
+        //glUniform1i(normalMapLocation, 1);
 
         glUniformMatrix4fv(modelMatLocation, 1, false, &modelMatrix);
 
@@ -363,12 +373,22 @@ void Renderer::draw()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        for(int i = 0; i < vertexArrays.size(); i++)
+        for(std::vector<Renderable>::iterator it = renderables.begin(); it != renderables.end(); ++it)
         {
-                GLuint vao = vertexArrays.at(i);
-                int triangleCount = triangleCounts.at(i);
-                GLuint texture = textures.at(i);
-                glBindTexture(GL_TEXTURE_2D, texture);
+                Renderable model = *it;
+                GLuint vao = model.getVao();
+                int triangleCount = model.getTriangleCount();
+                std::vector<int> mats = model.getMaterials();
+                /*NEED TO GET THE TEXTURES FOR EACH MATERIAL AND BIND IT.
+                THEN PASS IN THE TEXTURE UNIT NUMBERS TO THE SHADER*/
+                std::vector<GLuint> textures = model.getTextures();
+                int i;
+                std::vector<GLuint>::iterator texs;
+                for(texs = textures.begin(), i = 0; texs != textures.end(); ++texs, i++)
+                {
+                    glActiveTexture(GL_TEXTURE0 + i);
+                    glBindTexture(GL_TEXTURE_2D, *texs);
+                }
                 glBindVertexArray(vao);
                 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
 
@@ -380,25 +400,42 @@ void Renderer::draw()
 
 void Renderer::loadModel(ModelLoader &model)
 {
-        GLuint vao = loadPrimitiveData(model.getVertices(), model.vsize(), NULL, 0, model.getColours(), model.csize(), model.tsize(), model.getTexCoords(), model.getNormals(), model.nsize());
+        std::pair<GLuint, int> modelData = loadPrimitiveData(model.getVertices(), model.vsize(), NULL, 0, model.getColours(), model.csize(), model.tsize(), model.getTexCoords(), model.getNormals(), model.nsize());
         std::vector<ObjMaterial> mats = model.getMaterials();
+        Renderable renderable(modelData.first, modelData.second);
 
         for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
         {
-                std::cout << "mat" << std::endl;
+                ObjMaterial objMat = *it;
+                Material mat = newMaterial(materialIndex);
+                materialIndex++;
+                mat.loadObjMaterial(objMat);
+                updateMaterial(mat);
+                if(objMat.hasTexture())
+                {
+                    GLuint texture = loadTexture(objMat.getMapkd().c_str());
+                    renderable.addTexture(texture);
+                }
+                else
+                {
+                    mat.setColour(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
+                }
+                renderable.addMaterial(mat.getIndex());
         }
+
+        renderables.push_back(renderable);
 }
 
-GLuint Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize, size_t tsize, float *texCoords, float *normals, size_t nsize)
+std::pair<GLuint, int> Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize, size_t tsize, float *texCoords, float *normals, size_t nsize)
 {
 
         GLuint vao;
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
 
-        vertexArrays.push_back(vao);
+        //vertexArrays.push_back(vao);
         int triangleCount = vsize / sizeof(*vertices) / 3;
-        triangleCounts.push_back(triangleCount);
+        //triangleCounts.push_back(triangleCount);
 
         size_t bufSize = vsize + csize + tsize + nsize;
 
@@ -474,7 +511,7 @@ GLuint Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short
                 total += nsize;
         }
 
-        return vao;
+        return std::pair<GLuint, int>(vao, triangleCount);
 }
 
 GLuint Renderer::loadTexture(const char *name)
