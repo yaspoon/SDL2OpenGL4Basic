@@ -10,6 +10,7 @@ ObjMaterial::ObjMaterial(std::string filepath)
         matFile.open(filepath.c_str(), std::ios::in);
 
         map_kd = std::string();
+        texture = false;
 
         for(std::string line; std::getline(matFile, line); /*void*/)
         {
@@ -75,6 +76,7 @@ ObjMaterial::ObjMaterial(std::string filepath)
                 else if(identifier.compare("map_Kd") == 0)
                 {
                         ss >> map_kd;
+                        texture = true;
                 }
         }
 }
@@ -89,6 +91,7 @@ ObjMaterial::ObjMaterial(const ObjMaterial &copy)
         this->kd = copy.kd;
         this->ks = copy.ks;
         this->map_kd = copy.map_kd;
+        this->texture = copy.texture;
 }
 
 ObjMaterial& ObjMaterial::operator=(const ObjMaterial &copy)
@@ -130,4 +133,9 @@ float ObjMaterial::getDisolved()
 int ObjMaterial::getIllumination()
 {
         return illum;
+}
+
+bool ObjMaterial::hasTexture()
+{
+    return texture;
 }
