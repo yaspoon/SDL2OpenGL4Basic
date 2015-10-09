@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
                 lights[0].setIsEnabled(true);
                 lights[0].enableDiffuse(true);
                 lights[0].enableSpecular(true);
-                lights[0].setPosition(Vec4<GLfloat>(0.0f, 5.0f, 0.0f, 0.0f));
+                lights[0].setPosition(Vec4<GLfloat>(0.0f, 10.0f, 0.0f, 0.0f));
                 lights[0].setNormal(Vec4<GLfloat>(0.0f, 1.0f, 0.0f, 0.0f));
                 lights[0].setConstAttenuation(1.0f);
                 lights[0].setLinearAtten(0.0f);
