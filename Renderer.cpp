@@ -140,13 +140,13 @@ bool Renderer::initGL(std::vector<struct ShaderList> list)
         std::cout << "Max texture units:" << maxTextureUnits << std::endl;
         glViewport(0, 0, mf_width, mf_height);
 
-        glDepthRange(mf_near, mf_far); /*Tell opengl where the near and far planes sit*/
+        //glDepthRange(mf_near, mf_far); /*Tell opengl where the near and far planes sit*/
 
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
 
-        //glEnable(GL_DEPTH_TEST);
-        //glDepthFunc(GL_LESS);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
 
         std::pair<GLuint, bool> programPair = loadProgram(list);
 
