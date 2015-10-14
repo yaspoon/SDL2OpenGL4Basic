@@ -144,9 +144,9 @@ int main(int argc, char *argv[])
                 ObjLoader loader("resources/models/plane.obj");
                 //renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
                 renderer.loadModel(loader);
-                ObjLoader sphere("resources/models/monkey.obj");
+                ObjLoader monkey("resources/models/monkey.obj");
                 //renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
-                renderer.loadModel(sphere);
+                renderer.loadModel(monkey);
 
                 /*std::vector<ObjMaterial> mats = loader.getMaterials();
                 //mats.insert(mats.end(), sphere.getMaterials().begin(), sphere.getMaterials().end());
