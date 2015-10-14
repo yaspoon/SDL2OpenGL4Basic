@@ -378,7 +378,13 @@ void Renderer::draw()
                 Renderable model = *it;
                 GLuint vao = model.getVao();
                 int triangleCount = model.getTriangleCount();
-                std::vector<int> mats = model.getMaterials();
+                std::vector<Material> mats = model.getMaterials();
+                for(std::vector<Material>::iterator it = mats.begin(); it != mats.end(); ++it)
+                {
+                        Material mat = *it;
+                        mat.setEnabled(true);
+                        updateMaterial(mat);
+                }
                 /*NEED TO GET THE TEXTURES FOR EACH MATERIAL AND BIND IT.
                 THEN PASS IN THE TEXTURE UNIT NUMBERS TO THE SHADER*/
                 std::vector<GLuint> textures = model.getTextures();
@@ -393,6 +399,13 @@ void Renderer::draw()
                 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
 
                 glDrawArrays(GL_TRIANGLES, 0, triangleCount);
+
+                for(std::vector<Material>::iterator it = mats.begin(); it != mats.end(); ++it)
+                {
+                        Material mat = *it;
+                        mat.setEnabled(false);
+                        updateMaterial(mat);
+                }
         }
 
         SDL_GL_SwapWindow(window);
