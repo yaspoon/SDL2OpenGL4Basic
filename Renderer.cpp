@@ -423,7 +423,6 @@ void Renderer::loadModel(ModelLoader &model)
                 Material mat = newMaterial(materialIndex);
                 materialIndex++;
                 mat.loadObjMaterial(objMat);
-                updateMaterial(mat);
                 if(objMat.hasTexture())
                 {
                     GLuint texture = loadTexture(objMat.getMapkd().c_str());
@@ -433,7 +432,8 @@ void Renderer::loadModel(ModelLoader &model)
                 {
                     mat.setColour(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
                 }
-                renderable.addMaterial(mat.getIndex());
+                updateMaterial(mat);
+                renderable.addMaterial(mat);
         }
 
         renderables.push_back(renderable);
