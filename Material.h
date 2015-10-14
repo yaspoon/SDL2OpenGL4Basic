@@ -36,6 +36,7 @@ public:
         void setShininess(GLfloat shininess);
         void setColour(Vec4<GLfloat> colour);
         void setHasTexture(GLboolean hasTexture);
+        void setEnabled(GLboolean enabled);
 
         Vec4<GLfloat> getEmission();
         Vec4<GLfloat> getAmbient();
