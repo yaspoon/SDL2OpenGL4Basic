@@ -112,6 +112,17 @@ void Material::setShininess(float shininess)
         memcpy(materialData + offset, &shininess, size);
 }
 
+void Material::setEnabled(GLboolean enabled)
+{
+        this->enabled = enabled;
+        UBOUniform enabledUbo = uniforms[std::string("enabled")];
+
+        size_t size = enabledUbo.getSize() * typeSize(enabledUbo.getType());
+        size_t offset = enabledUbo.getOffset();
+
+        memcpy(materialData + offset, &enabled, size);
+}
+
 Vec4<GLfloat> Material::getEmission()
 {
         UBOUniform uniform = uniforms["emission"];
@@ -190,6 +201,10 @@ void Material::loadObjMaterial(ObjMaterial newMat)
         setSpecular(newMat.getSpecular());
         setShininess(16.0f);
         setEmission(Vec4<float>(1.0f, 0.0f, 0.0f, 0.0f));
+        if(!newMat.hasTexture())
+        {
+                setColour(Vec4<GLfloat>(1.0f, 0.0f, 0.0f, 1.0f));
+        }
 }
 
 void Material::setColour(Vec4<GLfloat> colour)
