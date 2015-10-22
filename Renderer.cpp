@@ -550,57 +550,11 @@ GLuint Renderer::loadTexture(const char *name)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+        SDL_FreeSurface(image);
+
         textures.push_back(texture);
         return texture;
 }
-
-/*void Renderer::loadTest()
-{
-        unsigned short indexs[] = {0, 1, 2, //Front face
-                             2, 3, 0};
-
-        float coords[] = {0, 0, 1, 0, 1, 1, 0, 1};
-
-        float vertices[] = {-5.0f, -5.0f, 0.0f,
-                                        5.0f, -5.0f, 0.0f,
-                                        5.0f, 5.0f, 0.0f,
-                                        -5.0f, 5.0f, 0.0f};
-
-        glBindVertexArray(vertArrays[TRIANGLES]);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexs), indexs, GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[ARRAY_BUFFER]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) + sizeof(coords), NULL, GL_STATIC_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-        glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertices), sizeof(coords), coords);
-
-        GLint vPos = glGetAttribLocation(program, "vPosition");
-        glVertexAttribPointer(vPos, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)0);
-        glEnableVertexAttribArray(vPos);
-
-        GLint tCoord = glGetAttribLocation(program, "tCoord");
-        glVertexAttribPointer(tCoord, 2, GL_FLOAT, GL_FALSE, 0, (const GLvoid *)sizeof(vertices));
-        glEnableVertexAttribArray(tCoord);
-
-        GLuint texture;
-        glGenTextures(1, &texture);
-        SDL_Surface *crate = IMG_Load("basic2.png");
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, crate->w, crate->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, crate->pixels);
-        glUniform1i(glGetUniformLocation(program, "tex"), 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-}*/
-
-/*void Renderer::setTriangleCount(float triangles)
-{
-        triangleCount = triangles;
-}*/
 
 void Renderer::setNumEnabledLights(int count)
 {
