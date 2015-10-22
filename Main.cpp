@@ -7,7 +7,6 @@
 #include <sstream>
 
 #include "Shader.h"
-#include "MD2Model.h"
 #include "Vec4.h"
 #include "Mat4.h"
 #include "Camera.h"
