@@ -66,6 +66,27 @@ Material &Material::operator=(const Material &copy)
                 uniforms[it->first] = it->second;
         }
 
+        std::cout << "copy op" << std::endl;
+
+        return *this;
+}
+
+Material &Material::operator=(Material &copy)
+{
+        this->index = copy.index;
+        this->dataSize = copy.dataSize;
+        this->numUniforms = copy.numUniforms;
+        this->materialData = new char[dataSize];
+        memset(materialData, 0, dataSize);
+        memcpy(materialData, copy.materialData, dataSize);
+
+        for(std::map<std::string, UBOUniform >::const_iterator it = copy.uniforms.begin(); it != copy.uniforms.end(); ++it)
+        {
+                uniforms[it->first] = it->second;
+        }
+
+        std::cout << "copy op" << std::endl;
+
         return *this;
 }
 
