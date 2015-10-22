@@ -428,7 +428,9 @@ void Renderer::loadModel(ModelLoader &model)
         for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
         {
                 ObjMaterial objMat = *it;
-                Material mat = newMaterial(materialIndex);
+                //Material mat = newMaterial(materialIndex);
+                Material mat(materialIndex, matUboStride, numMatUniforms, materialUniforms, matUniformIndices,
+                        matUniformSizes, matUniformOffsets, matUniformType, matUboOffset);
                 materialIndex++;
                 mat.loadObjMaterial(objMat);
                 if(objMat.hasTexture())
@@ -475,7 +477,7 @@ std::pair<GLuint, int> Renderer::loadPrimitiveData(float *vertices, size_t vsize
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glBufferData(GL_ARRAY_BUFFER,  bufSize, NULL, GL_STATIC_DRAW);
 
-        size_t total = 0.0f;
+        size_t total = 0;
 
         if(vertices)
         {
