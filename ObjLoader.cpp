@@ -186,7 +186,7 @@ std::vector<std::pair<int, bool> > ObjLoader::loadFace(std::string&ss)
 float *ObjLoader::getVertices()
 {
         int count = faces.size() * 3 * 3;
-        float *vertices = new float[faces.size() * 3 * 3];
+        float *vertices = new float[count];
         int i = 0;
 
         for(std::vector<Face>::iterator it = faces.begin(); it != faces.end(); ++it, i += 9)
