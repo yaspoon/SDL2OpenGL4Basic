@@ -16,7 +16,7 @@ private:
         int numUniforms;
         char *materialData;
         int index;
-        GLuint matUboStride;
+        //GLuint matUboStride;
         std::map<std::string, UBOUniform > uniforms;
         Vec4<GLfloat> colour;
         GLboolean hasTexture;
@@ -28,6 +28,8 @@ public:
         ~Material();
 
         Material &operator=(const Material &copy);
+        Material &operator=(Material &copy);
+        //Material operator=(const Material &copy);
 
         void setEmission(Vec4<GLfloat> emission);
         void setAmbient(Vec4<GLfloat> ambient);
