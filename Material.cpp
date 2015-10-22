@@ -7,7 +7,6 @@ Material::Material(int index, size_t bufSize, int numElements, const char *unifo
         this->index = index;
         this->dataSize = bufSize;
         this->numUniforms = numElements;
-        this->matUboStride = matUboStride;
         this->materialData = new char[this->dataSize];
         memset(this->materialData, 0, dataSize);
         this->hasTexture = false;
@@ -16,7 +15,7 @@ Material::Material(int index, size_t bufSize, int numElements, const char *unifo
         GLint *m_offsets = new int[numElements];
         for(int i = 0; i < numElements; i++)
         {
-                m_offsets[i] = offsets[i] - matUboOffset - (index * bufSize);
+                m_offsets[i] = offsets[i] - matUboOffset;
         }
 
         for(int i = 0; i < numElements; i++)
