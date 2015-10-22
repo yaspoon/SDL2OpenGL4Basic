@@ -178,9 +178,9 @@ Vec4<GLfloat> Material::getSpecular()
         memset(specularArray, 0, sizeof(specularArray));
         size_t size = uniform.getSize() * typeSize(uniform.getType());
 
-        memcpy(specularArray + uniform.getOffset(), materialData, size);
+        memcpy(specularArray, materialData + uniform.getOffset(), size);
 
-        Vec4<GLfloat> specular(specularArray[0], specularArray[1], specularArray[2], specular[3]);
+        Vec4<GLfloat> specular(specularArray[0], specularArray[1], specularArray[2], specularArray[3]);
 
         return specular;
 }
