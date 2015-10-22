@@ -78,7 +78,7 @@ void main()
 
 	for(i = 0; i < MAX_MATERIALS; i++)
 	{
-		if((enabledMaterials & i) != 0)
+		if(materials[i].enabled)
 		{
 			totalEmission += materials[i].emission;
 			totalDiffuse += materials[i].diffuse;
