@@ -30,6 +30,7 @@ std::string Shader::readText(std::string filepath)
                 buffer[length] = '\0';
 
                 retval.insert(0, buffer); //Insert buffer string  into retval string at the start position 0
+                delete[] buffer;
 
                 input.close();
         }
