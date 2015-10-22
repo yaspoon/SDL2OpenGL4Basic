@@ -4,7 +4,7 @@ class Math
 {
 private:
 public:
-        static const float PI = 3.14f;
+        static constexpr float PI = 3.14f;
         static float toRadians(float degrees);
 };
 #endif // MATH_H
