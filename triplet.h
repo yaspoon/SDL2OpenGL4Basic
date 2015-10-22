@@ -11,6 +11,7 @@ class triplet
                         second = 0.0f;
                         third = 0.0f;
                 }
+
                 triplet(T first, U second, V third)
                 {
                         this->first = first;
@@ -18,7 +19,7 @@ class triplet
                         this->third = third;
                 }
 
-                virtual ~triplet() {}
+                ~triplet() = default;
 
                 T first;
                 U second;
