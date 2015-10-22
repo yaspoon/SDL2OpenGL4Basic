@@ -110,8 +110,9 @@ void Material::setDiffuse(Vec4<GLfloat> diffuse)
 {
         UBOUniform diffUbo = uniforms[std::string("diffuse")];
 
+        size_t offset = diffUbo.getOffset();
         size_t size = diffUbo.getSize() * typeSize(diffUbo.getType());
-        memcpy(materialData + diffUbo.getOffset(), diffuse.getData(), size);
+        memcpy(materialData + offset, diffuse.getData(), size);
 }
 
 void Material::setSpecular(Vec4<GLfloat> specular)
