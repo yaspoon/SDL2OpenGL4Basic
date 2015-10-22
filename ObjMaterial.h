@@ -22,7 +22,7 @@ public:
 
         ObjMaterial(std::string filepath);
         ObjMaterial(const ObjMaterial &copy);
-        ObjMaterial& operator=(const ObjMaterial& copy);
+        ObjMaterial operator=(const ObjMaterial& copy);
         std::string getMapkd();
         Vec4<float> getAmbient();
         Vec4<float> getDiffuse();
