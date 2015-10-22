@@ -413,7 +413,15 @@ void Renderer::draw()
 
 void Renderer::loadModel(ModelLoader &model)
 {
-        std::pair<GLuint, int> modelData = loadPrimitiveData(model.getVertices(), model.vsize(), NULL, 0, model.getColours(), model.csize(), model.tsize(), model.getTexCoords(), model.getNormals(), model.nsize());
+        float *vertices = model.getVertices();
+        float *colours = model.getColours();
+        float *texCoords = model.getTexCoords();
+        float *modelnormals = model.getNormals();
+        std::pair<GLuint, int> modelData = loadPrimitiveData(vertices, model.vsize(), NULL, 0, colours, model.csize(), model.tsize(), texCoords, modelnormals, model.nsize());
+        delete[] vertices;
+        delete[] colours;
+        delete[] texCoords;
+        delete[] modelnormals;
         std::vector<ObjMaterial> mats = model.getMaterials();
         Renderable renderable(modelData.first, modelData.second);
 
