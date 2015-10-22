@@ -94,7 +94,7 @@ ObjMaterial::ObjMaterial(const ObjMaterial &copy)
         this->texture = copy.texture;
 }
 
-ObjMaterial& ObjMaterial::operator=(const ObjMaterial &copy)
+ObjMaterial ObjMaterial::operator=(const ObjMaterial &copy)
 {
         ObjMaterial mat(copy);
         return mat;
