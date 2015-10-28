@@ -147,6 +147,9 @@ int main(int argc, char *argv[])
                 //renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
                 renderer.loadModel(monkey);
 
+                ObjLoader texCube("resources/models/texCube.obj");
+                renderer.loadModel(texCube);
+
                 /*std::vector<ObjMaterial> mats = loader.getMaterials();
                 //mats.insert(mats.end(), sphere.getMaterials().begin(), sphere.getMaterials().end());
                 for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
