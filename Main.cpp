@@ -19,6 +19,8 @@
 #include "Box.h"
 #include "Renderer.h"
 
+#include "DaeLoader.h"
+
 const GLfloat PI = 3.14;
 enum vaoIds {TRIANGLES, NUM_VAOS};
 enum bufferIds {ARRAY_BUFFER, NUM_BUFFERS};
@@ -140,15 +142,19 @@ int main(int argc, char *argv[])
                 materials[0].setSpecular(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
                 materials[0].setShininess(16.0f);*/
 
-                ObjLoader loader("resources/models/plane.obj");
+                ObjLoader plane("resources/models/plane.obj");
                 //renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
-                renderer.loadModel(loader);
+                renderer.loadModel(plane);
+
                 ObjLoader monkey("resources/models/monkey.obj");
                 //renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
-                renderer.loadModel(monkey);
+                //renderer.loadModel(monkey);
 
                 ObjLoader texCube("resources/models/texCube.obj");
-                renderer.loadModel(texCube);
+                //renderer.loadModel(texCube);
+
+                DaeLoader collada("resources/models/cube.dae");
+                renderer.loadModel(collada);
 
                 /*std::vector<ObjMaterial> mats = loader.getMaterials();
                 //mats.insert(mats.end(), sphere.getMaterials().begin(), sphere.getMaterials().end());
