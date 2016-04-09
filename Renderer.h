@@ -125,6 +125,7 @@ private:
         Mat4<float> frustumProjection(float left, float right, float top, float bottom, float near, float far);
         Mat4<float> perspectiveProjection(float FOV, float aspectRatio, float near, float far);
         std::pair<GLuint, int> loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount, size_t tsize, float *texCoords, float *normals, size_t nsize);
+
         std::string title;
 
         SDL_Window *window = NULL;
@@ -171,5 +172,6 @@ public:
         void loadTest();
 
         const int getMaxLights();
+        static void DebugGLCB(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const char *message, const void *userParam);
 };
 #endif
