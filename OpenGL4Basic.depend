@@ -126,7 +126,7 @@
 	"ModelLoader.h"
 	"Renderable.h"
 
-1394995323 /usr/include/SDL2/SDL.h
+1451773690 /usr/include/SDL2/SDL.h
 	"SDL_main.h"
 	"SDL_stdinc.h"
 	"SDL_assert.h"
@@ -157,12 +157,12 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_main.h
+1451773690 /usr/include/SDL2/SDL_main.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_stdinc.h
+1451773690 /usr/include/SDL2/SDL_stdinc.h
 	"SDL_config.h"
 	<sys/types.h>
 	<stdio.h>
@@ -182,6 +182,7 @@
 	<math.h>
 	<float.h>
 	<iconv.h>
+	<sal.h>
 	"begin_code.h"
 	<alloca.h>
 	<malloc.h>
@@ -190,33 +191,34 @@
 	<stdlib.h>
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_config.h
+1451773690 /usr/include/SDL2/SDL_config.h
 	"SDL_platform.h"
 
-1394995323 /usr/include/SDL2/SDL_platform.h
+1451773690 /usr/include/SDL2/SDL_platform.h
 	"AvailabilityMacros.h"
 	"TargetConditionals.h"
 	<winapifamily.h>
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/begin_code.h
+1451773690 /usr/include/SDL2/begin_code.h
 
-1394995323 /usr/include/SDL2/close_code.h
+1451773690 /usr/include/SDL2/close_code.h
 
-1394995323 /usr/include/SDL2/SDL_assert.h
+1451773690 /usr/include/SDL2/SDL_assert.h
 	"SDL_config.h"
 	"begin_code.h"
 	<signal.h>
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_atomic.h
+1451773690 /usr/include/SDL2/SDL_atomic.h
 	"SDL_stdinc.h"
 	"SDL_platform.h"
 	"begin_code.h"
+	<mbarrier.h>
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_audio.h
+1451773690 /usr/include/SDL2/SDL_audio.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_endian.h"
@@ -226,24 +228,24 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_error.h
+1451773690 /usr/include/SDL2/SDL_error.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_endian.h
+1451773690 /usr/include/SDL2/SDL_endian.h
 	"SDL_stdinc.h"
 	<endian.h>
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_mutex.h
+1451773690 /usr/include/SDL2/SDL_mutex.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_thread.h
+1451773690 /usr/include/SDL2/SDL_thread.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_atomic.h"
@@ -252,18 +254,18 @@
 	<process.h>
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_rwops.h
+1451773690 /usr/include/SDL2/SDL_rwops.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_clipboard.h
+1451773690 /usr/include/SDL2/SDL_clipboard.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_cpuinfo.h
+1451773690 /usr/include/SDL2/SDL_cpuinfo.h
 	"SDL_stdinc.h"
 	<intrin.h>
 	<intrin.h>
@@ -275,7 +277,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_events.h
+1451773690 /usr/include/SDL2/SDL_events.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
@@ -289,7 +291,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_video.h
+1451773690 /usr/include/SDL2/SDL_video.h
 	"SDL_stdinc.h"
 	"SDL_pixels.h"
 	"SDL_rect.h"
@@ -297,12 +299,12 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_pixels.h
+1451773690 /usr/include/SDL2/SDL_pixels.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_rect.h
+1451773690 /usr/include/SDL2/SDL_rect.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_pixels.h"
@@ -310,7 +312,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_surface.h
+1451773690 /usr/include/SDL2/SDL_surface.h
 	"SDL_stdinc.h"
 	"SDL_pixels.h"
 	"SDL_rect.h"
@@ -319,11 +321,11 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_blendmode.h
+1451773690 /usr/include/SDL2/SDL_blendmode.h
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_keyboard.h
+1451773690 /usr/include/SDL2/SDL_keyboard.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_keycode.h"
@@ -331,27 +333,27 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_keycode.h
+1451773690 /usr/include/SDL2/SDL_keycode.h
 	"SDL_stdinc.h"
 	"SDL_scancode.h"
 
-1394995323 /usr/include/SDL2/SDL_scancode.h
+1451773690 /usr/include/SDL2/SDL_scancode.h
 	"SDL_stdinc.h"
 
-1394995323 /usr/include/SDL2/SDL_mouse.h
+1451773690 /usr/include/SDL2/SDL_mouse.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_joystick.h
+1451773690 /usr/include/SDL2/SDL_joystick.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_gamecontroller.h
+1451773690 /usr/include/SDL2/SDL_gamecontroller.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_rwops.h"
@@ -359,11 +361,11 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_quit.h
+1451773690 /usr/include/SDL2/SDL_quit.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 
-1394995323 /usr/include/SDL2/SDL_gesture.h
+1451773690 /usr/include/SDL2/SDL_gesture.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
@@ -371,60 +373,60 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_touch.h
+1451773690 /usr/include/SDL2/SDL_touch.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_filesystem.h
+1451773690 /usr/include/SDL2/SDL_filesystem.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_haptic.h
+1451773690 /usr/include/SDL2/SDL_haptic.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_joystick.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_hints.h
+1451773690 /usr/include/SDL2/SDL_hints.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_loadso.h
+1451773690 /usr/include/SDL2/SDL_loadso.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_log.h
+1451773690 /usr/include/SDL2/SDL_log.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_messagebox.h
+1451773690 /usr/include/SDL2/SDL_messagebox.h
 	"SDL_stdinc.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_power.h
+1451773690 /usr/include/SDL2/SDL_power.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_render.h
+1451773690 /usr/include/SDL2/SDL_render.h
 	"SDL_stdinc.h"
 	"SDL_rect.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_system.h
+1451773690 /usr/include/SDL2/SDL_system.h
 	"SDL_stdinc.h"
 	"SDL_keyboard.h"
 	"SDL_render.h"
@@ -432,13 +434,13 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_timer.h
+1451773690 /usr/include/SDL2/SDL_timer.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1394995323 /usr/include/SDL2/SDL_version.h
+1451773690 /usr/include/SDL2/SDL_version.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
@@ -539,7 +541,7 @@
 1420691539 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/EAngle.h
 	"Vec4.h"
 
-1436870253 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Math.h
+1450436697 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Math.h
 
 1425861403 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/EAngle.cpp
 	"EAngle.h"
@@ -568,7 +570,7 @@
 
 1347992174 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/anorms.h
 
-1441446531 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Shader.cpp
+1450436697 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Shader.cpp
 	"Shader.h"
 	<fstream>
 	<iostream>
@@ -601,14 +603,13 @@
 1436870253 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/UBOUniform.h
 	<SDL2/SDL_opengl.h>
 
-1444730141 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Main.cpp
+1460022239 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Main.cpp
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
 	<SDL2/SDL_image.h>
 	<iostream>
 	<sstream>
 	"Shader.h"
-	"MD2Model.h"
 	"Vec4.h"
 	"Mat4.h"
 	"Camera.h"
@@ -618,6 +619,7 @@
 	"Math.h"
 	"Box.h"
 	"Renderer.h"
+	"DaeLoader.h"
 
 1442832528 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjLoader.h
 	"ModelLoader.h"
@@ -629,13 +631,13 @@
 	"Vertex.h"
 	"ObjMaterial.h"
 
-1436870253 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/triplet.h
+1450436697 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/triplet.h
 
 1436870253 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Vertex.h
 	<vector>
 	"triplet.h"
 
-1444088268 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Renderer.h
+1457230756 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Renderer.h
 	<SDL.h>
 	<SDL2/SDL_opengl.h>
 	"Mat4.h"
@@ -646,12 +648,12 @@
 	"ModelLoader.h"
 	"Renderable.h"
 
-1444814605 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Material.cpp
+1450436697 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Material.cpp
 	"Material.h"
 	"Light.h"
 	<cstring>
 
-1444731331 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Material.h
+1450436697 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Material.h
 	"UBOUniform.h"
 	"ObjMaterial.h"
 	"Vec4.h"
@@ -659,7 +661,7 @@
 	<map>
 	<string>
 
-1442834430 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjLoader.cpp
+1459939525 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjLoader.cpp
 	"ObjLoader.h"
 	<iostream>
 	<fstream>
@@ -674,12 +676,14 @@
 	"ObjMaterial.h"
 	"Material.h"
 
-1444731490 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Renderer.cpp
+1460022458 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Renderer.cpp
 	"Renderer.h"
 	"Common.h"
 	"Math.h"
 	<SDL2/SDL_image.h>
 	<iomanip>
+	<iostream>
+	<string.h>
 
 1425861403 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Common.h
 	<iostream>
@@ -704,14 +708,14 @@
 	<fstream>
 	<sstream>
 
-1444088268 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjMaterial.h
+1450436697 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjMaterial.h
 	<string>
 	<vector>
 	"Vec4.h"
 
-1441101834 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Model.cpp
+1458123044 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/Model.cpp
 
-1444088268 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjMaterial.cpp
+1450436697 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/ObjMaterial.cpp
 	"ObjMaterial.h"
 	<iostream>
 	<fstream>
@@ -724,4 +728,153 @@
 1443182644 /home/brock/code/cpp/Opengl4/basic/ModelLoader.h
 	<stddef.h>
 	"ObjMaterial.h"
+
+1458465887 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/DaeErrorHandler.cpp
+	"DaeErrorHandler.h"
+
+1458460231 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/DaeErrorHandler.h
+	<GeneratedSaxParser.h>
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParser.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserStackMemoryManager.h"
+	"GeneratedSaxParserTypes.h"
+	"GeneratedSaxParserUtils.h"
+	"GeneratedSaxParserIErrorHandler.h"
+	"GeneratedSaxParserCoutErrorHandler.h"
+	"GeneratedSaxParserIUnknownElementHandler.h"
+	"GeneratedSaxParserINamespaceHandler.h"
+	"GeneratedSaxParserNamespaceStack.h"
+	"GeneratedSaxParserParserError.h"
+	"GeneratedSaxParserParser.h"
+	"GeneratedSaxParserSaxParser.h"
+	"GeneratedSaxParserLibxmlSaxParser.h"
+	"GeneratedSaxParserExpatSaxParser.h"
+	"GeneratedSaxParserParserTemplateBase.h"
+	"GeneratedSaxParserParserTemplate.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserPrerequisites.h
+	<string>
+	"COLLADABUPlatform.h"
+
+1449440306 /usr/include/opencollada/COLLADABaseUtils/COLLADABUPlatform.h
+	<cassert>
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserStackMemoryManager.h
+	"GeneratedSaxParserPrerequisites.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserTypes.h
+	"GeneratedSaxParserPrerequisites.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserUtils.h
+	"COLLADABUURI.h"
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserTypes.h"
+	<utility>
+	<map>
+
+1449440307 /usr/include/opencollada/COLLADABaseUtils/COLLADABUURI.h
+	"COLLADABUPrerequisites.h"
+	"COLLADABUUtils.h"
+
+1449440306 /usr/include/opencollada/COLLADABaseUtils/COLLADABUPrerequisites.h
+	"COLLADABUPlatform.h"
+	<string>
+	<string.h>
+
+1449440307 /usr/include/opencollada/COLLADABaseUtils/COLLADABUUtils.h
+	"COLLADABUPrerequisites.h"
+	<sstream>
+	<fstream>
+	<map>
+	<vector>
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserIErrorHandler.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserParserError.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserParserError.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserTypes.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserCoutErrorHandler.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserIErrorHandler.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserIUnknownElementHandler.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserTypes.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserINamespaceHandler.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserTypes.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserNamespaceStack.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserTypes.h"
+	<stack>
+	<map>
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserParser.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserTypes.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserSaxParser.h
+	"GeneratedSaxParserPrerequisites.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserLibxmlSaxParser.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserSaxParser.h"
+	"GeneratedSaxParserIErrorHandler.h"
+	<libxml/parser.h>
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserExpatSaxParser.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserSaxParser.h"
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserParserTemplateBase.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserParser.h"
+	"GeneratedSaxParserStackMemoryManager.h"
+	"GeneratedSaxParserUtils.h"
+	"GeneratedSaxParserParserError.h"
+	<map>
+	<stack>
+	<string.h>
+
+1449440307 /usr/include/opencollada/GeneratedSaxParser/GeneratedSaxParserParserTemplate.h
+	"GeneratedSaxParserPrerequisites.h"
+	"GeneratedSaxParserParser.h"
+	"GeneratedSaxParserStackMemoryManager.h"
+	"GeneratedSaxParserUtils.h"
+	"GeneratedSaxParserParserTemplateBase.h"
+	"GeneratedSaxParserIUnknownElementHandler.h"
+	"GeneratedSaxParserINamespaceHandler.h"
+	"GeneratedSaxParserNamespaceStack.h"
+	<map>
+	<stack>
+	<string.h>
+
+1458466762 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/DaeExpatParser.cpp
+	"DaeExpatParser.h"
+
+1458466774 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/DaeExpatParser.h
+	"GeneratedSaxParser.h"
+
+1459939557 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/DaeLoader.cpp
+	"DaeLoader.h"
+	<iostream>
+	<collada-dom2.4/1.4/dom/domGeometry.h>
+	<collada-dom2.4/1.4/dom/domSource.h>
+
+1460026237 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/DaeLoader.h
+	"ModelLoader.h"
+	<collada-dom2.4/dae.h>
+	<collada-dom2.4/1.4/dom/domFloat_array.h>
+
+1458460683 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/DaeParser.h
+	<GeneratedSaxParser.h>
+
+1458464569 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/DaeParser.cpp
+	"DaeParser.h"
 

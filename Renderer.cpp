@@ -3,6 +3,8 @@
 #include "Math.h"
 #include <SDL2/SDL_image.h>
 #include <iomanip>
+#include <iostream>
+#include <string.h>
 
 Renderer::Renderer():
 modelMatrix(1.0f), projectionMatrix(1.0f), cameraMatrix(1.0f)
@@ -108,6 +110,7 @@ bool Renderer::initSDL()
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);//Need this for DebugCallbackARB to work...
                         context = SDL_GL_CreateContext(window);
                         if(context != NULL)
                         {
@@ -136,6 +139,9 @@ bool Renderer::initSDL()
 bool Renderer::initGL(std::vector<struct ShaderList> list)
 {
         bool retval = true;
+
+        glDebugMessageCallbackARB(DebugGLCB, NULL);
+
         glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
         std::cout << "Max texture units:" << maxTextureUnits << std::endl;
         glViewport(0, 0, mf_width, mf_height);
@@ -418,6 +424,7 @@ void Renderer::loadModel(ModelLoader &model)
         float *texCoords = model.getTexCoords();
         float *modelnormals = model.getNormals();
         std::pair<GLuint, int> modelData = loadPrimitiveData(vertices, model.vsize(), NULL, 0, colours, model.csize(), model.tsize(), texCoords, modelnormals, model.nsize());
+
         delete[] vertices;
         delete[] colours;
         delete[] texCoords;
@@ -575,4 +582,10 @@ Material Renderer::newMaterial(int index)
 const int Renderer::getMaxLights()
 {
         return MAX_LIGHTS;
+}
+
+void Renderer::DebugGLCB(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const char *message, const void *userParam)
+{
+        //std::cout << "GL Error:" << std::end;
+        printf("GL Error: %s\n", message);
 }
