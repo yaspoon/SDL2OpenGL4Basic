@@ -13,13 +13,12 @@
 #include "Timer.h"
 #include "ObjLoader.h"
 #include "ObjMaterial.h"
+#include "PMDL.h"
 #include "Math.h"
 
 
 #include "Box.h"
 #include "Renderer.h"
-
-#include "DaeLoader.h"
 
 const GLfloat PI = 3.14;
 enum vaoIds {TRIANGLES, NUM_VAOS};
@@ -153,8 +152,8 @@ int main(int argc, char *argv[])
                 ObjLoader texCube("resources/models/texCube.obj");
                 //renderer.loadModel(texCube);
 
-                DaeLoader collada("resources/models/cube.dae");
-                renderer.loadModel(collada);
+                PMDL test("resources/models/test.pmdl");
+                renderer.loadModel(test);
 
                 /*std::vector<ObjMaterial> mats = loader.getMaterials();
                 //mats.insert(mats.end(), sphere.getMaterials().begin(), sphere.getMaterials().end());

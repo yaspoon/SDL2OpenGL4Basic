@@ -1,7 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 /*We need this weirdo define for the core profile gl3 stuff to work*/
 #define GL_GLEXT_PROTOTYPES 1
 #include <SDL2/SDL_opengl.h>
