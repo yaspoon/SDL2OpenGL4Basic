@@ -33,11 +33,11 @@ PMDL::PMDL(std::string filepath)
 
                 vertices_len = header.vertices_len * sizeof(float);
                 vertices = new float[header.vertices_len];
-                file.read((char*)vertices, vertices_len * sizeof(float));
+                file.read((char*)vertices, vertices_len);
 
                 normals_len = header.normals_len * sizeof(float);
                 normals = new float[header.normals_len];
-                file.read((char*)normals, normals_len * sizeof(float));
+                file.read((char*)normals, normals_len);
 
                 colours_len = header.vertices_len * sizeof(float);
                 colours = new float[header.vertices_len];
@@ -48,7 +48,7 @@ PMDL::PMDL(std::string filepath)
                         colours[i] = header.colour[channel];
                 }
 
-                for(int i = 0; i < colours_len; i+=3)
+                for(int i = 0; i < header.vertices_len; i+=3)
                 {
                         std::cout << "[" << colours[i] << "," << colours[i+1] << "," << colours[i+2] << "]" << std::endl;
                 }
