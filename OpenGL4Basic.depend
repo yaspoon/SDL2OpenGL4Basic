@@ -878,12 +878,13 @@
 1458464569 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/DaeParser.cpp
 	"DaeParser.h"
 
-1477302602 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/PMDL.cpp
+1478078042 source:/home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/PMDL.cpp
 	"PMDL.h"
 	<iostream>
 	<fstream>
+	<string.h>
 
-1477302741 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/PMDL.h
+1478077924 /home/brock/code/cpp/Opengl4/SDL2OpenGL4Basic/PMDL.h
 	"ModelLoader.h"
 	<cstdint>
 
