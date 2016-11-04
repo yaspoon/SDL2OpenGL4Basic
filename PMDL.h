@@ -49,8 +49,10 @@ private:
         float *vertices;
         float *normals;
         float *colours;
+        float *uvcoords;
 
         size_t vertices_len;
+        size_t uvcoords_len;
         size_t normals_len;
         size_t colours_len;
 

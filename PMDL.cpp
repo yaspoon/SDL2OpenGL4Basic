@@ -33,10 +33,17 @@ PMDL::PMDL(std::string filepath)
 
                 vertices_len = header.vertices_len * sizeof(float);
                 vertices = new float[header.vertices_len];
+                file.seekg(header.vertices_offset);
                 file.read((char*)vertices, vertices_len);
+
+                uvcoords_len = header.uvcoords_len * sizeof(float);
+                uvcoords = new float[header.uvcoords_len];
+                file.seekg(header.uvcoords_offset);
+                file.read((char*)uvcoords, uvcoords_len);
 
                 normals_len = header.normals_len * sizeof(float);
                 normals = new float[header.normals_len];
+                file.seekg(header.normals_offset);
                 file.read((char*)normals, normals_len);
 
                 colours_len = header.vertices_len * sizeof(float);
@@ -48,9 +55,9 @@ PMDL::PMDL(std::string filepath)
                         colours[i] = header.colour[channel];
                 }
 
-                for(int i = 0; i < header.vertices_len; i+=3)
+                for(int i = 0; i < header.uvcoords_len; i+=2)
                 {
-                        std::cout << "[" << colours[i] << "," << colours[i+1] << "," << colours[i+2] << "]" << std::endl;
+                        std::cout << "[" << uvcoords[i] << "," << uvcoords[i+1] << "]" << std::endl;
                 }
 
                 file.close();
@@ -76,6 +83,11 @@ PMDL::~PMDL()
         if(colours)
         {
                 delete[] colours;
+        }
+
+        if(uvcoords)
+        {
+                delete[] uvcoords;
         }
 }
 
@@ -107,12 +119,15 @@ size_t PMDL::nsize()
 
 float *PMDL::getTexCoords()
 {
-        return NULL;
+        int buffer_len = uvcoords_len / sizeof(float);
+        float *retval = new float[buffer_len];
+        memcpy(retval, uvcoords, uvcoords_len);
+        return retval;
 }
 
 size_t PMDL::tsize()
 {
-        return 0;
+        return uvcoords_len;
 }
 
 float *PMDL::getColours()
