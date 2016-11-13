@@ -3,6 +3,8 @@
 
 #include "ModelLoader.h"
 #include <cstdint>
+#include <string>
+#include <vector>
 
 struct __attribute__((packed)) PMDL_header
 {
@@ -18,8 +20,23 @@ struct __attribute__((packed)) PMDL_header
     int32_t uvcoords_len;
     int32_t normals_offset;
     int32_t normals_len;
+    int32_t textures_offset;
+    int32_t textures_len;
+    int32_t materials_offset;
+    int32_t materials_len;
     float colour[4];
 };
+
+/*struct __attribute__((packed)) PMDL_material
+{
+	float alpha;
+	float diffuse_colour[3];
+	float specular_colour[3];
+	float specular_intensity;
+	float specular_hardness;
+	float roughness;
+	int texture_count;
+}*/
 
 struct PMDL_data
 {
@@ -28,6 +45,20 @@ struct PMDL_data
     float *uvcoords;
     float *normals;
 };
+class PMDL_material
+{
+	public:
+		PMDL_material(float alpha, float diffuse_colour[3], float specular_colour[3], float specular_intensity, float specular_hardness, float roughness, std::vector<std::string> textures);
+
+	private:
+	float alpha;
+	float diffuse_colour[3];
+	float specular_colour[3];
+	float specular_intensity;
+	float specular_hardness;
+	float roughness;
+	std::vector<std::string> textures;
+}
 
 class PMDL: public ModelLoader
 {
@@ -50,6 +81,7 @@ private:
         float *normals;
         float *colours;
         float *uvcoords;
+	std::vector<PMDL_materials> materials
 
         size_t vertices_len;
         size_t uvcoords_len;
