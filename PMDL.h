@@ -2,6 +2,7 @@
 #define PMDL_H
 
 #include "ModelLoader.h"
+#include "PMDLMaterial.h"
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -45,10 +46,11 @@ struct PMDL_data
     float *uvcoords;
     float *normals;
 };
-class PMDL_material
+/*class PMDL_material
 {
 	public:
-		PMDL_material(float alpha, float diffuse_colour[3], float specular_colour[3], float specular_intensity, float specular_hardness, float roughness, std::vector<std::string> textures);
+		PMDL_material(float alpha, float diffuse_colour[3], float specular_colour[3], float specular_intensity, float specular_hardness, float roughness, 
+				std::vector<std::string> textures);
 
 	private:
 	float alpha;
@@ -58,7 +60,7 @@ class PMDL_material
 	float specular_hardness;
 	float roughness;
 	std::vector<std::string> textures;
-}
+};*/
 
 class PMDL: public ModelLoader
 {
@@ -75,13 +77,13 @@ public:
         float *getColours();
         size_t csize();
 
-        std::vector<ObjMaterial> getMaterials();
+        std::vector<ModelMaterial*> getMaterials();
 private:
         float *vertices;
         float *normals;
         float *colours;
         float *uvcoords;
-	std::vector<PMDL_materials> materials
+	std::vector<PMDLMaterial*> materials;
 
         size_t vertices_len;
         size_t uvcoords_len;
