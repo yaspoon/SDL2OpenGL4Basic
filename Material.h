@@ -2,7 +2,7 @@
 #define MATERIAL_H
 
 #include "UBOUniform.h"
-#include "ObjMaterial.h"
+#include "ModelMaterial.h"
 #include "Vec4.h"
 
 #include <SDL2/SDL_opengl.h>
@@ -19,7 +19,7 @@ private:
         //GLuint matUboStride;
         std::map<std::string, UBOUniform > uniforms;
         Vec4<GLfloat> colour;
-        GLboolean hasTexture;
+        GLboolean hasTextures;
         GLboolean enabled;
 
 public:
@@ -37,7 +37,7 @@ public:
         void setSpecular(Vec4<GLfloat> specular);
         void setShininess(GLfloat shininess);
         void setColour(Vec4<GLfloat> colour);
-        void setHasTexture(GLboolean hasTexture);
+        void setHasTextures(GLboolean hasTextures);
         void setEnabled(GLboolean enabled);
 
         Vec4<GLfloat> getEmission();
@@ -51,7 +51,7 @@ public:
         size_t getDataSize();
         int getNumUniforms();
 
-        void loadObjMaterial(ObjMaterial newMat);
+        void loadModelMaterial(ModelMaterial *newMat);
 };
 
 #endif // MATERIAL_H
