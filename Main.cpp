@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
                 ObjLoader texCube("resources/models/texCube.obj");
                 //renderer.loadModel(texCube);
 
-                PMDL test("resources/models/test.pmdl");
+                PMDL test("resources/models/square.pmdl");
                 renderer.loadModel(test);
 
                 /*std::vector<ObjMaterial> mats = loader.getMaterials();
