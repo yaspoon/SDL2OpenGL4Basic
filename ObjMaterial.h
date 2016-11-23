@@ -4,8 +4,9 @@
 #include <string>
 #include <vector>
 #include "Vec4.h"
+#include "ModelMaterial.h"
 
-class ObjMaterial
+class ObjMaterial : public ModelMaterial
 {
 private:
         std::string name;
@@ -15,7 +16,7 @@ private:
         Vec4<float> ka;
         Vec4<float> kd;
         Vec4<float> ks;
-        std::string map_kd;
+	std::vector<std::string> map_kds;
         bool texture;
 
 public:
@@ -23,13 +24,13 @@ public:
         ObjMaterial(std::string filepath);
         ObjMaterial(const ObjMaterial &copy);
         ObjMaterial operator=(const ObjMaterial& copy);
-        std::string getMapkd();
+	std::vector<std::string> getTextures();
         Vec4<float> getAmbient();
         Vec4<float> getDiffuse();
         Vec4<float> getSpecular();
         float getSpecularExponent();
         float getDisolved();
         int getIllumination();
-        bool hasTexture();
+        bool hasTextures();
 };
 #endif // OBJ_MATERIAL_H
