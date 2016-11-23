@@ -75,7 +75,7 @@ ObjLoader::ObjLoader(std::string filepath)
                {
                         std::string materialFile;
                         ss >> materialFile;
-                        ObjMaterial mat(path + materialFile);
+                        ObjMaterial *mat = new ObjMaterial(path + materialFile);
                         materials.push_back(mat);
                }
        }
@@ -318,7 +318,9 @@ size_t ObjLoader::csize()
         return sizeof(float) * faces.size() * 3 * 3;
 }
 
-std::vector<ObjMaterial> ObjLoader::getMaterials()
+std::vector<ModelMaterial*> ObjLoader::getMaterials()
 {
-        return materials;
+	std::vector<ModelMaterial*> mdlMats(materials.begin(), materials.end());
+        return mdlMats;
 }
+
