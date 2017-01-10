@@ -80,15 +80,22 @@ public:
         std::vector<ModelMaterial*> getMaterials();
 private:
         float *vertices;
+	int *faces;
         float *normals;
         float *colours;
         float *uvcoords;
 	std::vector<PMDLMaterial*> materials;
 
         size_t vertices_len;
+	size_t vertices_count;
+	size_t faces_len;
+	size_t faces_count;
         size_t uvcoords_len;
+	size_t uvcoords_count;
         size_t normals_len;
+	size_t normals_count;
         size_t colours_len;
+	size_t colours_count;
 
         const int PMDL_HEADER_LEN = sizeof(struct PMDL_header);
 };

@@ -11,10 +11,14 @@ PMDL::PMDL(std::string filepath)
         vertices = NULL;
         normals = NULL;
         colours = NULL;
+	faces = NULL;
 
         vertices_len = 0;
+	vertices_count = 0;
         normals_len = 0;
         colours_len = 0;
+	faces_len = 0;
+	faces_count = 0;
 
         std::ifstream file;
         file.open(filepath.c_str(), std::ios::in | std::ios::binary);
@@ -36,30 +40,47 @@ PMDL::PMDL(std::string filepath)
                                 "\n}" << std::endl;
 
                 vertices_len = header.vertices_len * sizeof(float);
+		vertices_count = header.vertices_len;
                 vertices = new float[header.vertices_len];
                 file.seekg(header.vertices_offset);
                 file.read((char*)vertices, vertices_len);
 
-		std::cout << "Vertex count:" << header.vertices_len / sizeof(float) << std::endl;
-		for(int i = 0; i < header.vertices_len / sizeof(float); i++)
+		std::cout << "Vertex count:" << header.vertices_len << std::endl;
+		for(int i = 0; i < header.vertices_len / 3; i++)
 		{
-			std::cout << "vertex[" << vertices[i*3] << "," << vertices[i*3+1] << "," << vertices[i*3+1] << "]" << std::endl;
+			std::cout << "vertex[" << vertices[i*3] << "," << vertices[i*3+1] << "," << vertices[i*3+2] << "]" << std::endl;
+		}
+
+		faces_len = header.faces_len * sizeof(int);
+		faces_count = header.faces_len;
+		faces = new int[header.faces_len];
+		file.seekg(header.faces_offset);
+		file.read((char*)faces, faces_len);
+
+		std::cout << "Faces count:" << header.faces_len << std::endl;
+		for(int i = 0; i < header.faces_len; i+=3)
+		{
+			std::cout << "face[" << faces[i] << "," << faces[i+1] << "," << faces[i+2] << "]" << std::endl;
 		}
 
                 uvcoords_len = header.uvcoords_len * sizeof(float);
+		uvcoords_count = header.uvcoords_len;
                 uvcoords = new float[header.uvcoords_len];
                 file.seekg(header.uvcoords_offset);
                 file.read((char*)uvcoords, uvcoords_len);
 
                 normals_len = header.normals_len * sizeof(float);
+		normals_count = header.normals_len;
+		std::cout << "normals_count:" << normals_count << std::endl;
                 normals = new float[header.normals_len];
                 file.seekg(header.normals_offset);
                 file.read((char*)normals, normals_len);
 
-                colours_len = header.vertices_len * sizeof(float);
-                colours = new float[header.vertices_len];
+                colours_len = faces_count * sizeof(float);
+		colours_count = faces_count;
+                colours = new float[faces_count];
 
-                for(int i = 0; i < header.vertices_len; i++)
+                for(int i = 0; i < faces_count; i++)
                 {
                         int channel = i % 3;
                         colours[i] = header.colour[channel];
@@ -172,47 +193,80 @@ PMDL::~PMDL()
 
 float *PMDL::getVertices()
 {
-        int buffer_len = vertices_len / sizeof(float); /*so gross*/
+        int buffer_len = faces_count * 3;
         float *retval = new float[buffer_len];
-        memcpy(retval, vertices, vertices_len);
+	int index = 0;
+
+	for(int i = 0; i < faces_count; i++)
+	{
+		int vertexIndex = faces[i];
+		retval[index] = vertices[vertexIndex * 3];
+		retval[index + 1] = vertices[(vertexIndex * 3) + 1];
+		retval[index + 2] = vertices[(vertexIndex * 3) + 2];
+		index += 3;
+	}
+
+	for(int i = 0; i < faces_count; i++)
+	{
+		std::cout << "vertex:[" << retval[i*3] << "," << retval[i*3+1] << "," << retval[i*3+2] << "]" << std::endl;
+	}
+
         return retval;
 }
 
 size_t PMDL::vsize()
 {
-        return vertices_len;
+        return faces_count * 3 * sizeof(float);
 }
 
 float *PMDL::getNormals()
 {
-        int buffer_len = normals_len / sizeof(float);
+	int buffer_len = faces_count * 3;
         float *retval = new float[buffer_len];
-        memcpy(retval, normals, normals_len);
+
+	for(int i = 0; i < faces_count; i++)
+	{
+		retval[i * 3] = normals[faces[i]];
+		retval[i * 3 + 1] = normals[faces[i] + 1];
+		retval[i * 3 + 2] = normals[faces[i] + 2];
+	}
+
         return retval;
 }
 
 size_t PMDL::nsize()
 {
-        return normals_len;
+        return faces_count * 3 * sizeof(float);
 }
 
 float *PMDL::getTexCoords()
 {
-        int buffer_len = uvcoords_len / sizeof(float);
+        int buffer_len = uvcoords_count * 2;
         float *retval = new float[buffer_len];
-        memcpy(retval, uvcoords, uvcoords_len);
+
+	for(int i = 0; i < buffer_len; i++)
+	{
+		retval[i] = uvcoords[i];
+		retval[i] = uvcoords[i];
+	}
+
+	for(int i = 0; i < faces_count; i++)
+	{
+		std::cout << "uv[" << retval[i*2] * 1024.0f << "," << retval[i*2 + 1] * 1024.0f << "]" << std::endl;
+	}
+
         return retval;
 }
 
 size_t PMDL::tsize()
 {
-        return uvcoords_len;
+        return faces_count * 2 * sizeof(float);
 }
 
 float *PMDL::getColours()
 {
-        int buffer_len = colours_len / sizeof(float);
-        float * retval = new float[buffer_len];
+        int buffer_len = colours_count;
+        float *retval = new float[buffer_len];
         memcpy(retval, colours, colours_len);
         return retval;
 }
