@@ -13,13 +13,12 @@
 #include "Timer.h"
 #include "ObjLoader.h"
 #include "ObjMaterial.h"
+#include "PMDL.h"
 #include "Math.h"
 
 
 #include "Box.h"
 #include "Renderer.h"
-
-#include "DaeLoader.h"
 
 const GLfloat PI = 3.14;
 enum vaoIds {TRIANGLES, NUM_VAOS};
@@ -144,7 +143,7 @@ int main(int argc, char *argv[])
 
                 ObjLoader plane("resources/models/plane.obj");
                 //renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
-                renderer.loadModel(plane);
+                //renderer.loadModel(plane);
 
                 ObjLoader monkey("resources/models/monkey.obj");
                 //renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
@@ -153,8 +152,8 @@ int main(int argc, char *argv[])
                 ObjLoader texCube("resources/models/texCube.obj");
                 //renderer.loadModel(texCube);
 
-                DaeLoader collada("resources/models/cube.dae");
-                renderer.loadModel(collada);
+                PMDL test("resources/models/square.pmdl");
+                renderer.loadModel(test);
 
                 /*std::vector<ObjMaterial> mats = loader.getMaterials();
                 //mats.insert(mats.end(), sphere.getMaterials().begin(), sphere.getMaterials().end());

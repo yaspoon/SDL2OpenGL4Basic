@@ -2,7 +2,7 @@
 #define MODELLOADER_H
 
 #include <stddef.h>
-#include "ObjMaterial.h"
+#include "ModelMaterial.h"
 class ModelLoader
 {
         public:
@@ -15,7 +15,7 @@ class ModelLoader
                 virtual size_t tsize() = 0;
                 virtual float *getColours() = 0;
                 virtual size_t csize() = 0;
-                virtual std::vector<ObjMaterial> getMaterials() = 0;
+                virtual std::vector<ModelMaterial*> getMaterials() = 0;
                 //virtual int *getIndices();
                 //virtual size_t isize();
 

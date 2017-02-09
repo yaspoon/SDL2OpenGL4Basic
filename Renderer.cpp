@@ -429,21 +429,25 @@ void Renderer::loadModel(ModelLoader &model)
         delete[] colours;
         delete[] texCoords;
         delete[] modelnormals;
-        std::vector<ObjMaterial> mats = model.getMaterials();
+        std::vector<ModelMaterial*> mats = model.getMaterials();
         Renderable renderable(modelData.first, modelData.second);
 
-        for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
+        for(std::vector<ModelMaterial*>::iterator it = mats.begin(); it != mats.end(); ++it)
         {
-                ObjMaterial objMat = *it;
+                ModelMaterial *modelMat = *it;
                 //Material mat = newMaterial(materialIndex);
                 Material mat(materialIndex, matUboStride, numMatUniforms, materialUniforms, matUniformIndices,
                         matUniformSizes, matUniformOffsets, matUniformType, matUboOffset);
                 materialIndex++;
-                mat.loadObjMaterial(objMat);
-                if(objMat.hasTexture())
+                mat.loadModelMaterial(modelMat);
+                if(modelMat->hasTextures())
                 {
-                    GLuint texture = loadTexture(objMat.getMapkd().c_str());
-                    renderable.addTexture(texture);
+			std::vector<std::string> textures = modelMat->getTextures();
+			for(std::vector<std::string>::iterator it = textures.begin(); it != textures.end(); ++it)
+			{	std::string texturePath = *it;
+				GLuint texture = loadTexture(texturePath.c_str());
+				renderable.addTexture(texture);
+			}
                 }
                 else
                 {

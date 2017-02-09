@@ -9,7 +9,7 @@ Material::Material(int index, size_t bufSize, int numElements, const char *unifo
         this->numUniforms = numElements;
         this->materialData = new char[this->dataSize];
         memset(this->materialData, 0, dataSize);
-        this->hasTexture = false;
+        this->hasTextures = false;
         this->enabled = false;
 
         GLint *m_offsets = new int[numElements];
@@ -36,7 +36,7 @@ Material::Material(const Material &copy)
         this->dataSize = copy.dataSize;
         this->numUniforms = copy.numUniforms;
         this->materialData = new char[dataSize];
-        this->hasTexture = false;
+        this->hasTextures = false;
         this->enabled = false;
         memset(materialData, 0, dataSize);
         memcpy(materialData, copy.materialData, dataSize);
@@ -215,14 +215,14 @@ float Material::getShininess()
         return shinness;
 }
 
-void Material::loadObjMaterial(ObjMaterial newMat)
+void Material::loadModelMaterial(ModelMaterial *newMat)
 {
-        setAmbient(newMat.getAmbient());
-        setDiffuse(newMat.getDiffuse());
-        setSpecular(newMat.getSpecular());
+        setAmbient(newMat->getAmbient());
+        setDiffuse(newMat->getDiffuse());
+        setSpecular(newMat->getSpecular());
         setShininess(16.0f);
         setEmission(Vec4<float>(1.0f, 0.0f, 0.0f, 0.0f));
-        if(!newMat.hasTexture())
+        if(!newMat->hasTextures())
         {
                 setColour(Vec4<GLfloat>(1.0f, 0.0f, 0.0f, 1.0f));
         }
@@ -233,7 +233,7 @@ void Material::setColour(Vec4<GLfloat> colour)
         this->colour = colour;
 }
 
-void Material::setHasTexture(GLboolean hasTexture)
+void Material::setHasTextures(GLboolean hasTextures)
 {
-        this->hasTexture = hasTexture;
+        this->hasTextures = hasTextures;
 }

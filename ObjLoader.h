@@ -28,9 +28,11 @@ class ObjLoader: public ModelLoader
                 float *getColours();
                 size_t csize();
 
-                std::vector<ObjMaterial> getMaterials();
+		bool hasTextures();
 
-                virtual ~ObjLoader();
+                std::vector<ModelMaterial*> getMaterials();
+
+                ~ObjLoader();
         protected:
         private:
                 std::vector<Vertex> vertices;
@@ -42,7 +44,7 @@ class ObjLoader: public ModelLoader
                 std::vector<std::pair<int, bool> > loadFace(std::string &ss);
                 std::pair<float, float> loadTexCoords(std::stringstream &ss);
 
-                std::vector<ObjMaterial> materials;
+                std::vector<ObjMaterial*> materials;
 };
 
 #endif // OBJLOADER_H
