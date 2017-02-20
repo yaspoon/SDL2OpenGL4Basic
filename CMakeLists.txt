@@ -1,12 +1,27 @@
 cmake_minimum_required (VERSION 2.6)
 project (OpenGLBasic)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 set(CMAKE_BUILD_TYPE debug)
+find_package(SDL2)
+find_package(SDL2_image)
+find_package(OpenGL)
+if(OPENGL_FOUND)
+	if(SDL2_FOUND)
+		if(SDL2_IMAGE_FOUND)
+			#include_directories("/usr/include/SDL2/")
+			set(INCS ${INCS} ${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+			include_directories(${INCS})
+			message(STATUS "${INCS}")
+			set(LIBS ${LIBS} ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+			message(STATUS "${LIBS}")
 
-include_directories("/usr/include/SDL2/")
+			add_executable(OpenGLBasic Box.cpp Face.cpp Main.cpp Math.cpp Light.cpp Timer.cpp Camera.cpp EAngle.cpp Shader.cpp Vertex.cpp Material.cpp Renderer.cpp ObjLoader.cpp ObjMaterial.cpp Renderable.cpp UBOUniform.cpp PMDL.cpp PMDLMaterial.cpp)
 
-add_executable(OpenGLBasic Box.cpp Face.cpp Main.cpp Math.cpp Light.cpp Timer.cpp Camera.cpp EAngle.cpp Shader.cpp Vertex.cpp Material.cpp Renderer.cpp ObjLoader.cpp ObjMaterial.cpp Renderable.cpp UBOUniform.cpp PMDL.cpp PMDLMaterial.cpp)
-
-#target_link_libraries (OpenGLBasic GL SDL2 SDL2_image vulkan)
-target_link_libraries (OpenGLBasic GL SDL2 SDL2_image)
+			#target_link_libraries (OpenGLBasic GL SDL2 SDL2_image vulkan)
+			#target_link_libraries (OpenGLBasic GL SDL2 SDL2_image)
+			target_link_libraries (OpenGLBasic ${LIBS})
+		endif(SDL2_IMAGE_FOUND)
+	endif(SDL2_FOUND)
+endif(OPENGL_FOUND)
 
