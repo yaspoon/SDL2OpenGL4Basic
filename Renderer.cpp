@@ -147,6 +147,7 @@ bool Renderer::initGL(std::vector<struct ShaderList> list)
         glViewport(0, 0, mf_width, mf_height);
 
         //glDepthRange(mf_near, mf_far); /*Tell opengl where the near and far planes sit*/
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
