@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
         SDL_bool relativeMouse = SDL_FALSE;
         Timer GameTimer; //Keep track of time between game frames
         Timer FrameTimer; //Keep track of time between actual drawn frames
-        Camera cam;
+        Camera cam(0.0f, 0.0f, -85.0f);
 
         Mat4<float> transMatrix(30.0f);
         transMatrix[3][2] = 0.0f;
