@@ -21,6 +21,7 @@ private:
 
 public:
         Camera();
+        Camera(float x, float y, float z);
         void update(float dt);
         Mat4<float> cameraMatrix();
 
