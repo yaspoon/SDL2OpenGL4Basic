@@ -505,7 +505,7 @@ std::pair<GLuint, int> Renderer::loadPrimitiveData(float *vertices, size_t vsize
                 total += vsize;
         }
 
-        if(colours)
+        if(colours && csize > 0)
         {
                 glBufferSubData(GL_ARRAY_BUFFER, total, csize, colours);
                 vColour = glGetAttribLocation(program, "vColour");
