@@ -18,6 +18,11 @@ Camera::Camera()
 
 }
 
+Camera::Camera(float x, float y, float z)
+	:position(x, y, z, 1.0f), up(0.0f, 1.0f, 0.0f, 0.0f)
+{
+}
+
 void Camera::update(float dt)
 {
         direction.normalise();
@@ -29,6 +34,7 @@ void Camera::update(float dt)
         Vec4<float> velocity = (tmpDir * movedir[z]) + (right * movedir[x]);
 
         position = position + velocity * dt;
+	//std::cout << "Camera position:" << "[" << position[x] << "," << position[y] << "," << position[z] << "]" << std::endl;
 }
 
 Mat4<float> Camera::cameraMatrix()
