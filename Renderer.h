@@ -25,11 +25,16 @@ private:
         GLint vPosition;
         GLint vColour;
         GLint vNormal;
+	GLint vTexCoord;
 
         //GLuint vertArrays[NUM_VAOS];
         //GLuint buffers[NUM_BUFFERS];
         //GLuint ibo[NUM_INDEXS];
         //GLuint textures[NUM_TEXTURES];
+	GLuint normalTransformFeedbackBuffer;
+	GLuint normalTransformFeedback_id;
+	GLuint normalFragFeedbackTex;
+	GLuint normalFragFeedbackBuf;
 
         float mf_width;
         float mf_height;
@@ -49,7 +54,7 @@ private:
 
         GLint maxTextureUnits;
 
-        const static int numUniforms = 17;
+        const static int numUniforms = 18;
         const char *shaderUniforms[numUniforms] = {
                 "lights[0].isEnabled",
                 "lights[0].enableDiffuse",
@@ -57,6 +62,7 @@ private:
                 "lights[0].isSpotlight",
                 "lights[0].isPointlight",
                 "lights[0].specularMode",
+		"lights[0].colour",
                 "lights[0].ambientLight",
                 "lights[0].diffuseLight",
                 "lights[0].specularLight",
@@ -124,7 +130,7 @@ private:
 
         Mat4<float> frustumProjection(float left, float right, float top, float bottom, float near, float far);
         Mat4<float> perspectiveProjection(float FOV, float aspectRatio, float near, float far);
-        std::pair<GLuint, int> loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount, size_t tsize, float *texCoords, float *normals, size_t nsize);
+        std::pair<GLuint, int> loadPrimitiveData(float *vertices, size_t vcount, unsigned short *indices, size_t icount, float *colour, size_t ccount, size_t tsize, float *texCoords, float *normals, size_t nsize, int triangleCount);
 
         std::string title;
 
@@ -173,5 +179,9 @@ public:
 
         const int getMaxLights();
         static void DebugGLCB(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const char *message, const void *userParam);
+	static std::string DebugGLGetSourceString(GLenum source);
+	static std::string DebugGLGetErrorTypeString(GLenum type);
+	static std::string DebugGLGetSeverityString(GLenum severity);
+	void DebugPushGroupRenderer(std::string groupName, GLuint id);
 };
 #endif

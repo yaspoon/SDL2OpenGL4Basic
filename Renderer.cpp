@@ -139,15 +139,52 @@ bool Renderer::initSDL()
 bool Renderer::initGL(std::vector<struct ShaderList> list)
 {
         bool retval = true;
+	//const GLenum fragmentBuffers[] = {GL_COLOR_ATTACHMENT0};
 
-        glDebugMessageCallbackARB(DebugGLCB, NULL);
+        //glDebugMessageCallbackARB(DebugGLCB, NULL);
+	//glEnable(GL_DEBUG_OUTPUT);
+	//glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+	/* {Start}
+	 * Setup vertex shader transform feedback
+	 * For the normal output
+	 */
+	//glGenTransformFeedbacks(1, &normalTransformFeedback_id);
+	//glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, normalTransformFeedback_id);
+
+	//glGenBuffers(1, &normalTransformFeedbackBuffer);
+	//glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, normalTransformFeedbackBuffer);
+
+	//float *zeroBuffer = new float[3896];
+	//memset(zeroBuffer, 0, 3896 * sizeof(float));
+	//glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, 3896 * sizeof(float), zeroBuffer, GL_DYNAMIC_COPY);
+	//glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, normalTransformFeedbackBuffer);
+	/* {End}
+	 * vertex shader transform feedback
+	 */
+
+	/* {start}
+	 * Setup an image buffer to output fragment
+	 * shader results
+	 */
+	//glGenBuffers(1, &normalFragFeedbackBuf);
+	//glBindBuffer(GL_TEXTURE_BUFFER, normalFragFeedbackBuf);
+	//glBufferData(GL_TEXTURE_BUFFER, 3896 * sizeof(float), zeroBuffer, GL_DYNAMIC_COPY);
+
+	//glGenTextures(1, &normalFragFeedbackTex);
+	//glBindTexture(GL_TEXTURE_BUFFER, normalFragFeedbackTex);
+
+	//glTexBuffer(GL_TEXTURE_BUFFER, GL_R32F, normalFragFeedbackBuf);
+	//glBindImageTexture(0, normalFragFeedbackTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+	/*{end}*/
 
         glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
         std::cout << "Max texture units:" << maxTextureUnits << std::endl;
         glViewport(0, 0, mf_width, mf_height);
 
         //glDepthRange(mf_near, mf_far); /*Tell opengl where the near and far planes sit*/
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
@@ -159,7 +196,10 @@ bool Renderer::initGL(std::vector<struct ShaderList> list)
 
         if(programPair.second)
         {
+		//GLchar *programVarryings[] = {"normal"};
                 program = programPair.first;
+		//glTransformFeedbackVaryings(program, 1, programVarryings, GL_INTERLEAVED_ATTRIBS); 
+		glLinkProgram(program); //Must relink after adding feedback
                 glUseProgram(program);
 
                 glUniformMatrix4fv(projMatLocation, 1, GL_FALSE, &projectionMatrix);
@@ -364,27 +404,22 @@ void Renderer::updateMaterial(Material material)
 
 void Renderer::draw()
 {
-        //glActiveTexture(GL_TEXTURE0);
-        //glBindTexture(GL_TEXTURE_2D, textures[0]);
-        //glUniform1i(textureLocation, 0);
-
-        //glActiveTexture(GL_TEXTURE1);
-        //glBindTexture(GL_TEXTURE_2D, textures[1]);
-        //glUniform1i(normalMapLocation, 1);
-
-        glUniformMatrix4fv(modelMatLocation, 1, false, &modelMatrix);
-
         glUniformMatrix4fv(cameraMatLocation, 1, false, &cameraMatrix);
 
-        glUniform3f(camPositionLocation, camPosition[x], camPosition[y], camPosition[z]);
+        glUniform4f(camPositionLocation, camPosition[x], camPosition[y], camPosition[z], camPosition[w]);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for(std::vector<Renderable>::iterator it = renderables.begin(); it != renderables.end(); ++it)
         {
                 Renderable model = *it;
+		Mat4<float> currentModelMatrix = model.getModelMatrix();
+		glUniformMatrix4fv(modelMatLocation, 1, false, &currentModelMatrix);
+
                 GLuint vao = model.getVao();
                 int triangleCount = model.getTriangleCount();
+		//float *tempBuffer = new float[triangleCount * 3 * 4];
+		//float *transformedNormalBuffer = new float[triangleCount * 3 * 4];
                 std::vector<Material> mats = model.getMaterials();
                 for(std::vector<Material>::iterator it = mats.begin(); it != mats.end(); ++it)
                 {
@@ -404,8 +439,24 @@ void Renderer::draw()
                 }
                 glBindVertexArray(vao);
                 //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[INDEXS]);
-
+		
+		//glBeginTransformFeedback(GL_TRIANGLES);
                 glDrawArrays(GL_TRIANGLES, 0, triangleCount);
+		//glGetBufferSubData(GL_TRANSFORM_FEEDBACK_BUFFER, 0, triangleCount * 3 * 4 * sizeof(float), tempBuffer);
+		//glEndTransformFeedback();
+
+		/*for(int i = 0; i < (triangleCount * 3 * 4); i++)
+		{
+			std::cout << "Normal:[" << i << "]=" << tempBuffer[i] << std::endl;
+		}*/
+
+		//memset(tempBuffer, 0, triangleCount * 3 * 4 * sizeof(float));
+
+		/*glGetBufferSubData(GL_TEXTURE_BUFFER, 0, triangleCount * 3 * 4 * sizeof(float), transformedNormalBuffer);
+		for(int i = 0; i < (triangleCount * 3 * 4); i++)
+		{
+			std::cout << "Transformed Normal:[" << i << "]=" << transformedNormalBuffer[i] << std::endl;
+		}*/
 
                 for(std::vector<Material>::iterator it = mats.begin(); it != mats.end(); ++it)
                 {
@@ -420,57 +471,69 @@ void Renderer::draw()
 
 void Renderer::loadModel(ModelLoader &model)
 {
-        float *vertices = model.getVertices();
-        float *colours = model.getColours();
-        float *texCoords = model.getTexCoords();
-        float *modelnormals = model.getNormals();
-        std::pair<GLuint, int> modelData = loadPrimitiveData(vertices, model.vsize(), NULL, 0, colours, model.csize(), model.tsize(), texCoords, modelnormals, model.nsize());
+	DebugPushGroupRenderer("loadModel", 0);
+	{
+		float *vertices = model.getVertices();
+		float *colours = model.getColours();
+		float *texCoords = model.getTexCoords();
+		float *modelnormals = model.getNormals();
+		std::pair<GLuint, int> modelData = loadPrimitiveData(vertices, model.vsize(), NULL, 0, colours, model.csize(), model.tsize(), texCoords, modelnormals, model.nsize(), model.getTriangleCount());
+		std::cout << "Loaded primitive data" << std::endl;
 
-        delete[] vertices;
-        delete[] colours;
-        delete[] texCoords;
-        delete[] modelnormals;
-        std::vector<ModelMaterial*> mats = model.getMaterials();
-        Renderable renderable(modelData.first, modelData.second);
+		delete[] vertices;
+		delete[] colours;
+		delete[] texCoords;
+		delete[] modelnormals;
+		std::vector<ModelMaterial*> mats = model.getMaterials();
+		Renderable renderable(modelData.first, modelData.second);
 
-        for(std::vector<ModelMaterial*>::iterator it = mats.begin(); it != mats.end(); ++it)
-        {
-                ModelMaterial *modelMat = *it;
-                //Material mat = newMaterial(materialIndex);
-                Material mat(materialIndex, matUboStride, numMatUniforms, materialUniforms, matUniformIndices,
-                        matUniformSizes, matUniformOffsets, matUniformType, matUboOffset);
-                materialIndex++;
-                mat.loadModelMaterial(modelMat);
-                if(modelMat->hasTextures())
-                {
-			std::vector<std::string> textures = modelMat->getTextures();
-			for(std::vector<std::string>::iterator it = textures.begin(); it != textures.end(); ++it)
-			{	std::string texturePath = *it;
-				GLuint texture = loadTexture(texturePath.c_str());
-				renderable.addTexture(texture);
+		Mat4<float> renderablesModelMatrix = model.getModelMatrix();
+		renderable.setModelMatrix(renderablesModelMatrix);
+
+		for(std::vector<ModelMaterial*>::iterator it = mats.begin(); it != mats.end(); ++it)
+		{
+			ModelMaterial *modelMat = *it;
+			//Material mat = newMaterial(materialIndex);
+			Material mat(materialIndex, matUboStride, numMatUniforms, materialUniforms, matUniformIndices,
+				matUniformSizes, matUniformOffsets, matUniformType, matUboOffset);
+			materialIndex++;
+			mat.loadModelMaterial(modelMat);
+			if(modelMat->hasTextures())
+			{
+				std::vector<std::string> textures = modelMat->getTextures();
+				for(std::vector<std::string>::iterator it = textures.begin(); it != textures.end(); ++it)
+				{	std::string texturePath = *it;
+					GLuint texture = loadTexture(texturePath.c_str());
+					renderable.addTexture(texture);
+				}
 			}
-                }
-                else
-                {
-                    mat.setColour(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
-                }
-                updateMaterial(mat);
-                renderable.addMaterial(mat);
-        }
+			else
+			{
+			    mat.setColour(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
+			}
+			updateMaterial(mat);
+			renderable.addMaterial(mat);
+		}
 
-        renderables.push_back(renderable);
+		renderables.push_back(renderable);
+	}
+	glPopDebugGroup();
 }
 
-std::pair<GLuint, int> Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize, size_t tsize, float *texCoords, float *normals, size_t nsize)
+std::pair<GLuint, int> Renderer::loadPrimitiveData(float *vertices, size_t vsize, unsigned short *indices, size_t icount, float *colours, size_t csize, size_t tsize, float *texCoords, float *normals, size_t nsize, int triangleCount)
 {
+
+	std::cout << "<";
+	for(int i = 0; i < (nsize / sizeof(float)); i++) {
+		std::cout << normals[i] << ",";
+	}
+	std::cout << ">" << std::endl;
 
         GLuint vao;
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
 
-        //vertexArrays.push_back(vao);
-        int triangleCount = vsize / sizeof(*vertices) / 3;
-        //triangleCounts.push_back(triangleCount);
+	//int triangleCount = vsize / sizeof(*vertices) / 4;
 
         size_t bufSize = vsize + csize + tsize + nsize;
 
@@ -499,10 +562,13 @@ std::pair<GLuint, int> Renderer::loadPrimitiveData(float *vertices, size_t vsize
                 if(vPosition == -1)
                 {
                         std::cout << "Couldn't find vPosition in shader" << std::endl;
-                }
-                glVertexAttribPointer(vPosition, 3, GL_FLOAT,  GL_FALSE, 0, (GLvoid*)total);
-                glEnableVertexAttribArray(vPosition);
-                total += vsize;
+		}
+		else
+		{
+			glVertexAttribPointer(vPosition, 4, GL_FLOAT,  GL_FALSE, 0, (GLvoid*)total);
+			glEnableVertexAttribArray(vPosition);
+			total += vsize;
+		}
         }
 
         if(colours && csize > 0)
@@ -512,38 +578,52 @@ std::pair<GLuint, int> Renderer::loadPrimitiveData(float *vertices, size_t vsize
                 if(vColour == -1)
                 {
                         std::cout << "Couldn't find Colour in shader" << std::endl;
-                }
-                glVertexAttribPointer(vColour, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)total);
-                glEnableVertexAttribArray(vColour);
-                total += csize;
+		}
+		else
+		{
+			glVertexAttribPointer(vColour, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)total);
+			glEnableVertexAttribArray(vColour);
+			total += csize;
+		}
         }
 
         if(tsize)
         {
                 glBufferSubData(GL_ARRAY_BUFFER, total, tsize, texCoords);
 
-                GLint texAttrib = glGetAttribLocation(program, "vTexCoord");
-                if(texAttrib == -1)
+                vTexCoord = glGetAttribLocation(program, "vTexCoord");
+                if(vTexCoord == -1)
                 {
                         std::cout << "Couldn't find tCoord in shader" << std::endl;
-                }
-                glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)total);
-                glEnableVertexAttribArray(texAttrib);
-                total += tsize;
+		}
+		else
+		{
+			glVertexAttribPointer(vTexCoord, 2, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)total);
+			glEnableVertexAttribArray(vTexCoord);
+			total += tsize;
+		}
         }
 
         if(normals)
         {
+		std::cout << "Loading normal data" << std::endl;
+		for(int i = 0; i < (nsize / 4); i++)
+		{
+			std::cout << "LoadPrimitive Normal[" << i << "]=" << normals[i] << std::endl;
+		}
+
                 glBufferSubData(GL_ARRAY_BUFFER, total, nsize, normals);
                 vNormal = glGetAttribLocation(program, "vNormal");
                 if(vNormal == -1)
                 {
                         std::cout << "Failed to find vNormal in shader" << std::endl;
                 }
-
-                glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)(total));
-                glEnableVertexAttribArray(vNormal);
-                total += nsize;
+		else
+		{
+			glVertexAttribPointer(vNormal, 4, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)(total));
+			glEnableVertexAttribArray(vNormal);
+			total += nsize;
+		}
         }
 
         return std::pair<GLuint, int>(vao, triangleCount);
@@ -589,8 +669,110 @@ const int Renderer::getMaxLights()
         return MAX_LIGHTS;
 }
 
+std::string Renderer::DebugGLGetSourceString(GLenum source)
+{
+	std::string retval;
+	switch(source)
+	{
+		case GL_DEBUG_SOURCE_API:
+			retval = "OpenGL API";
+			break;
+		case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+			retval = "Window system API";
+			break;
+		case GL_DEBUG_SOURCE_SHADER_COMPILER:
+			retval = "Shader compiler";
+			break;
+		case GL_DEBUG_SOURCE_THIRD_PARTY:
+			retval = "Third party";
+			break;
+		case GL_DEBUG_SOURCE_APPLICATION:
+			retval = "User application";
+			break;
+		case GL_DEBUG_SOURCE_OTHER:
+			retval = "Other";
+			break;
+		default:
+			retval = "Unknown";
+			break;
+
+	}
+	return retval;
+}
+
+std::string Renderer::DebugGLGetSeverityString(GLenum severity)
+{
+	std::string errorSeverity;
+	switch(severity)
+	{
+		case GL_DEBUG_SEVERITY_HIGH:
+			errorSeverity = "HIGH";
+			break;
+		case GL_DEBUG_SEVERITY_MEDIUM:
+			errorSeverity = "MEDIUM";
+			break;
+		case GL_DEBUG_SEVERITY_LOW:
+			errorSeverity = "LOW";
+			break;
+		case GL_DEBUG_SEVERITY_NOTIFICATION:
+			errorSeverity = "NOTIFICATION";
+			break;
+		default:
+			errorSeverity = "UNKNOWN";
+			break;
+	}
+
+	return errorSeverity;
+}
+
+std::string Renderer::DebugGLGetErrorTypeString(GLenum type)
+{
+	std::string errorType;
+	switch(type)
+	{
+		case GL_DEBUG_TYPE_ERROR:
+			errorType = "ERROR";
+			break;
+		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+			errorType = "DEPRECATED_BEHAVIOUR";
+			break;
+		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+			errorType = "UNDEFINED_BEHAVIOUR";
+			break;
+		case GL_DEBUG_TYPE_PORTABILITY:
+			errorType = "NONPORTABLE";
+			break;
+		case GL_DEBUG_TYPE_PERFORMANCE:
+			errorType = "NONPERFORMANCE";
+			break;
+		case GL_DEBUG_TYPE_MARKER:
+			errorType = "COMMAND_STREAM_MARKER";
+			break;
+		case GL_DEBUG_TYPE_PUSH_GROUP:
+			errorType = "PUSH_GROUP";
+			break;
+		case GL_DEBUG_TYPE_POP_GROUP:
+			errorType = "POP_GROUP";
+			break;
+		case GL_DEBUG_TYPE_OTHER:
+			errorType = "OTHER";
+			break;
+		default:
+			errorType = "UNKNOWN";
+			break;
+	}
+
+	return errorType;
+}
+
 void Renderer::DebugGLCB(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const char *message, const void *userParam)
 {
-        //std::cout << "GL Error:" << std::end;
-        printf("GL Error: %s\n", message);
+	std::string strMessage(message);
+	std::cout << "GL " << DebugGLGetSourceString(source) << ":" << DebugGLGetErrorTypeString(type) << ":" << DebugGLGetSeverityString(severity) << ":" << strMessage << std::endl;
+}
+
+void Renderer::DebugPushGroupRenderer(std::string groupName, GLuint id)
+{
+	std::string message = "Renderer::" + groupName;
+	glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, id, message.size(), message.c_str()); 
 }
