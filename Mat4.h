@@ -196,6 +196,21 @@ public:
                 return retval;
         }
 
+	/* transpose
+	 * input: none
+	 * output: transpose of this matrix
+	 * Transposings a matrix is to make the rows of the
+	 * matrixs the column, or the columns the rows
+	 */
+	Mat4<T> transpose()
+	{
+		return Mat4<T>(mat[0 * rows +  x], mat[1 * rows +  x], mat[2 * rows +  x], mat[3 * rows +  x], //Top row of new matrix is the first column of the this matrix
+			mat[0 * rows +  y], mat[1 * rows +  y], mat[2 * rows +  y], mat[3 * rows +  y], //Second row of new matrix is the second column of the this matrix
+			mat[0 * rows +  z], mat[1 * rows +  z], mat[2 * rows +  z], mat[3 * rows +  z], //Third row of new matrix is the third column of the this matrix
+			mat[0 * rows +  w], mat[1 * rows +  w], mat[2 * rows +  w], mat[3 * rows +  w]); //Fourth row of new matrix is the fourth column of the this matrix
+
+	}
+
         void print()
         {
                 for(int i = 0; i < rows; i++)
