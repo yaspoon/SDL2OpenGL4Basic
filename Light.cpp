@@ -155,9 +155,16 @@ void Light::setNormal(Vec4<GLfloat> normal)
 
 void Light::setAngle(GLfloat angle)
 {
-        GLfloat radians = Math::toRadians(angle);
+        GLfloat cosAngle = Math::cos(angle);
         UBOUniform angleUbo = uniforms[std::string("angle")];
-        memcpy(lightData + angleUbo.getOffset(), &radians, sizeof(radians));
+        memcpy(lightData + angleUbo.getOffset(), &cosAngle, sizeof(cosAngle));
+}
+
+void Light::setColour(Vec4<GLfloat> colour)
+{
+	UBOUniform colourUbo = uniforms[std::string("lightColour")];
+	size_t size = colourUbo.getSize() * typeSize(colourUbo.getType());
+	memcpy(lightData + colourUbo.getOffset(), colour.getData(), size);
 }
 
 void Light::setLinearAtten(GLfloat linearAtten)
@@ -198,9 +205,15 @@ size_t typeSize(GLenum type)
 
         switch(type)
         {
-                CASE(GL_FLOAT,                          1, GLfloat);
-                CASE(GL_BOOL,                           1, GLboolean);
-                CASE(GL_FLOAT_VEC3,               3, GLfloat);
+                CASE(GL_FLOAT,          1, GLfloat);
+                CASE(GL_BOOL,           1, GLboolean);
+                CASE(GL_FLOAT_VEC3,	3, GLfloat);
+                CASE(GL_FLOAT_VEC4,     4, GLfloat);
+		default:
+		{
+			fprintf(stderr, "ERROR: Light::typeSize could not find type %d\n", type);
+			size = 0;
+		}
         }
 
         return size;
@@ -335,6 +348,22 @@ GLfloat Light::getConstAttenuation()
         memcpy(&constAtten, lightData + constAttenUbo.getOffset(), sizeof(constAtten));
 
         return constAtten;
+}
+
+GLfloat Light::getAngle()
+{
+	GLfloat angle;
+	UBOUniform angleUbo = uniforms[std::string("angle")];
+	memcpy(&angle, lightData + angleUbo.getOffset(), sizeof(angle));
+
+	return angle;
+}
+
+GLfloat Light::getSpotlightFade()
+{
+	GLfloat fade;
+	UBOUniform fadeUbo = uniforms[std::string("fade")];
+	memcpy(&fade, lightData + fadeUbo.getOffset(), sizeof(fade));
 }
 
 int Light::getIndex()

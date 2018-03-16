@@ -18,6 +18,7 @@ class Light
 
                 Light &operator=(const Light &other);
 
+		void setColour(Vec4<GLfloat> colour);
                 void setIsEnabled(GLboolean enabled);
                 void enableDiffuse(GLboolean enabled);
                 void enableSpecular(GLboolean enabled);
@@ -31,6 +32,7 @@ class Light
                 void setPosition(Vec4<GLfloat> pos);
                 void setNormal(Vec4<GLfloat> normal);
                 void setAngle(GLfloat angle);
+		void setSpotlightFade(GLfloat fade);
                 void setLinearAtten(GLfloat linearAtten);
                 void setQuadAtten(GLfloat quagAtten);
                 void setConstAttenuation(GLfloat constAtten);
@@ -51,6 +53,8 @@ class Light
                 GLfloat getQuadAtten();
                 GLfloat getConstAttenuation();
                 GLfloat getSpotponent();
+		GLfloat getAngle();
+		GLfloat getSpotlightFade();
                 int getIndex();
                 size_t getDataSize();
 
