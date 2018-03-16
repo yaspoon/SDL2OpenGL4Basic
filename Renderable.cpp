@@ -6,12 +6,14 @@ Renderable::Renderable()
 }
 
 Renderable::Renderable(GLuint vao, int triangleCount)
+	:modelMatrix(1.0f)
 {
         this->vao = vao;
         this->triangleCount = triangleCount;
 }
 
 Renderable::Renderable(GLuint vao, std::vector<Material> mats, int triangleCount)
+	:modelMatrix(1.0f)
 {
         this->vao = vao;
         this->materials = mats;
@@ -58,3 +60,12 @@ int Renderable::getTriangleCount()
     return triangleCount;
 }
 
+Mat4<float> Renderable::getModelMatrix()
+{
+	return modelMatrix;
+}
+
+void Renderable::setModelMatrix(Mat4<float> newModelMatrix)
+{
+	modelMatrix = newModelMatrix;
+}
