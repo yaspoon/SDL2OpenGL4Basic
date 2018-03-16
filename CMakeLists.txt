@@ -3,6 +3,7 @@ project (OpenGLBasic)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 set(CMAKE_BUILD_TYPE debug)
+set(CMAKE_EXPORT_COMPILE_COMMAND ON)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -16,7 +17,7 @@ if(OPENGL_FOUND)
 			set(LIBS ${LIBS} ${OPENGL_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES})
 			message(STATUS "${LIBS}")
 
-			add_executable(OpenGLBasic Box.cpp Face.cpp Main.cpp Math.cpp Light.cpp Timer.cpp Camera.cpp EAngle.cpp Shader.cpp Vertex.cpp Material.cpp Renderer.cpp ObjLoader.cpp ObjMaterial.cpp Renderable.cpp UBOUniform.cpp PMDL.cpp PMDLMaterial.cpp)
+			add_executable(OpenGLBasic Box.cpp Face.cpp Main.cpp Math.cpp Light.cpp Timer.cpp Camera.cpp EAngle.cpp Shader.cpp Vertex.cpp Material.cpp Renderer.cpp ObjMaterial.cpp Renderable.cpp UBOUniform.cpp PMDL.cpp PMDLMaterial.cpp)
 
 			#target_link_libraries (OpenGLBasic GL SDL2 SDL2_image vulkan)
 			#target_link_libraries (OpenGLBasic GL SDL2 SDL2_image)
