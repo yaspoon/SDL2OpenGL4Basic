@@ -70,10 +70,12 @@ int main(int argc, char *argv[])
         SDL_bool relativeMouse = SDL_FALSE;
         Timer GameTimer; //Keep track of time between game frames
         Timer FrameTimer; //Keep track of time between actual drawn frames
-        Camera cam(0.0f, 0.0f, -85.0f);
+        Camera cam(0.0f, 0.0f, -8.0f);
 
         Mat4<float> transMatrix(30.0f);
         transMatrix[3][2] = 0.0f;
+
+	Mat4<int> matTest(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
 
         bool quit = false;
 
@@ -102,20 +104,23 @@ int main(int argc, char *argv[])
                 std::vector<Material> materials;
 
                 lights.insert(lights.end(), renderer.newLight(lights.size()));
+		lights[0].setColour(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
                 lights[0].setAmbientLight(Vec4<GLfloat>(0.3f, 0.3f, 0.3f, 1.0f));
                 lights[0].setDiffuseLight(Vec4<GLfloat>(0.4f, 0.4f, 0.4f, 1.0f));
                 lights[0].setSpecularLight(Vec4<GLfloat>(0.6f, 0.6f, 0.6f, 1.0f));
                 lights[0].setIsEnabled(true);
                 lights[0].enableDiffuse(true);
                 lights[0].enableSpecular(true);
-                lights[0].setPosition(Vec4<GLfloat>(0.0f, 10.0f, 0.0f, 0.0f));
-                lights[0].setNormal(Vec4<GLfloat>(0.0f, 1.0f, 0.0f, 0.0f));
+		lights[0].setStrength(1.0f);
+		lights[0].setSpecularMode(false);
+                lights[0].setPosition(Vec4<GLfloat>(0.0f, 20.0f, 0.0f, 1.0f));
+                lights[0].setNormal(Vec4<GLfloat>(0.0f, -1.0f, 0.0f, 0.0f)); //Point the light down at the plane. The shader fixes up the math later!
                 lights[0].setConstAttenuation(1.0f);
-                lights[0].setLinearAtten(0.0f);
+                lights[0].setLinearAtten(1.0f);
                 lights[0].setQuadAtten(1.0f);
-                //lights[0].setIsPointLight(true);
+                lights[0].setIsPointLight(false);
                 lights[0].setIsSpotLight(true);
-                lights[0].setAngle(90.0f);
+                lights[0].setAngle(45.0f);
                 lights[0].setSpotponent(16.0f);
 
                 /*lights.insert(lights.end(), renderer.newLight(lights.size()));
@@ -129,58 +134,41 @@ int main(int argc, char *argv[])
                 lights[1].setNormal(Vec4<GLfloat>(0.0f, 1.0f, 0.0f, 0.0f));
                 //lights[1].setShininess(1.0f);
                 lights[1].setConstAttenuation(1.0f);
-                lights[1].setIsSpotLight(true);
+                lights[1].setIsPointLight(true);
                 lights[1].setLinearAtten(1.0f);
                 lights[1].setAngle(90.0f);
                 lights[1].setSpotponent(16.0f);*/
 
-                //materials.insert(materials.end(), renderer.newMaterial(materials.size()));
-                /*materials[0].setEmission(Vec4<GLfloat>(1.0f, 0.0f, 0.0f, 0.0f));
-                materials[0].setAmbient(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
-                materials[0].setDiffuse(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
-                materials[0].setSpecular(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
-                materials[0].setShininess(16.0f);*/
+		PMDL light("resources/models/light.pmdl");
+		Mat4<float> light_model_matrix(1.0f);
+		light_model_matrix = light_model_matrix.setTranslation(Vec4<float>(0.0f, 0.0f, -5.0f, 1.0f));
+		light.setModelMatrix(light_model_matrix);
+		renderer.loadModel(light);
 
-                //ObjLoader plane("resources/models/plane.obj");
-                //renderer.loadPrimitiveData(loader.getVertices(), loader.vsize(), NULL, 0, loader.getColours(), loader.csize(), loader.tsize(), loader.getTexCoords(), loader.getAvgNormals(), loader.nsize());
-                //renderer.loadModel(plane);
+		PMDL square("resources/models/square.pmdl");
+		Mat4<float> square_model_matrix(2.0f);
+		square_model_matrix = square_model_matrix.setTranslation(Vec4<float>(3.0f, 0.0f, 0.0f, 0.0f));
+		square.setModelMatrix(square_model_matrix); 
+                renderer.loadModel(square);
 
-                //ObjLoader monkey("resources/models/monkey.obj");
-                //renderer.loadPrimitiveData(sphere.getVertices(), sphere.vsize(), NULL, 0, sphere.getColours(), sphere.csize(), sphere.tsize(), sphere.getTexCoords(), sphere.getAvgNormals(), sphere.nsize());
-                //renderer.loadModel(monkey);
+		Mat4<float> monkey_model_matrix(2.0f);
+		monkey_model_matrix = monkey_model_matrix.setTranslation(Vec4<float>(-3.0f, 0.0f, 0.0f, 0.0f));
+                PMDL monkey("resources/models/monkey.pmdl");
+		monkey.setModelMatrix(monkey_model_matrix);
+                renderer.loadModel(monkey);
 
-                //ObjLoader texCube("resources/models/texCube.obj");
-                //renderer.loadModel(texCube);
+		Mat4<float> plane_model_matrix(30.0f);
+		plane_model_matrix = plane_model_matrix.setTranslation(Vec4<float>(0.0f, -2.0f, 0.0f, 0.0f));
+		PMDL plane("resources/models/plane.pmdl");
+		plane.setModelMatrix(plane_model_matrix);
+		renderer.loadModel(plane);
+		plane.dumpNormals();
 
-                PMDL test("resources/models/square.pmdl");
-                renderer.loadModel(test);
-
-                /*std::vector<ObjMaterial> mats = loader.getMaterials();
-                //mats.insert(mats.end(), sphere.getMaterials().begin(), sphere.getMaterials().end());
-                for(std::vector<ObjMaterial>::iterator it = mats.begin(); it != mats.end(); ++it)
-                {
-                        ObjMaterial mat = *it;
-                        int i = materials.size();
-                        materials.insert(materials.end(), renderer.newMaterial(materials.size()));
-                        materials[i].loadObjMaterial(mat);
-
-                        if(mat.getMapkd().length() != 0) //There is a texture string
-                        {
-                                std::cout << "Loading texture:" << mat.getMapkd() << std::endl;
-                                renderer.loadTexture(mat.getMapkd().c_str());
-                                materials[i].setHasTexture(true);
-                        }
-                        else
-                        {
-                                materials[i].setColour(Vec4<GLfloat>(1.0f, 1.0f, 1.0f, 1.0f));
-                                materials[i].setHasTexture(false);
-                        }
-
-                }
-                //renderer.loadTexture("resources/textures/normalmap2.png");
-                renderer.updateMaterials(materials);*/
+		std::string debugGroupLighting("Lighting");
+		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, debugGroupLighting.size(), debugGroupLighting.c_str());
                 renderer.updateLights(lights);
                 renderer.setNumEnabledLights(lights.size());
+		glPopDebugGroup();
 
                 while(!quit)
                 {
@@ -355,6 +343,8 @@ int main(int argc, char *argv[])
                         }
 
                 }
+
+		renderer.cleanup();
 
         }
         else
