@@ -6,6 +6,7 @@
 
 PMDL::PMDL(std::string filepath)
 {
+	ModelLoader::modelMatrix = Mat4<float>(1.0f);
         //std::cout << "PMDL_HEADER_LEN:" << PMDL_HEADER_LEN << std::endl;
         std::cout << "PMDL_HEADER_LEN:" << sizeof(PMDL_header) << std::endl;
         vertices = NULL;
@@ -46,10 +47,10 @@ PMDL::PMDL(std::string filepath)
                 file.read((char*)vertices, vertices_len);
 
 		std::cout << "Vertex count:" << header.vertices_len << std::endl;
-		for(int i = 0; i < header.vertices_len / 3; i++)
+		/*for(int i = 0; i < header.vertices_len / 3; i++)
 		{
 			std::cout << "vertex[" << vertices[i*3] << "," << vertices[i*3+1] << "," << vertices[i*3+2] << "]" << std::endl;
-		}
+		}*/
 
 		faces_len = header.faces_len * sizeof(int);
 		faces_count = header.faces_len;
@@ -58,10 +59,10 @@ PMDL::PMDL(std::string filepath)
 		file.read((char*)faces, faces_len);
 
 		std::cout << "Faces count:" << header.faces_len << std::endl;
-		for(int i = 0; i < header.faces_len; i+=3)
+		/*for(int i = 0; i < header.faces_len; i+=3)
 		{
 			std::cout << "face[" << faces[i] << "," << faces[i+1] << "," << faces[i+2] << "]" << std::endl;
-		}
+		}*/
 
                 uvcoords_len = header.uvcoords_len * sizeof(float);
 		uvcoords_count = header.uvcoords_len;
@@ -69,12 +70,18 @@ PMDL::PMDL(std::string filepath)
                 file.seekg(header.uvcoords_offset);
                 file.read((char*)uvcoords, uvcoords_len);
 
-                normals_len = header.normals_len * sizeof(float);
-		normals_count = header.normals_len;
+                normals_len = header.normals_len * sizeof(float); //Buffer length in bytes
+		normals_count = header.normals_len / normal_component_count;
 		std::cout << "normals_count:" << normals_count << std::endl;
+		/*Because my modeling format sucks normals_len is actualy the number of floats in the normal array, aka 4 * no_normals(aka number of vertices)*/
                 normals = new float[header.normals_len];
                 file.seekg(header.normals_offset);
                 file.read((char*)normals, normals_len);
+
+		/*for(int i = 0; i < header.normals_len; i+=3)
+		{
+			std::cout << "normal[" << normals[i] << "," << normals[i+1] << "," << normals[i+2] << "]" << std::endl;
+		}*/
 
                 colours_len = faces_count * sizeof(float);
 		colours_count = faces_count;
@@ -86,11 +93,11 @@ PMDL::PMDL(std::string filepath)
                         colours[i] = header.colour[channel];
                 }
 
-		std::cout << "uvcoords:" << std::endl;
+		/*std::cout << "uvcoords:" << std::endl;
                 for(int i = 0; i < header.uvcoords_len; i+=2)
                 {
                         std::cout << "[" << uvcoords[i] << "," << uvcoords[i+1] << "]" << std::endl;
-                }
+                }*/
 
 		file.seekg(header.textures_offset);
 		std::vector<std::string> materials_textures;
@@ -161,6 +168,14 @@ PMDL::PMDL(std::string filepath)
 		}
 
                 file.close();
+		delete[] alphas;
+		delete[] diffuse_colours;
+		delete[] specular_colours;
+		delete[] specular_intensities;
+		delete[] specular_hardnesses;
+		delete[] roughnesses;
+		delete[] materials_texture_counts;
+		delete[] materials_texture_indexs;
         }
         else
         {
@@ -170,6 +185,10 @@ PMDL::PMDL(std::string filepath)
 
 PMDL::~PMDL()
 {
+	if(faces) {
+		delete[] faces;
+	}
+
         if(vertices)
         {
                 delete[] vertices;
@@ -189,11 +208,15 @@ PMDL::~PMDL()
         {
                 delete[] uvcoords;
         }
+
+	for(std::vector<PMDLMaterial*>::iterator it = materials.begin(); it != materials.end(); ++it) {
+		delete *it;
+	}
 }
 
 float *PMDL::getVertices()
 {
-        int buffer_len = faces_count * 3;
+        int buffer_len = faces_count * vertices_component_count;
         float *retval = new float[buffer_len];
 	int index = 0;
 
@@ -203,32 +226,40 @@ float *PMDL::getVertices()
 		retval[index] = vertices[vertexIndex * 3];
 		retval[index + 1] = vertices[(vertexIndex * 3) + 1];
 		retval[index + 2] = vertices[(vertexIndex * 3) + 2];
-		index += 3;
+		retval[index + 3] = 1.0f; //This is a point, so set the W to 1 so translations work!
+		index += 4;
 	}
 
-	for(int i = 0; i < faces_count; i++)
+	/*for(int i = 0; i < faces_count; i++)
 	{
 		std::cout << "vertex:[" << retval[i*3] << "," << retval[i*3+1] << "," << retval[i*3+2] << "]" << std::endl;
-	}
+	}*/
 
         return retval;
 }
 
 size_t PMDL::vsize()
 {
-        return faces_count * 3 * sizeof(float);
+        return faces_count * vertices_component_count * sizeof(float);
 }
 
+/*
+ * Like vertices there is only 4 normals in 2 triangles
+ * We need to "unpack" the normals so we end up with 3 per per face
+ */
 float *PMDL::getNormals()
 {
-	int buffer_len = faces_count * 3;
+	int buffer_len = faces_count * normal_component_count;
         float *retval = new float[buffer_len];
 
 	for(int i = 0; i < faces_count; i++)
 	{
-		retval[i * 3] = normals[faces[i]];
-		retval[i * 3 + 1] = normals[faces[i] + 1];
-		retval[i * 3 + 2] = normals[faces[i] + 2];
+		std::cout << "getNormals Normal[" << i << "]=" << normals[i] << std::endl;
+		int normalIndex = faces[i] * 4;
+		retval[i * normal_component_count] = normals[normalIndex];
+		retval[i * normal_component_count + 1] = normals[normalIndex + 1];
+		retval[i * normal_component_count + 2] = normals[normalIndex + 2];
+		retval[i * normal_component_count + 3] = 0.0f; //This is a vector, therefore the w component is 0 because we don't want translation to do stuff!
 	}
 
         return retval;
@@ -236,12 +267,27 @@ float *PMDL::getNormals()
 
 size_t PMDL::nsize()
 {
-        return faces_count * 3 * sizeof(float);
+        return faces_count * normal_component_count * sizeof(float);
+}
+
+void PMDL::dumpNormals()
+{
+	std::cout << "normals_count:" << normals_count << std::endl << "normal_component_count:" << normal_component_count << std::endl;
+	int count = normals_count * normal_component_count;
+	std::cout << "count:" << count << std::endl;
+	std::cout << "<";
+	for(int i = 0; i < count; i++) {
+		if(i != 0 && i % 4 == 0) {
+			std::cout << ">\n<";
+		}
+		std::cout << normals[i] << ",";
+	}
+	std::cout << ">" << std::endl;
 }
 
 float *PMDL::getTexCoords()
 {
-        int buffer_len = uvcoords_count * 2;
+        int buffer_len = uvcoords_count;
         float *retval = new float[buffer_len];
 
 	for(int i = 0; i < buffer_len; i++)
@@ -250,10 +296,10 @@ float *PMDL::getTexCoords()
 		retval[i] = uvcoords[i];
 	}
 
-	for(int i = 0; i < faces_count; i++)
+	/*for(int i = 0; i < faces_count; i++)
 	{
 		std::cout << "uv[" << retval[i*2] * 1024.0f << "," << retval[i*2 + 1] * 1024.0f << "]" << std::endl;
-	}
+	}*/
 
         return retval;
 }
@@ -280,4 +326,9 @@ std::vector<ModelMaterial*> PMDL::getMaterials()
 {
 	std::vector<ModelMaterial*> mdlMaterials(materials.begin(), materials.end());
         return mdlMaterials;
+}
+
+int PMDL::getTriangleCount()
+{
+	return faces_count;
 }

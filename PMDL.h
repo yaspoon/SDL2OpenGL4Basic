@@ -72,12 +72,15 @@ public:
         size_t vsize();
         float *getNormals();
         size_t nsize();
+	void dumpNormals();
         float *getTexCoords();
         size_t tsize();
         float *getColours();
         size_t csize();
 
         std::vector<ModelMaterial*> getMaterials();
+
+	int getTriangleCount();
 private:
         float *vertices;
 	int *faces;
@@ -98,5 +101,7 @@ private:
 	size_t colours_count;
 
         const int PMDL_HEADER_LEN = sizeof(struct PMDL_header);
+	const int normal_component_count = 4; //normals are now a vec4 so xyzw
+	const int vertices_component_count = 4; //normals are now a vec4 so xyzw
 };
 #endif // PMDL_H
