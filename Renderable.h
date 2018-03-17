@@ -6,6 +6,7 @@
 #include <SDL2/SDL_opengl.h>
 #include "ObjMaterial.h"
 #include "Material.h"
+#include "Mat4.h"
 
 class Renderable
 {
@@ -21,6 +22,8 @@ class Renderable
                 void addMaterial(Material mat);
                 void addTexture(GLuint texture);
                 void setTriangleCount(int triangleCount);
+		void setModelMatrix(Mat4<float> newModelMatrix);
+		Mat4<float> getModelMatrix();
 
         protected:
         private:
@@ -28,6 +31,7 @@ class Renderable
                 int triangleCount;
                 std::vector<GLuint> textures;
                 std::vector<Material> materials;
+		Mat4<float> modelMatrix;
 };
 
 #endif // RENDERABLE_H
